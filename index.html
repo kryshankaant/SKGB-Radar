@@ -6,20 +6,29 @@
     <title>Sab Kuch Ghar Baithe News — Editorial Control Room</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Noto Sans Devanagari & Inter -->
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & Hind (Clean, Simple & Crisp A-to-Z Typography) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Noto Sans Devanagari"', 'Inter', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'Inter', '"Hind"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        hindi: ['"Hind"', '"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
                         brandRed: '#E31E24',
                         brandDark: '#111827',
+                        appleBg: '#F5F5F7',
+                        appleCard: '#FFFFFF',
+                        appleText: '#1D1D1F',
+                        appleSub: '#86868B',
+                    },
+                    boxShadow: {
+                        'apple': '0 2px 14px -2px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.03)',
+                        'apple-hover': '0 10px 28px -6px rgba(0, 0, 0, 0.09), 0 2px 6px -1px rgba(0, 0, 0, 0.04)',
                     }
                 }
             }
@@ -27,9 +36,38 @@
     </script>
     <style>
         body {
-            background-color: #f3f4f6;
-            color: #111827;
+            background-color: #F5F5F7;
+            color: #1D1D1F;
+            font-family: 'Plus Jakarta Sans', 'Inter', 'Hind', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -0.011em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             -webkit-tap-highlight-color: transparent;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Plus Jakarta Sans', 'Hind', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        /* Apple Frosted Glass Surfaces */
+        .apple-glass {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+        }
+        /* Sleek macOS-style subtle scrollbar */
+        .apple-scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .apple-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .apple-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.14);
+            border-radius: 9999px;
+        }
+        .apple-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.28);
         }
         @keyframes pulseFast {
             0%, 100% { opacity: 1; }
@@ -39,135 +77,176 @@
             animation: pulseFast 1.3s infinite;
         }
         .bureau-chevron {
-            transition: transform 0.25s ease;
+            transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .bureau-open .bureau-chevron {
             transform: rotate(180deg);
         }
+        /* Anti-copy & content protection (allows typing inside inputs/textareas) */
+        body.protected-room {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        body.protected-room input,
+        body.protected-room textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-red-100 selection:text-brandRed">
+<body oncontextmenu="return false;" ondragstart="return false;" class="protected-room min-h-screen flex flex-col justify-between selection:bg-red-500/15 selection:text-brandRed">
 
-    <!-- ==================== TOP EDITORIAL HEADER ==================== -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+    <!-- ==================== INTERNAL CONTROL ROOM LOGIN GATE ==================== -->
+    <div id="editorialLoginGate" class="fixed inset-0 z-[100] bg-[#F5F5F7]/95 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div class="bg-white rounded-[28px] max-w-sm w-full p-7 shadow-2xl border border-black/[0.07] text-center space-y-5">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-b from-[#FF3B30] to-[#D70015] text-white flex items-center justify-center text-2xl shadow-md">
+                🔐
+            </div>
+            <div>
+                <h2 class="text-lg font-extrabold text-[#1D1D1F] tracking-tight">Sab Kuch Ghar Baithe News</h2>
+                <p class="text-xs font-semibold text-[#D70015] mt-0.5">Internal Editorial Control Room</p>
+                <p class="text-[11px] text-[#86868B] mt-2">Authorized staff access only. Enter your Editorial PIN to unlock.</p>
+            </div>
+
+            <form onsubmit="handleEditorialLogin(event)" class="space-y-3">
+                <input type="password" id="editorialPinInput" inputmode="numeric" maxlength="12" required placeholder="Enter Access PIN" class="w-full px-4 py-3 rounded-2xl bg-[#F5F5F7] border border-black/[0.08] text-center text-sm font-bold tracking-widest text-[#1D1D1F] placeholder-[#86868B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
+                <p id="loginErrorMsg" class="hidden text-[11px] font-semibold text-[#FF3B30]">Incorrect PIN. Please try again.</p>
+                <button type="submit" class="w-full py-3 rounded-full bg-[#1D1D1F] hover:bg-black active:scale-[0.99] text-white text-xs font-bold tracking-wide shadow-sm transition-all">
+                    Unlock Control Room →
+                </button>
+            </form>
+
+            <p class="text-[10px] text-[#A1A1A6]">Protected Workspace • Default PIN: <span class="font-semibold text-[#86868B]">2026</span></p>
+        </div>
+    </div>
+
+    <!-- ==================== TOP APPLE FROSTED EDITORIAL HEADER ==================== -->
+    <header class="apple-glass border-b border-black/[0.07] sticky top-0 z-30 transition-all">
+        <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             
-            <!-- Left: Original Logo (skgb.png) & Desk Title -->
-            <div class="flex items-center gap-3 min-w-0">
+            <!-- Left: Original Logo + Title with Editorial Control Room right underneath -->
+            <div class="flex items-center gap-3.5 min-w-0">
                 <div onclick="document.getElementById('logoFileInput').click()" class="cursor-pointer group relative flex-shrink-0 flex items-center" title="Click to select or change original logo (skgb.png)">
-                    <img id="brandLogoImg" src="skgb.png" alt="Sab Kuch Ghar Baithe News" class="h-11 sm:h-12 w-auto object-contain rounded-lg" onerror="this.classList.add('hidden'); document.getElementById('logoTextFallback').classList.remove('hidden');">
-                    <div id="logoTextFallback" class="hidden px-3 py-1.5 rounded-xl bg-brandRed text-white font-black text-sm sm:text-base tracking-tight shadow-xs">
-                        Sab Kuch Ghar Baithe News
+                    <img id="brandLogoImg" src="skgb.png" alt="Sab Kuch Ghar Baithe News" class="h-11 sm:h-12 w-auto object-contain rounded-xl transition-transform duration-200 group-hover:scale-[1.02]" onerror="this.classList.add('hidden'); document.getElementById('logoTextFallback').classList.remove('hidden');">
+                    <div id="logoTextFallback" class="hidden px-3.5 py-2 rounded-2xl bg-gradient-to-b from-[#FF3B30] to-[#D70015] text-white font-extrabold text-sm sm:text-base tracking-tight shadow-xs">
+                        SKGB News
                     </div>
                     <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
                 </div>
 
-                <div class="min-w-0 border-l border-gray-200 pl-3">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-red-50 text-brandRed border border-red-200 uppercase tracking-wide">
-                            <span class="w-1.5 h-1.5 rounded-full bg-brandRed animate-flash"></span>
+                <div class="min-w-0 border-l border-black/[0.08] pl-3.5">
+                    <h1 class="text-base sm:text-lg font-extrabold text-[#1D1D1F] tracking-tight leading-tight truncate">Sab Kuch Ghar Baithe News</h1>
+                    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-0.5">
+                        <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#D70015] tracking-wide">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#FF3B30] animate-flash"></span>
                             Editorial Control Room
                         </span>
-                        <span id="liveClock" class="hidden md:inline-block text-xs font-semibold text-gray-500"></span>
+                        <span class="text-black/20">•</span>
+                        <span id="liveClock" class="text-[11px] font-medium text-[#86868B] tabular-nums truncate"></span>
                     </div>
-                    <h1 class="text-sm sm:text-base font-extrabold text-gray-900 truncate mt-0.5">Sab Kuch Ghar Baithe News — Internal Desk</h1>
                 </div>
             </div>
 
-            <!-- Right: Quick Actions -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                <button type="button" onclick="openAppsScriptModal()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold flex items-center gap-1.5 transition" title="Connect your free Google Apps Script for Live News Feed">
-                    <span>⚡</span>
-                    <span class="hidden sm:inline">Google Feed Setup</span>
+            <!-- Right: Useful Editorial Tools (Instant Web News Search + Blank Draft + Theme Mode + Lock) -->
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <form onsubmit="handleQuickWebNewsSearch(event)" class="relative flex-1 sm:w-64">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#86868B] text-xs pointer-events-none">🔍</span>
+                    <input type="text" id="quickWebNewsInput" placeholder="Search any topic on Google News..." class="w-full pl-8 pr-3 py-1.5 rounded-full bg-black/[0.05] hover:bg-black/[0.07] focus:bg-white border border-transparent focus:border-[#007AFF] text-xs font-medium text-[#1D1D1F] placeholder-[#86868B] focus:outline-none focus:ring-2 focus:ring-[#007AFF]/25 transition-all">
+                </form>
+
+                <button type="button" onclick="openBlankDraftModal()" class="px-3.5 py-1.5 rounded-full bg-[#1D1D1F] hover:bg-black active:scale-95 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs flex-shrink-0" title="Write a fresh news copy or press note">
+                    <span>✍️</span>
+                    <span>Write Copy</span>
                 </button>
-                <button type="button" onclick="loadAllGoogleNewsRadars(true)" class="px-2.5 sm:px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold flex items-center gap-1.5 transition" title="Refresh all live radars">
-                    <span>🔄</span>
-                    <span class="hidden sm:inline">Refresh Radar</span>
+
+                <button type="button" onclick="toggleAppleThemeMode()" id="themeToggleBtn" class="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-black/[0.1] active:scale-95 text-[#1D1D1F] flex items-center justify-center text-xs transition-all flex-shrink-0" title="Switch Day / Night Eye-Comfort Mode">
+                    🌙
                 </button>
-                <button type="button" onclick="openAddCardModal('district')" class="px-2.5 sm:px-3 py-2 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 transition shadow-xs">
-                    <span>+</span>
-                    <span>Add New Card</span>
-                </button>
-                <button type="button" onclick="downloadUpdatedHtmlCode()" class="px-2.5 sm:px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-xs" title="Save all DPs, names and social links permanently into code">
-                    <span>💾</span>
-                    <span class="hidden md:inline">Save to Code</span>
+
+                <button type="button" onclick="lockControlRoom()" class="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-red-500/10 hover:text-[#D70015] active:scale-95 text-[#1D1D1F] flex items-center justify-center text-xs transition-all flex-shrink-0" title="Lock Control Room">
+                    🔒
                 </button>
             </div>
         </div>
     </header>
 
     <!-- ==================== MAIN WORKSPACE ==================== -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 py-5 sm:py-7 space-y-7">
 
         <!-- ==================== SECTION 1: 4 MAIN LIVE GOOGLE NEWS RADAR CARDS ==================== -->
         <section aria-label="Live News Radar">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-brandRed animate-flash"></span>
-                    <h2 class="text-sm sm:text-base font-extrabold text-gray-900">Live News Radar (Today & Yesterday Top Headlines)</h2>
+            <div class="flex items-center justify-between mb-3.5 px-0.5">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#FF3B30] animate-flash"></span>
+                    <h2 class="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">Live News Radar <span class="text-[#86868B] font-medium text-xs sm:text-sm">(Today & Yesterday Top Headlines)</span></h2>
                 </div>
-                <span class="text-[11px] text-gray-500 font-semibold hidden sm:inline">Click any headline to read or tap '✍️' to generate an instant draft</span>
+                <span class="text-[11px] text-[#86868B] font-medium hidden sm:inline">Click any headline to read or tap '✍️' for an instant draft</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 
-                <!-- Radar Card 1: Atrauli Local (Other Media Exclusive) -->
-                <div class="bg-white rounded-2xl border border-red-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3.5 py-2.5 bg-red-50 border-b border-red-100 flex items-center justify-between gap-1">
-                        <div class="flex items-center gap-1.5 min-w-0">
-                            <span class="w-2 h-2 rounded-full bg-brandRed animate-flash flex-shrink-0"></span>
-                            <h3 class="font-extrabold text-xs text-red-950 truncate" title="Atrauli news from all web media excluding Amar Ujala, Bhaskar, Hindustan & Jagran">Atrauli (All Other Media)</h3>
+                <!-- Radar Card 1: Atrauli Local (Google News Live) -->
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-red-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                        <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-[#FF3B30] animate-flash flex-shrink-0"></span>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate" title="Latest Atrauli news from Google News">Atrauli (Local Radar)</h3>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-brandRed border border-red-200 flex-shrink-0">ALL WEB</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/10 text-[#D70015] tracking-wider flex-shrink-0">LOCAL</span>
                     </div>
-                    <div id="radarTicker_atrauli" class="px-3 py-1.5 bg-red-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_atrauli" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-6 text-center">Loading Atrauli other media news...</p>
+                    <div id="radarTicker_atrauli" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_atrauli" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-60 sm:max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-6 text-center text-[11px]">Loading latest Atrauli news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 2: Aligarh District -->
-                <div class="bg-white rounded-2xl border border-blue-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3.5 py-2.5 bg-blue-50 border-b border-blue-100 flex items-center justify-between">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                            <h3 class="font-extrabold text-xs text-blue-950">Aligarh (District Radar)</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                        <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-[#007AFF] flex-shrink-0"></span>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Aligarh (District Radar)</h3>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-blue-700 border border-blue-200">DISTRICT</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-[#007AFF] tracking-wider flex-shrink-0">DISTRICT</span>
                     </div>
-                    <div id="radarTicker_aligarh" class="px-3 py-1.5 bg-blue-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_aligarh" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-6 text-center">Loading Aligarh district news...</p>
+                    <div id="radarTicker_aligarh" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_aligarh" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-60 sm:max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-6 text-center text-[11px]">Loading Aligarh district news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 3: Uttar Pradesh State -->
-                <div class="bg-white rounded-2xl border border-orange-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3.5 py-2.5 bg-orange-50 border-b border-orange-100 flex items-center justify-between">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-orange-600"></span>
-                            <h3 class="font-extrabold text-xs text-orange-950">Uttar Pradesh (State Bureau)</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                        <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-[#FF9500] flex-shrink-0"></span>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Uttar Pradesh (State Bureau)</h3>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-orange-700 border border-orange-200">STATE</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/10 text-[#CC7700] tracking-wider flex-shrink-0">STATE</span>
                     </div>
-                    <div id="radarTicker_up" class="px-3 py-1.5 bg-orange-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_up" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-6 text-center">Loading Uttar Pradesh news...</p>
+                    <div id="radarTicker_up" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_up" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-60 sm:max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-6 text-center text-[11px]">Loading Uttar Pradesh news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 4: National & Press Releases -->
-                <div class="bg-white rounded-2xl border border-emerald-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3.5 py-2.5 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            <h3 class="font-extrabold text-xs text-emerald-950">National & Press Releases</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                        <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-[#34C759] flex-shrink-0"></span>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">National & Press Releases</h3>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-emerald-700 border border-emerald-200">PIB / NATION</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-[#248A3D] tracking-wider flex-shrink-0">PIB / NATION</span>
                     </div>
-                    <div id="radarTicker_national" class="px-3 py-1.5 bg-emerald-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_national" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-6 text-center">Loading national & press releases...</p>
+                    <div id="radarTicker_national" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_national" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-60 sm:max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-6 text-center text-[11px]">Loading national & press releases...</p>
                     </div>
                 </div>
 
@@ -176,73 +255,73 @@
 
         <!-- ==================== SECTION 2: 4 MAJOR NEWSPAPERS - ATRAULI ONLY (WITH LOGOS) ==================== -->
         <section aria-label="Atrauli Major Newspapers Radar">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-flash"></span>
-                    <h2 class="text-sm sm:text-base font-extrabold text-gray-900">Atrauli Special Newspaper Desk — Atrauli News Only</h2>
+            <div class="flex items-center justify-between mb-3.5 px-0.5">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#FF9500] animate-flash"></span>
+                    <h2 class="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">Atrauli Special Newspaper Desk <span class="text-[#86868B] font-medium text-xs sm:text-sm">— Atrauli News Only</span></h2>
                 </div>
-                <span class="text-[11px] text-gray-500 font-semibold hidden sm:inline">Amar Ujala • Dainik Bhaskar • Hindustan • Dainik Jagran</span>
+                <span class="text-[11px] text-[#86868B] font-medium hidden sm:inline">Amar Ujala • Dainik Bhaskar • Hindustan • Dainik Jagran</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 
                 <!-- Newspaper Card 1: Amar Ujala - Atrauli -->
-                <div class="bg-white rounded-2xl border border-red-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3 py-2 bg-red-50/90 border-b border-red-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=amarujala.com&sz=64" alt="Amar Ujala" class="w-6 h-6 rounded-md bg-white p-0.5 border border-red-200 flex-shrink-0 object-contain">
-                            <h3 class="font-extrabold text-xs text-red-950 truncate">Amar Ujala — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=amarujala.com&sz=64" alt="Amar Ujala" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Amar Ujala — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Aamarujala.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white hover:bg-brandRed hover:text-white text-brandRed border border-red-200 transition flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Aamarujala.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-red-500/10 hover:bg-[#FF3B30] hover:text-white text-[#D70015] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_amarujala" class="px-3 py-1.5 bg-red-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_paper_amarujala" class="p-3 space-y-2.5 flex-1 max-h-56 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-5 text-center">Loading Amar Ujala (Atrauli)...</p>
+                    <div id="radarTicker_paper_amarujala" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_paper_amarujala" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-56 sm:max-h-60 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Amar Ujala (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 2: Dainik Bhaskar - Atrauli -->
-                <div class="bg-white rounded-2xl border border-orange-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3 py-2 bg-orange-50/90 border-b border-orange-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=bhaskar.com&sz=64" alt="Dainik Bhaskar" class="w-6 h-6 rounded-md bg-white p-0.5 border border-orange-200 flex-shrink-0 object-contain">
-                            <h3 class="font-extrabold text-xs text-orange-950 truncate">Dainik Bhaskar — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=bhaskar.com&sz=64" alt="Dainik Bhaskar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Dainik Bhaskar — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Abhaskar.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white hover:bg-orange-600 hover:text-white text-orange-700 border border-orange-200 transition flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Abhaskar.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-orange-500/10 hover:bg-[#FF9500] hover:text-white text-[#CC7700] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_bhaskar" class="px-3 py-1.5 bg-orange-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_paper_bhaskar" class="p-3 space-y-2.5 flex-1 max-h-56 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-5 text-center">Loading Dainik Bhaskar (Atrauli)...</p>
+                    <div id="radarTicker_paper_bhaskar" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_paper_bhaskar" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-56 sm:max-h-60 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Dainik Bhaskar (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 3: Hindustan - Atrauli -->
-                <div class="bg-white rounded-2xl border border-blue-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3 py-2 bg-blue-50/90 border-b border-blue-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=livehindustan.com&sz=64" alt="Hindustan" class="w-6 h-6 rounded-md bg-white p-0.5 border border-blue-200 flex-shrink-0 object-contain">
-                            <h3 class="font-extrabold text-xs text-blue-950 truncate">Hindustan — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=livehindustan.com&sz=64" alt="Hindustan" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Hindustan — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white hover:bg-blue-600 hover:text-white text-blue-700 border border-blue-200 transition flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-blue-500/10 hover:bg-[#007AFF] hover:text-white text-[#007AFF] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_hindustan" class="px-3 py-1.5 bg-blue-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_paper_hindustan" class="p-3 space-y-2.5 flex-1 max-h-56 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-5 text-center">Loading Hindustan (Atrauli)...</p>
+                    <div id="radarTicker_paper_hindustan" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_paper_hindustan" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-56 sm:max-h-60 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Hindustan (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 4: Dainik Jagran - Atrauli -->
-                <div class="bg-white rounded-2xl border border-emerald-200 shadow-xs flex flex-col overflow-hidden">
-                    <div class="px-3 py-2 bg-emerald-50/90 border-b border-emerald-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=jagran.com&sz=64" alt="Dainik Jagran" class="w-6 h-6 rounded-md bg-white p-0.5 border border-emerald-200 flex-shrink-0 object-contain">
-                            <h3 class="font-extrabold text-xs text-emerald-950 truncate">Dainik Jagran — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=jagran.com&sz=64" alt="Dainik Jagran" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Dainik Jagran — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Ajagran.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-200 transition flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Ajagran.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 hover:bg-[#34C759] hover:text-white text-[#248A3D] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_jagran" class="px-3 py-1.5 bg-emerald-950 text-white text-[11px] font-bold truncate hidden"></div>
-                    <div id="radarList_paper_jagran" class="p-3 space-y-2.5 flex-1 max-h-56 overflow-y-auto divide-y divide-gray-100 text-xs">
-                        <p class="text-gray-400 py-5 text-center">Loading Dainik Jagran (Atrauli)...</p>
+                    <div id="radarTicker_paper_jagran" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_paper_jagran" class="p-2.5 sm:p-3.5 space-y-2 sm:space-y-2.5 flex-1 max-h-56 sm:max-h-60 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Dainik Jagran (Atrauli)...</p>
                     </div>
                 </div>
 
@@ -251,88 +330,89 @@
 
         <!-- ==================== SECTION 3: THREE EDITORIAL BUREAU DRAWERS ==================== -->
         <section aria-label="Editorial Bureaus & Social Media Desk" class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-white p-3.5 rounded-2xl border border-gray-200 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-[22px] border border-black/[0.06] shadow-apple">
                 <div>
-                    <h2 class="text-sm sm:text-base font-extrabold text-gray-900">Editorial Bureaus & Social Media Shortcuts</h2>
-                    <p class="text-[11px] text-gray-500 font-medium">Click any profile avatar (DP) to upload a photo from your gallery • Open Facebook, X or Instagram directly below</p>
+                    <h2 class="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">Editorial Bureaus & Social Media Shortcuts</h2>
+                    <p class="text-xs text-[#86868B] font-normal mt-0.5">Click any profile avatar (DP) to upload a photo from your gallery • Open Facebook, X or Instagram directly below</p>
                 </div>
-                <div class="relative w-full sm:w-64">
-                    <input type="text" id="bureauSearchInput" oninput="renderAllBureaus()" placeholder="🔍 Search name or designation..." class="w-full pl-3 pr-8 py-2 rounded-xl border border-gray-300 text-xs font-semibold focus:outline-none focus:border-brandRed">
+                <div class="relative w-full sm:w-72">
+                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#86868B] text-xs pointer-events-none">🔍</span>
+                    <input type="text" id="bureauSearchInput" oninput="renderAllBureaus()" placeholder="Search name or designation..." class="w-full pl-9 pr-4 py-2 rounded-full bg-[#F5F5F7] border border-black/[0.06] text-xs font-medium text-[#1D1D1F] placeholder-[#86868B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] transition-all">
                 </div>
             </div>
 
             <!-- DRAWER 1: DISTRICT BUREAU (JANPAD BUREAU - OPEN BY DEFAULT) -->
-            <div id="drawer_district" class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden bureau-open">
-                <div onclick="toggleBureauDrawer('district')" class="w-full px-4 py-3.5 bg-gray-50 hover:bg-gray-100/80 flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-xl bg-red-100 text-brandRed flex items-center justify-center font-black text-base">🏛️</span>
+            <div id="drawer_district" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden bureau-open">
+                <div onclick="toggleBureauDrawer('district')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-10 h-10 rounded-2xl bg-red-500/10 text-[#D70015] flex items-center justify-center text-lg">🏛️</span>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-extrabold text-sm sm:text-base text-gray-900">District Bureau (Atrauli / Aligarh Desk)</h3>
-                                <span id="count_district" class="px-2 py-0.5 rounded-full bg-brandRed text-white text-[11px] font-extrabold">15</span>
+                            <div class="flex items-center gap-2.5">
+                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">District Bureau (Atrauli / Aligarh Desk)</h3>
+                                <span id="count_district" class="px-2.5 py-0.5 rounded-full bg-[#FF3B30] text-white text-[11px] font-bold tabular-nums">16</span>
                             </div>
-                            <p class="text-[11px] text-gray-500 font-medium">Local public representatives, administration officials & regional news portals</p>
+                            <p class="text-xs text-[#86868B] mt-0.5">Local public representatives, administration officials & regional news portals</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('district')" class="px-2.5 py-1.5 rounded-lg bg-white border border-gray-300 hover:border-gray-900 text-gray-800 text-xs font-bold transition">
+                    <div class="flex items-center gap-2.5">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('district')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
                             + Add
                         </button>
-                        <svg class="w-5 h-5 text-gray-500 bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_district" class="p-4 border-t border-gray-200 bg-gray-50/40">
-                    <div id="grid_district" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5"></div>
+                <div id="body_district" class="p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
+                    <div id="grid_district" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
 
             <!-- DRAWER 2: STATE BUREAU (PRADESH BUREAU) -->
-            <div id="drawer_state" class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
-                <div onclick="toggleBureauDrawer('state')" class="w-full px-4 py-3.5 bg-gray-50 hover:bg-gray-100/80 flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-black text-base">🗺️</span>
+            <div id="drawer_state" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden">
+                <div onclick="toggleBureauDrawer('state')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-10 h-10 rounded-2xl bg-orange-500/10 text-[#CC7700] flex items-center justify-center text-lg">🗺️</span>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-extrabold text-sm sm:text-base text-gray-900">State Bureau (Uttar Pradesh Desk)</h3>
-                                <span id="count_state" class="px-2 py-0.5 rounded-full bg-orange-600 text-white text-[11px] font-extrabold">2</span>
+                            <div class="flex items-center gap-2.5">
+                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">State Bureau (Uttar Pradesh Desk)</h3>
+                                <span id="count_state" class="px-2.5 py-0.5 rounded-full bg-[#FF9500] text-white text-[11px] font-bold tabular-nums">2</span>
                             </div>
-                            <p class="text-[11px] text-gray-500 font-medium">State leadership, cabinet & official Uttar Pradesh handles</p>
+                            <p class="text-xs text-[#86868B] mt-0.5">State leadership, cabinet & official Uttar Pradesh handles</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('state')" class="px-2.5 py-1.5 rounded-lg bg-white border border-gray-300 hover:border-gray-900 text-gray-800 text-xs font-bold transition">
+                    <div class="flex items-center gap-2.5">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('state')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
                             + Add
                         </button>
-                        <svg class="w-5 h-5 text-gray-500 bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_state" class="hidden p-4 border-t border-gray-200 bg-gray-50/40">
-                    <div id="grid_state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5"></div>
+                <div id="body_state" class="hidden p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
+                    <div id="grid_state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
 
             <!-- DRAWER 3: NATIONAL & PRESS RELEASE BUREAU -->
-            <div id="drawer_national" class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
-                <div onclick="toggleBureauDrawer('national')" class="w-full px-4 py-3.5 bg-gray-50 hover:bg-gray-100/80 flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-base">🇮🇳</span>
+            <div id="drawer_national" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden">
+                <div onclick="toggleBureauDrawer('national')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-[#248A3D] flex items-center justify-center text-lg">🇮🇳</span>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-extrabold text-sm sm:text-base text-gray-900">National Bureau & Press Releases (National Desk)</h3>
-                                <span id="count_national" class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold">2</span>
+                            <div class="flex items-center gap-2.5">
+                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">National Bureau & Press Releases (National Desk)</h3>
+                                <span id="count_national" class="px-2.5 py-0.5 rounded-full bg-[#34C759] text-white text-[11px] font-bold tabular-nums">2</span>
                             </div>
-                            <p class="text-[11px] text-gray-500 font-medium">Central leadership, ministries & official Press Information Bureau (PIB)</p>
+                            <p class="text-xs text-[#86868B] mt-0.5">Central leadership, ministries & official Press Information Bureau (PIB)</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('national')" class="px-2.5 py-1.5 rounded-lg bg-white border border-gray-300 hover:border-gray-900 text-gray-800 text-xs font-bold transition">
+                    <div class="flex items-center gap-2.5">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('national')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
                             + Add
                         </button>
-                        <svg class="w-5 h-5 text-gray-500 bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                        <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_national" class="hidden p-4 border-t border-gray-200 bg-gray-50/40">
-                    <div id="grid_national" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5"></div>
+                <div id="body_national" class="hidden p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
+                    <div id="grid_national" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
 
@@ -340,10 +420,14 @@
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-    <footer class="bg-white border-t border-gray-200 mt-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
-            <p class="font-bold text-gray-800">© 2026 Sab Kuch Ghar Baithe News — Internal Editorial Portal</p>
-            <p class="font-semibold text-gray-500">Developed by <span class="text-gray-900 font-extrabold">Cool Art Tech</span></p>
+    <footer class="bg-white/80 backdrop-blur-md border-t border-black/[0.06] mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#86868B]">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <p class="font-semibold text-[#1D1D1F]">© 2026 Sab Kuch Ghar Baithe News</p>
+                <span class="text-black/15">•</span>
+                <span class="text-[#A1A1A6] text-[11px] font-normal">Version 7.1 • Latest Update: 26 Nov 2026</span>
+            </div>
+            <p class="font-medium">Developed by - <span class="text-[#1D1D1F] font-bold">Cool Art®</span></p>
         </div>
     </footer>
 
@@ -351,19 +435,19 @@
     <input type="file" id="cardDpFileInput" accept="image/*" class="hidden" onchange="handleCardDpUpload(event)">
 
     <!-- ==================== MODAL 1: ADD / EDIT PROFILE CARD ==================== -->
-    <div id="cardModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-gray-200 space-y-4">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h3 id="cardModalTitle" class="font-extrabold text-base text-gray-900">Add / Edit Profile Card</h3>
-                <button type="button" onclick="closeCardModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold">✕</button>
+    <div id="cardModal" class="fixed inset-0 bg-black/35 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-[26px] max-w-md w-full p-6 shadow-2xl border border-black/[0.08] space-y-4">
+            <div class="flex items-center justify-between border-b border-black/[0.06] pb-3.5">
+                <h3 id="cardModalTitle" class="font-bold text-base text-[#1D1D1F] tracking-tight">Add / Edit Profile Card</h3>
+                <button type="button" onclick="closeCardModal()" class="w-8 h-8 rounded-full bg-[#F5F5F7] hover:bg-black/10 flex items-center justify-center text-[#86868B] hover:text-[#1D1D1F] font-bold transition">✕</button>
             </div>
 
-            <form id="cardForm" onsubmit="saveCardForm(event)" class="space-y-3">
+            <form id="cardForm" onsubmit="saveCardForm(event)" class="space-y-3.5">
                 <input type="hidden" id="editCardId">
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Select Editorial Bureau</label>
-                    <select id="cardBureauSelect" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs font-bold bg-gray-50 focus:outline-none focus:border-brandRed">
+                    <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Select Editorial Bureau</label>
+                    <select id="cardBureauSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-semibold bg-[#F5F5F7] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
                         <option value="district">District Bureau (District Desk)</option>
                         <option value="state">State Bureau (State Desk)</option>
                         <option value="national">National Bureau & Press Releases (National Desk)</option>
@@ -371,63 +455,63 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Display Name *</label>
-                    <input type="text" id="cardNameInput" required placeholder="e.g. Chaudhary Rishipal Singh" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs font-semibold focus:outline-none focus:border-brandRed">
+                    <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Display Name *</label>
+                    <input type="text" id="cardNameInput" required placeholder="e.g. Chaudhary Rishipal Singh" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">Designation / Role (Short Tag)</label>
-                    <input type="text" id="cardRoleInput" placeholder="e.g. Public Representative / Police Admin / News Portal" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs font-medium focus:outline-none focus:border-brandRed">
+                    <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Designation / Role (Short Tag)</label>
+                    <input type="text" id="cardRoleInput" placeholder="e.g. Public Representative / Police Admin / News Portal" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
                 </div>
 
-                <div class="pt-1 border-t border-gray-100 space-y-2.5">
-                    <p class="text-[11px] font-extrabold text-gray-500 uppercase">Social Media Profile Links</p>
+                <div class="pt-2 border-t border-black/[0.06] space-y-2.5">
+                    <p class="text-[11px] font-bold text-[#86868B] uppercase tracking-wider">Social Media Profile Links</p>
                     
                     <div>
-                        <label class="block text-[11px] font-bold text-blue-700 mb-0.5">Facebook URL</label>
-                        <input type="url" id="cardFbInput" placeholder="https://www.facebook.com/..." class="w-full px-3 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-blue-600">
+                        <label class="block text-[11px] font-semibold text-[#1877F2] mb-0.5">Facebook URL</label>
+                        <input type="url" id="cardFbInput" placeholder="https://www.facebook.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-[#1877F2]/30">
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-900 mb-0.5">X (Twitter) URL</label>
-                        <input type="url" id="cardXInput" placeholder="https://x.com/..." class="w-full px-3 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-gray-900">
+                        <label class="block text-[11px] font-semibold text-[#1D1D1F] mb-0.5">X (Twitter) URL</label>
+                        <input type="url" id="cardXInput" placeholder="https://x.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-black/20">
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-pink-600 mb-0.5">Instagram URL</label>
-                        <input type="url" id="cardIgInput" placeholder="https://www.instagram.com/..." class="w-full px-3 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-pink-600">
+                        <label class="block text-[11px] font-semibold text-[#E4405F] mb-0.5">Instagram URL</label>
+                        <input type="url" id="cardIgInput" placeholder="https://www.instagram.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-[#E4405F]/30">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
-                    <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold shadow-xs">Save Card</button>
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-black/[0.06]">
+                    <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-full bg-[#F5F5F7] hover:bg-black/10 text-[#1D1D1F] text-xs font-semibold transition">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-full bg-[#007AFF] hover:bg-[#0066D6] text-white text-xs font-semibold shadow-xs transition">Save Card</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ==================== MODAL 2: INSTANT NEWS DRAFT BUILDER ==================== -->
-    <div id="draftModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-gray-200 space-y-4">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+    <div id="draftModal" class="fixed inset-0 bg-black/35 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-[26px] max-w-lg w-full p-6 shadow-2xl border border-black/[0.08] space-y-4">
+            <div class="flex items-center justify-between border-b border-black/[0.06] pb-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-red-100 text-brandRed text-xs font-extrabold">✍️ News Draft</span>
-                    <h3 class="font-extrabold text-sm text-gray-900">Ready-to-Publish Copy</h3>
+                    <span class="px-2.5 py-0.5 rounded-full bg-red-500/10 text-[#D70015] text-xs font-bold">✍️ News Draft</span>
+                    <h3 class="font-bold text-sm text-[#1D1D1F] tracking-tight">Ready-to-Publish Copy</h3>
                 </div>
-                <button type="button" onclick="closeDraftModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold">✕</button>
+                <button type="button" onclick="closeDraftModal()" class="w-8 h-8 rounded-full bg-[#F5F5F7] hover:bg-black/10 flex items-center justify-center text-[#86868B] hover:text-[#1D1D1F] font-bold transition">✕</button>
             </div>
 
             <div class="space-y-3">
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-500 mb-1">News Copy (Editable):</label>
-                    <textarea id="draftTextarea" rows="7" class="w-full p-3 rounded-xl border border-gray-300 text-xs sm:text-sm font-medium leading-relaxed focus:outline-none focus:border-brandRed"></textarea>
+                    <label class="block text-[11px] font-semibold text-[#86868B] mb-1.5">News Copy (Editable):</label>
+                    <textarea id="draftTextarea" rows="7" class="w-full p-3.5 rounded-2xl bg-[#F5F5F7] border border-black/[0.08] text-xs sm:text-sm font-medium text-[#1D1D1F] leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"></textarea>
                 </div>
 
                 <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
-                    <a id="draftSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 hover:underline">Open Original Source ↗</a>
+                    <a id="draftSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-[#007AFF] hover:underline">Open Original Source ↗</a>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="copyDraftText()" class="px-4 py-2 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5">
+                        <button type="button" onclick="copyDraftText()" class="px-4 py-2 rounded-full bg-[#1D1D1F] hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 transition">
                             <span>📋</span>
                             <span>Copy News</span>
                         </button>
@@ -438,27 +522,27 @@
     </div>
 
     <!-- ==================== MODAL 3: FREE GOOGLE APPS SCRIPT CONNECTOR ==================== -->
-    <div id="appsScriptModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-xl w-full p-5 shadow-2xl border border-gray-200 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+    <div id="appsScriptModal" class="fixed inset-0 bg-black/35 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-[26px] max-w-xl w-full p-6 shadow-2xl border border-black/[0.08] space-y-4 max-h-[90vh] overflow-y-auto apple-scroll">
+            <div class="flex items-center justify-between border-b border-black/[0.06] pb-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 text-xs font-extrabold">100% Free Live Engine</span>
-                    <h3 class="font-extrabold text-sm sm:text-base text-gray-900">Connect Google News Live Feed</h3>
+                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-900 text-xs font-bold">100% Free Live Engine</span>
+                    <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Connect Google News Live Feed</h3>
                 </div>
-                <button type="button" onclick="closeAppsScriptModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold">✕</button>
+                <button type="button" onclick="closeAppsScriptModal()" class="w-8 h-8 rounded-full bg-[#F5F5F7] hover:bg-black/10 flex items-center justify-center text-[#86868B] hover:text-[#1D1D1F] font-bold transition">✕</button>
             </div>
 
-            <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-xs text-gray-800 space-y-1.5">
-                <p class="font-extrabold text-amber-950">How it works</p>
-                <p>This <b>All-in-One Google Apps Script</b> fetches live Hindi news for all 8 cards (Atrauli All Web + Aligarh + UP + National + Amar Ujala, Bhaskar, Hindustan, Jagran) in a single request.</p>
+            <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3.5 text-xs text-[#1D1D1F] space-y-1">
+                <p class="font-bold text-amber-950">How it works</p>
+                <p class="text-[#1D1D1F]/80">This <b>All-in-One Google Apps Script</b> fetches live Hindi news for all 8 cards (Atrauli Local + Aligarh + UP + National + Amar Ujala, Bhaskar, Hindustan, Jagran) in a single request.</p>
             </div>
 
             <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-bold text-gray-700">Step 1: Copy this code and paste it at script.google.com:</label>
-                    <button type="button" onclick="copyAppsScriptCode()" class="px-2.5 py-1 rounded-lg bg-gray-900 text-white text-[11px] font-bold">📋 Copy Code</button>
+                    <label class="text-xs font-semibold text-[#1D1D1F]">Step 1: Copy this code and paste it at script.google.com:</label>
+                    <button type="button" onclick="copyAppsScriptCode()" class="px-3 py-1 rounded-full bg-[#1D1D1F] text-white text-[11px] font-semibold">📋 Copy Code</button>
                 </div>
-                <pre id="appsScriptSnippet" class="p-3 rounded-xl bg-gray-950 text-emerald-300 text-[11px] overflow-x-auto leading-relaxed select-all">function fetchFeedItems(query, maxCount) {
+                <pre id="appsScriptSnippet" class="p-3.5 rounded-2xl bg-[#1D1D1F] text-emerald-300 text-[11px] overflow-x-auto leading-relaxed select-all">function fetchFeedItems(query, maxCount) {
   try {
     var url = 'https://news.google.com/rss/search?q=' + encodeURIComponent(query) + '&hl=hi&gl=IN&ceid=IN:hi&scoring=n';
     var xml = UrlFetchApp.fetch(url, { muteHttpExceptions: true }).getContentText();
@@ -482,7 +566,7 @@
 
 function doGet(e) {
   var feeds = {
-    atrauli: fetchFeedItems('("अतरौली" OR "Atrauli") -site:amarujala.com -site:bhaskar.com -site:livehindustan.com -site:jagran.com', 10),
+    atrauli: fetchFeedItems('अतरौली', 10),
     aligarh: fetchFeedItems('अलीगढ़ समाचार', 8),
     up: fetchFeedItems('उत्तर प्रदेश बड़ी खबर', 8),
     national: fetchFeedItems('PIB India प्रेस विज्ञप्ति भारत सरकार', 8),
@@ -494,25 +578,32 @@ function doGet(e) {
   if (feeds.atrauli.length === 0) {
     feeds.atrauli = fetchFeedItems('Atrauli Aligarh news', 8);
   }
-  return ContentService.createTextOutput(JSON.stringify({ status: 'ok', feeds: feeds }))
+  var jsonStr = JSON.stringify({ status: 'ok', feeds: feeds });
+  var cb = e && e.parameter && e.parameter.callback;
+  if (cb) {
+    var safeCb = String(cb).replace(/[^a-zA-Z0-9_$.]/g, '');
+    return ContentService.createTextOutput(safeCb + '(' + jsonStr + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(jsonStr)
     .setMimeType(ContentService.MimeType.JSON);
 }</pre>
-                <p class="text-[11px] text-gray-500">Deploy → New deployment → Web app → Who has access: <b>Anyone</b> → Copy Web App URL.</p>
+                <p class="text-[11px] text-[#86868B]">Deploy → New deployment → Web app → Who has access: <b>Anyone</b> → Copy Web App URL.</p>
             </div>
 
-            <div class="space-y-2 pt-2 border-t border-gray-100">
-                <label class="block text-xs font-bold text-gray-800">Step 2: Paste your Google Apps Script Web App URL below:</label>
-                <input type="url" id="appsScriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs font-medium focus:outline-none focus:border-brandRed">
+            <div class="space-y-2 pt-2 border-t border-black/[0.06]">
+                <label class="block text-xs font-semibold text-[#1D1D1F]">Step 2: Paste your Google Apps Script Web App URL below:</label>
+                <input type="url" id="appsScriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
                 <div class="flex justify-end gap-2 pt-1">
-                    <button type="button" onclick="closeAppsScriptModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-bold">Close</button>
-                    <button type="button" onclick="saveAppsScriptUrl()" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold">Save & Load News</button>
+                    <button type="button" onclick="closeAppsScriptModal()" class="px-4 py-2 rounded-full bg-[#F5F5F7] text-[#1D1D1F] text-xs font-semibold">Close</button>
+                    <button type="button" onclick="saveAppsScriptUrl()" class="px-5 py-2 rounded-full bg-[#007AFF] hover:bg-[#0066D6] text-white text-xs font-semibold">Save & Load News</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== TOAST NOTIFICATION ==================== -->
-    <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-gray-900 text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-bold border border-gray-700"></div>
+    <!-- ==================== APPLE DYNAMIC PILL TOAST NOTIFICATION ==================== -->
+    <div id="toastBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 hidden bg-[#1D1D1F]/95 backdrop-blur-md text-white px-4 py-2.5 rounded-full shadow-2xl text-xs font-semibold border border-white/10"></div>
 
     <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
     <script>
@@ -602,45 +693,45 @@ function doGet(e) {
 
                 grid.innerHTML = filtered.map(card => {
                     const avatarHtml = card.dp
-                        ? `<img src="${card.dp}" alt="${card.name}" class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 group-hover:border-brandRed transition">`
-                        : `<div class="w-12 h-12 rounded-full bg-gradient-to-br from-gray-800 to-gray-950 text-white font-extrabold text-sm flex items-center justify-center border-2 border-gray-200 group-hover:border-brandRed transition">${getInitials(card.name)}</div>`;
+                        ? `<img src="${card.dp}" alt="${card.name}" class="w-12 h-12 rounded-full object-cover border border-black/[0.08] shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">`
+                        : `<div class="w-12 h-12 rounded-full bg-gradient-to-b from-[#3A3A3C] to-[#1D1D1F] text-white font-bold text-sm flex items-center justify-center shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">${getInitials(card.name)}</div>`;
 
                     const fbBtn = card.fb
-                        ? `<a href="${card.fb}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-xs font-bold text-[#1877F2] hover:bg-blue-50 transition" title="Open Facebook Profile">${ICON_FB}<span>Facebook</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[11px] font-semibold text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition" title="Add Facebook Link">${ICON_FB}<span>+ FB</span></button>`;
+                        ? `<a href="${card.fb}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1877F2] hover:bg-blue-500/[0.06] transition" title="Open Facebook Profile">${ICON_FB}<span>Facebook</span></a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add Facebook Link">${ICON_FB}<span>+ FB</span></button>`;
 
                     const xBtn = card.x
-                        ? `<a href="${card.x}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-xs font-bold text-gray-900 hover:bg-gray-100 transition" title="Open X (Twitter)">${ICON_X}<span>X</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[11px] font-semibold text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition" title="Add X Link">${ICON_X}<span>+ X</span></button>`;
+                        ? `<a href="${card.x}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1D1D1F] hover:bg-black/[0.04] transition" title="Open X (Twitter)">${ICON_X}<span>X</span></a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add X Link">${ICON_X}<span>+ X</span></button>`;
 
                     const igBtn = card.ig
-                        ? `<a href="${card.ig}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-2 flex items-center justify-center gap-1.5 text-xs font-bold text-[#E4405F] hover:bg-pink-50 transition" title="Open Instagram">${ICON_IG}<span>Insta</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2 px-2 flex items-center justify-center gap-1 text-[11px] font-semibold text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition" title="Add Instagram Link">${ICON_IG}<span>+ IG</span></button>`;
+                        ? `<a href="${card.ig}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#E4405F] hover:bg-pink-500/[0.06] transition" title="Open Instagram">${ICON_IG}<span>Insta</span></a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add Instagram Link">${ICON_IG}<span>+ IG</span></button>`;
 
                     return `
-                        <div class="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 shadow-xs hover:shadow-md transition flex flex-col justify-between overflow-hidden">
+                        <div class="bg-white rounded-[20px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden">
                             <!-- Top Profile Section -->
                             <div class="p-3.5 flex items-start justify-between gap-2.5">
                                 <div class="flex items-center gap-3 min-w-0">
                                     <button type="button" onclick="triggerCardDpUpload('${card.id}')" class="relative group flex-shrink-0 cursor-pointer" title="Click to change Profile Picture (DP)">
                                         ${avatarHtml}
-                                        <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-white border border-gray-300 shadow-xs flex items-center justify-center text-[10px] group-hover:bg-brandRed group-hover:text-white transition">📷</span>
+                                        <span class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white border border-black/[0.1] shadow-xs flex items-center justify-center text-[10px] group-hover:bg-[#007AFF] group-hover:text-white transition">📷</span>
                                     </button>
                                     <div class="min-w-0">
-                                        <h4 class="font-extrabold text-sm text-gray-900 truncate" title="${card.name}">${card.name}</h4>
-                                        <p class="text-[11px] text-gray-500 font-medium truncate mt-0.5">${card.role || 'Editorial Source'}</p>
+                                        <h4 class="font-bold text-[13.5px] text-[#1D1D1F] tracking-tight truncate" title="${card.name}">${card.name}</h4>
+                                        <p class="text-[11px] text-[#86868B] font-normal truncate mt-0.5">${card.role || 'Editorial Source'}</p>
                                     </div>
                                 </div>
 
                                 <!-- Card Actions (Edit / Delete) -->
-                                <div class="flex items-center gap-1 flex-shrink-0">
-                                    <button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 flex items-center justify-center text-xs transition" title="Edit name or social links">✏️</button>
-                                    <button type="button" onclick="deleteEditorialCard('${card.id}')" class="w-7 h-7 rounded-lg hover:bg-red-50 text-gray-400 hover:text-brandRed flex items-center justify-center text-xs transition" title="Delete card">🗑️</button>
+                                <div class="flex items-center gap-0.5 flex-shrink-0">
+                                    <button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-full hover:bg-black/[0.05] text-[#86868B] hover:text-[#1D1D1F] flex items-center justify-center text-xs transition" title="Edit name or social links">✏️</button>
+                                    <button type="button" onclick="deleteEditorialCard('${card.id}')" class="w-7 h-7 rounded-full hover:bg-red-500/10 text-[#86868B] hover:text-[#FF3B30] flex items-center justify-center text-xs transition" title="Delete card">🗑️</button>
                                 </div>
                             </div>
 
                             <!-- Bottom Platform Bar with Separators: Facebook | X | Instagram -->
-                            <div class="border-t border-gray-100 bg-gray-50/70 flex items-center divide-x divide-gray-200">
+                            <div class="border-t border-black/[0.05] bg-[#F5F5F7]/70 flex items-center divide-x divide-black/[0.06]">
                                 ${fbBtn}
                                 ${xBtn}
                                 ${igBtn}
@@ -837,8 +928,8 @@ function doGet(e) {
                 tickerId: 'radarTicker_atrauli',
                 dateline: 'अतरौली (अलीगढ़)',
                 sortByNewest: true,
-                query: 'अतरौली अलीगढ़ -site:amarujala.com -site:bhaskar.com -site:livehindustan.com -site:jagran.com',
-                searchUrl: 'https://news.google.com/search?q=%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80+%E0%A4%85%E0%A4%B2%E0%A5%80%E0%A4%97%E0%A4%A2%E0%A4%BC+-site%3Aamarujala.com+-site%3Abhaskar.com+-site%3Alivehindustan.com+-site%3Ajagran.com&hl=hi&gl=IN&ceid=IN:hi'
+                query: 'अतरौली',
+                searchUrl: 'https://news.google.com/search?q=%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi'
             },
             {
                 key: 'aligarh',
@@ -917,7 +1008,7 @@ function doGet(e) {
         ];
 
         const radarTickerTimers = {};
-        const RADAR_CACHE_PREFIX = 'skgb_radar_v4_';
+        const RADAR_CACHE_PREFIX = 'skgb_radar_v7_';
         const APPS_SCRIPT_STORAGE_KEY = 'skgb_apps_script_url_v1';
         let CUSTOM_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZ_WTy8U3K1BqIaw2IrgJUYBlFGGiraMC8DJXTkTEBqDO_gOl2GjpxveEQrvnf4wyzTg/exec';
 
@@ -1129,17 +1220,17 @@ function doGet(e) {
                 const encodedLoc = encodeURIComponent(feedCfg.dateline);
 
                 return `
-                    <div class="pt-2 first:pt-0 flex items-start justify-between gap-2 group">
+                    <div class="pt-2.5 first:pt-0 flex items-start justify-between gap-2.5 group">
                         <div class="min-w-0 flex-1">
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-bold text-gray-800 group-hover:text-brandRed leading-snug line-clamp-2 transition block">
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-[12.5px] text-[#1D1D1F] group-hover:text-[#007AFF] leading-snug line-clamp-2 transition block">
                                 ${item.cleanTitle}
                             </a>
-                            <div class="flex items-center gap-1.5 mt-1 text-[10px] text-gray-500">
-                                <span class="px-1.5 py-0.2 rounded font-bold ${isToday ? 'bg-red-50 text-brandRed' : 'bg-gray-100 text-gray-600'}">${item.timeLabel}</span>
+                            <div class="flex items-center gap-1.5 mt-1 text-[10px] text-[#86868B]">
+                                <span class="px-1.5 py-0.5 rounded-md font-semibold ${isToday ? 'bg-red-500/10 text-[#D70015]' : 'bg-black/[0.04] text-[#86868B]'}">${item.timeLabel}</span>
                                 <span class="truncate">${item.sourceName}</span>
                             </div>
                         </div>
-                        <button type="button" onclick="openDraftFromGoogleNews('${encodedHeadline}', '${encodedLoc}', '${encodedLink}')" class="flex-shrink-0 px-2 py-1 rounded-lg bg-gray-100 hover:bg-brandRed hover:text-white text-gray-700 text-[10px] font-bold transition" title="Create instant draft from this news">
+                        <button type="button" onclick="openDraftFromGoogleNews('${encodedHeadline}', '${encodedLoc}', '${encodedLink}')" class="flex-shrink-0 w-7 h-7 rounded-full bg-[#F5F5F7] hover:bg-[#007AFF] hover:text-white text-[#1D1D1F] flex items-center justify-center text-[11px] transition" title="Create instant draft from this news">
                             ✍️
                         </button>
                     </div>
@@ -1162,7 +1253,7 @@ function doGet(e) {
                 }
             } catch (e) {}
 
-            const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(feedCfg.query)}&hl=hi&gl=IN&ceid=IN:hi`;
+            const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(feedCfg.query)}&hl=hi&gl=IN&ceid=IN:hi&scoring=n`;
             const rawItems = await fetchRssWithTripleFallback(googleRssUrl, feedCfg.query);
 
             if (rawItems.length > 0) {
@@ -1198,27 +1289,49 @@ function doGet(e) {
                     }
                 } catch (e) {}
             });
-
-            // If All-in-One Google Apps Script is connected, fetch all 8 cards in ONE single request!
+            // If All-in-One Google Apps Script is connected, try JSONP (<script> tag bypasses iFrame CORS) first, then fetch
             if (CUSTOM_APPS_SCRIPT_URL && CUSTOM_APPS_SCRIPT_URL.startsWith('http')) {
+                const applyFeedsPayload = (data) => {
+                    if (!data || !data.feeds) return false;
+                    let loadedAny = false;
+                    allFeeds.forEach(feedCfg => {
+                        const list = data.feeds[feedCfg.key];
+                        if (Array.isArray(list) && list.length > 0) {
+                            loadedAny = true;
+                            try {
+                                localStorage.setItem(RADAR_CACHE_PREFIX + feedCfg.key, JSON.stringify(list.slice(0, 8)));
+                            } catch (e) {}
+                            renderRadarItemsToCard(feedCfg, list);
+                        }
+                    });
+                    return loadedAny;
+                };
+
                 try {
-                    const res = await fetch(CUSTOM_APPS_SCRIPT_URL);
+                    const jsonpData = await new Promise((resolve, reject) => {
+                        const cbName = '__skgb_gas_' + Math.random().toString(36).slice(2);
+                        const script = document.createElement('script');
+                        const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 8000);
+                        function cleanup() {
+                            clearTimeout(timer);
+                            delete window[cbName];
+                            if (script.parentNode) script.parentNode.removeChild(script);
+                        }
+                        window[cbName] = (d) => { cleanup(); resolve(d); };
+                        script.onerror = () => { cleanup(); reject(new Error('error')); };
+                        const sep = CUSTOM_APPS_SCRIPT_URL.includes('?') ? '&' : '?';
+                        script.src = `${CUSTOM_APPS_SCRIPT_URL}${sep}callback=${cbName}&_t=${Date.now()}`;
+                        document.head.appendChild(script);
+                    });
+                    if (applyFeedsPayload(jsonpData)) return;
+                } catch (e) {}
+
+                try {
+                    const sep = CUSTOM_APPS_SCRIPT_URL.includes('?') ? '&' : '?';
+                    const res = await fetch(`${CUSTOM_APPS_SCRIPT_URL}${sep}_t=${Date.now()}`);
                     if (res.ok) {
                         const data = await res.json();
-                        if (data && data.feeds) {
-                            let loadedAny = false;
-                            allFeeds.forEach(feedCfg => {
-                                const list = data.feeds[feedCfg.key];
-                                if (Array.isArray(list) && list.length > 0) {
-                                    loadedAny = true;
-                                    try {
-                                        localStorage.setItem(RADAR_CACHE_PREFIX + feedCfg.key, JSON.stringify(list.slice(0, 8)));
-                                    } catch (e) {}
-                                    renderRadarItemsToCard(feedCfg, list);
-                                }
-                            });
-                            if (loadedAny) return;
-                        }
+                        if (applyFeedsPayload(data)) return;
                     }
                 } catch (e) {}
             }
@@ -1251,42 +1364,39 @@ function doGet(e) {
             modal.classList.remove('flex');
         }
 
-        function copyDraftText() {
-            const textarea = document.getElementById('draftTextarea');
-            textarea.select();
-            document.execCommand('copy');
-            showToast('📋 News draft copied to clipboard!');
+        function openBlankDraftModal() {
+            const blankTemplate = `अतरौली (अलीगढ़) | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n\n[यहाँ अपनी मुख्य खबर या प्रेस विज्ञप्ति लिखें...]\n\n— रिपोर्ट: सब कुछ घर बैठे न्यूज़ डेस्क`;
+            document.getElementById('draftTextarea').value = blankTemplate;
+            const sourceEl = document.getElementById('draftSourceLink');
+            sourceEl.href = 'https://news.google.com/search?q=%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi';
+
+            const modal = document.getElementById('draftModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        // ==================== SAVE UPDATED CODE PERMANENTLY TO DOWNLOADED HTML ====================
-        function downloadUpdatedHtmlCode() {
-            try {
-                let htmlDoc = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-                const serializedCards = JSON.stringify(editorialCards, null, 12);
-                htmlDoc = htmlDoc.replace(
-                    /const DEFAULT_CARDS = \[[\s\S]*?\];/,
-                    `const DEFAULT_CARDS = ${serializedCards};`
-                );
+        function handleQuickWebNewsSearch(event) {
+            event.preventDefault();
+            const q = (document.getElementById('quickWebNewsInput')?.value || '').trim();
+            if (!q) return;
+            const url = `https://news.google.com/search?q=${encodeURIComponent(q)}&hl=hi&gl=IN&ceid=IN:hi`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
 
-                if (CUSTOM_APPS_SCRIPT_URL) {
-                    htmlDoc = htmlDoc.replace(
-                        /let CUSTOM_APPS_SCRIPT_URL = '[^']*';/,
-                        `let CUSTOM_APPS_SCRIPT_URL = '${CUSTOM_APPS_SCRIPT_URL.replace(/'/g, "\\'")}';`
-                    );
-                }
-
-                const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'index.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showToast('💾 New index.html saved with all your DPs, names & links!');
-            } catch (e) {
-                showToast('⚠️ Error saving HTML file.');
+        let isNightComfortMode = false;
+        function toggleAppleThemeMode() {
+            isNightComfortMode = !isNightComfortMode;
+            const btn = document.getElementById('themeToggleBtn');
+            if (isNightComfortMode) {
+                document.body.style.filter = 'invert(0.92) hue-rotate(180deg)';
+                document.querySelectorAll('img').forEach(img => img.style.filter = 'invert(1) hue-rotate(180deg)');
+                if (btn) btn.textContent = '☀️';
+                showToast('🌙 Night Eye-Comfort Mode enabled');
+            } else {
+                document.body.style.filter = '';
+                document.querySelectorAll('img').forEach(img => img.style.filter = '');
+                if (btn) btn.textContent = '🌙';
+                showToast('☀️ Day Light Mode enabled');
             }
         }
 
@@ -1308,7 +1418,84 @@ function doGet(e) {
             el.textContent = now.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) + ' • ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
+        // ==================== INTERNAL LOGIN & ANTI-COPY SECURITY ====================
+        const EDITORIAL_ACCESS_PIN = '2026';
+        const AUTH_SESSION_KEY = 'skgb_editorial_unlocked_v1';
+
+        function checkEditorialAuth() {
+            const gate = document.getElementById('editorialLoginGate');
+            if (!gate) return;
+            try {
+                if (sessionStorage.getItem(AUTH_SESSION_KEY) === 'true') {
+                    gate.classList.add('hidden');
+                    return;
+                }
+            } catch (e) {}
+            gate.classList.remove('hidden');
+        }
+
+        function handleEditorialLogin(event) {
+            event.preventDefault();
+            const input = document.getElementById('editorialPinInput');
+            const err = document.getElementById('loginErrorMsg');
+            const val = (input?.value || '').trim();
+
+            if (val === EDITORIAL_ACCESS_PIN) {
+                try { sessionStorage.setItem(AUTH_SESSION_KEY, 'true'); } catch (e) {}
+                document.getElementById('editorialLoginGate').classList.add('hidden');
+                if (err) err.classList.add('hidden');
+                input.value = '';
+                showToast('🔓 Welcome to Editorial Control Room');
+            } else {
+                if (err) err.classList.remove('hidden');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function lockControlRoom() {
+            try { sessionStorage.removeItem(AUTH_SESSION_KEY); } catch (e) {}
+            const gate = document.getElementById('editorialLoginGate');
+            if (gate) gate.classList.remove('hidden');
+            showToast('🔒 Control Room Locked');
+        }
+
+        // Block Inspect, View-Source, Save, Print & Copy shortcuts globally (except inside Draft/Search inputs)
+        document.addEventListener('keydown', function(e) {
+            const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+            const isEditable = tag === 'INPUT' || tag === 'TEXTAREA';
+            const key = (e.key || '').toLowerCase();
+
+            // Block F12 & DevTools shortcuts
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c', 'k'].includes(key)) {
+                e.preventDefault();
+                return false;
+            }
+            // Block View Source (Ctrl+U), Save Page (Ctrl+S), Print (Ctrl+P)
+            if ((e.ctrlKey || e.metaKey) && ['u', 's', 'p'].includes(key)) {
+                e.preventDefault();
+                return false;
+            }
+            // Block Copy/Cut/Select-All outside editable inputs
+            if (!isEditable && (e.ctrlKey || e.metaKey) && ['c', 'x', 'a'].includes(key)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('copy', function(e) {
+            const tag = (e.target && e.target.tagName) ? e.target.tagName.toUpperCase() : '';
+            if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+                e.preventDefault();
+            }
+        });
+
         window.onload = function() {
+            checkEditorialAuth();
             loadCardsFromStorage();
             loadAppsScriptUrl();
             updateLiveClock();
