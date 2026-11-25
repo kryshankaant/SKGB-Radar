@@ -122,7 +122,7 @@
                 </button>
             </form>
 
-            <p class="text-[10px] text-[#A1A1A6]">Protected Workspace • Default PIN: <span class="font-semibold text-[#86868B]">2026</span></p>
+            <p class="text-[10px] text-[#A1A1A6]">Protected Workspace • Authorized Personnel Only</p>
         </div>
     </div>
 
@@ -172,6 +172,21 @@
                 <button type="button" onclick="lockControlRoom()" class="w-8 h-8 rounded-full bg-black/[0.05] hover:bg-red-500/10 hover:text-[#D70015] active:scale-95 text-[#1D1D1F] flex items-center justify-center text-xs transition-all flex-shrink-0" title="Lock Control Room">
                     🔒
                 </button>
+            </div>
+        </div>
+
+        <!-- Live Newsroom Breaking Wire Bar -->
+        <div class="bg-[#1D1D1F] text-white border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-1.5 flex items-center justify-between gap-3 text-[11px]">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <span class="px-2 py-0.5 rounded bg-[#FF3B30] text-white font-extrabold text-[9.5px] tracking-wider uppercase flex-shrink-0 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-flash"></span> LIVE DESK
+                    </span>
+                    <p id="masterControlWire" class="truncate font-medium text-white/90">Monitoring Atrauli, Aligarh, Uttar Pradesh & National news wires in real time...</p>
+                </div>
+                <span class="hidden md:inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400 flex-shrink-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> FEED ACTIVE
+                </span>
             </div>
         </div>
     </header>
@@ -250,28 +265,26 @@
                         <p class="text-[#86868B] py-6 text-center text-[11px]">Loading national & press releases...</p>
                     </div>
                 </div>
-
-            </div>
-        </section>
-
-        <!-- ==================== SECTION 2: 4 MAJOR NEWSPAPERS - ATRAULI ONLY (WITH PROMINENT LOGOS) ==================== -->
+        <!-- ==================== SECTION 2: 4 MAJOR NEWSPAPERS - ATRAULI ONLY (WITH REAL MASTHEAD LOGOS) ==================== -->
         <section aria-label="Atrauli Major Newspapers Radar">
             <div class="flex items-center justify-between mb-3.5 px-0.5">
                 <div class="flex items-center gap-2.5">
                     <span class="w-2.5 h-2.5 rounded-full bg-[#FF9500] animate-flash"></span>
                     <h2 class="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">Atrauli Special Newspaper Desk <span class="text-[#86868B] font-medium text-xs sm:text-sm">— Atrauli News Only</span></h2>
                 </div>
-                <span class="text-[11px] text-[#86868B] font-medium hidden sm:inline">Amar Ujala • Dainik Bhaskar • Hindustan • Dainik Jagran</span>
+                <span class="text-[11px] text-[#86868B] font-medium hidden sm:inline">Amar Ujala • Dainik Bhaskar • Dainik Jagran • Hindustan</span>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 items-stretch">
                 
                 <!-- Newspaper Card 1: Amar Ujala - Atrauli -->
                 <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-rose-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
                     <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-rose-500/[0.14] via-red-500/[0.07] to-white border-b border-rose-200/60 flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=amarujala.com&sz=128" alt="Amar Ujala" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-rose-200 shadow-xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#9F1239] tracking-tight truncate">Amar Ujala — Atrauli</h3>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="h-8 sm:h-9 px-2 rounded-xl bg-white border border-rose-200 shadow-2xs flex items-center justify-center flex-shrink-0">
+                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Amar_Ujala_Logo.png" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=amarujala.com&sz=128';" alt="Amar Ujala" class="h-4 sm:h-5 w-auto max-w-[82px] sm:max-w-[96px] object-contain">
+                            </div>
+                            <span class="font-bold text-[10.5px] sm:text-xs text-[#9F1239] truncate">Atrauli</span>
                         </div>
                         <a href="https://news.google.com/search?q=site%3Aamarujala.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-rose-500/15 hover:bg-[#E11D48] hover:text-white text-[#BE123C] transition-all flex-shrink-0">All ↗</a>
                     </div>
@@ -284,9 +297,11 @@
                 <!-- Newspaper Card 2: Dainik Bhaskar - Atrauli -->
                 <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-orange-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
                     <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-orange-500/[0.15] via-amber-500/[0.08] to-white border-b border-orange-200/60 flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=bhaskar.com&sz=128" alt="Dainik Bhaskar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-orange-200 shadow-xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#9A3412] tracking-tight truncate">Dainik Bhaskar — Atrauli</h3>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="h-8 sm:h-9 px-2 rounded-xl bg-white border border-orange-200 shadow-2xs flex items-center justify-center flex-shrink-0">
+                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dainik_Bhaskar_Logo.svg" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=bhaskar.com&sz=128';" alt="Dainik Bhaskar" class="h-4 sm:h-5 w-auto max-w-[82px] sm:max-w-[96px] object-contain">
+                            </div>
+                            <span class="font-bold text-[10.5px] sm:text-xs text-[#9A3412] truncate">Atrauli</span>
                         </div>
                         <a href="https://news.google.com/search?q=site%3Abhaskar.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-orange-500/15 hover:bg-[#EA580C] hover:text-white text-[#C2410C] transition-all flex-shrink-0">All ↗</a>
                     </div>
@@ -296,33 +311,37 @@
                     </div>
                 </div>
 
-                <!-- Newspaper Card 3: Hindustan - Atrauli -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-sky-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-sky-500/[0.15] via-blue-500/[0.08] to-white border-b border-sky-200/60 flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=livehindustan.com&sz=128" alt="Hindustan" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-sky-200 shadow-xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#075985] tracking-tight truncate">Hindustan — Atrauli</h3>
-                        </div>
-                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-sky-500/15 hover:bg-[#0284C7] hover:text-white text-[#0369A1] transition-all flex-shrink-0">All ↗</a>
-                    </div>
-                    <div id="radarTicker_paper_hindustan" class="px-2.5 sm:px-3.5 py-1.5 bg-[#0C4A6E] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
-                    <div id="radarList_paper_hindustan" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
-                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Hindustan (Atrauli)...</p>
-                    </div>
-                </div>
-
-                <!-- Newspaper Card 4: Dainik Jagran - Atrauli -->
+                <!-- Newspaper Card 3: Dainik Jagran - Atrauli (Attached djlogo.png Masthead) -->
                 <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-purple-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
                     <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-purple-500/[0.14] via-indigo-500/[0.07] to-white border-b border-purple-200/60 flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=jagran.com&sz=128" alt="Dainik Jagran" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-purple-200 shadow-xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#581C87] tracking-tight truncate">Dainik Jagran — Atrauli</h3>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="h-8 sm:h-9 px-2 rounded-xl bg-white border border-purple-200 shadow-2xs flex items-center justify-center flex-shrink-0">
+                                <img src="djlogo.png" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Dainik_Jagran_newspaper_logo.jpg';" alt="Dainik Jagran" class="h-5 sm:h-6 w-auto max-w-[92px] sm:max-w-[110px] object-contain">
+                            </div>
+                            <span class="font-bold text-[10.5px] sm:text-xs text-[#581C87] truncate">Atrauli</span>
                         </div>
                         <a href="https://news.google.com/search?q=site%3Ajagran.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-purple-500/15 hover:bg-[#7E22CE] hover:text-white text-[#6B21A8] transition-all flex-shrink-0">All ↗</a>
                     </div>
                     <div id="radarTicker_paper_jagran" class="px-2.5 sm:px-3.5 py-1.5 bg-[#4C1D95] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_paper_jagran" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Dainik Jagran (Atrauli)...</p>
+                    </div>
+                </div>
+
+                <!-- Newspaper Card 4: Hindustan - Atrauli (Last Position) -->
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-sky-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-sky-500/[0.15] via-blue-500/[0.08] to-white border-b border-sky-200/60 flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="h-8 sm:h-9 px-2 rounded-xl bg-white border border-sky-200 shadow-2xs flex items-center justify-center flex-shrink-0">
+                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hindustan_Newspaper_Logo.png" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=livehindustan.com&sz=128';" alt="Hindustan" class="h-4 sm:h-5 w-auto max-w-[82px] sm:max-w-[96px] object-contain">
+                            </div>
+                            <span class="font-bold text-[10.5px] sm:text-xs text-[#075985] truncate">Atrauli</span>
+                        </div>
+                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-sky-500/15 hover:bg-[#0284C7] hover:text-white text-[#0369A1] transition-all flex-shrink-0">All ↗</a>
+                    </div>
+                    <div id="radarTicker_paper_hindustan" class="px-2.5 sm:px-3.5 py-1.5 bg-[#0C4A6E] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarList_paper_hindustan" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
+                        <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Hindustan (Atrauli)...</p>
                     </div>
                 </div>
 
@@ -350,7 +369,7 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Atrauli Desk (Local Bureau)</h3>
-                                <span id="count_atrauli" class="px-2 py-0.5 rounded-full bg-[#FF3B30] text-white text-[11px] font-bold tabular-nums">15</span>
+                                <span id="count_atrauli" class="px-2 py-0.5 rounded-full bg-[#FF3B30] text-white text-[11px] font-bold tabular-nums">16</span>
                             </div>
                             <p class="text-[11px] text-[#86868B] mt-0.5">Atrauli public representatives, local leaders & regional news portals</p>
                         </div>
@@ -443,6 +462,83 @@
             </div>
 
         </section>
+
+        <!-- ==================== SECTION 4: CONTROL ROOM EMERGENCY & LOCAL POLICE HELPLINES ==================== -->
+        <section aria-label="Emergency and Police Helpline Directory" class="bg-white rounded-[22px] border border-red-200/75 shadow-apple overflow-hidden">
+            <div class="px-4 sm:px-5 py-3 bg-gradient-to-r from-red-600/[0.1] via-amber-500/[0.05] to-white border-b border-red-200/60 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#FF3B30] animate-flash"></span>
+                    <h2 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Control Room Emergency & Atrauli / Aligarh Police Helplines</h2>
+                </div>
+                <span class="text-[10.5px] font-semibold text-[#86868B]">Tap any number for instant call / verification</span>
+            </div>
+
+            <div class="p-3.5 sm:p-4 space-y-3">
+                <!-- Quick National & State Emergency Numbers -->
+                <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    <a href="tel:112" class="p-2.5 rounded-2xl bg-red-500/[0.08] hover:bg-red-500/[0.15] border border-red-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#D70015] tabular-nums">112</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">UP Police / Dial 112</p>
+                    </a>
+                    <a href="tel:108" class="p-2.5 rounded-2xl bg-emerald-500/[0.08] hover:bg-emerald-500/[0.15] border border-emerald-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#047857] tabular-nums">108</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">Emergency Ambulance</p>
+                    </a>
+                    <a href="tel:101" class="p-2.5 rounded-2xl bg-orange-500/[0.08] hover:bg-orange-500/[0.15] border border-orange-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#C2410C] tabular-nums">101</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">Fire Brigade</p>
+                    </a>
+                    <a href="tel:1930" class="p-2.5 rounded-2xl bg-blue-500/[0.08] hover:bg-blue-500/[0.15] border border-blue-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#0055D4] tabular-nums">1930</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">Cyber Crime Helpline</p>
+                    </a>
+                    <a href="tel:1090" class="p-2.5 rounded-2xl bg-purple-500/[0.08] hover:bg-purple-500/[0.15] border border-purple-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#6B21A8] tabular-nums">1090</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">Women Power Line</p>
+                    </a>
+                    <a href="tel:1076" class="p-2.5 rounded-2xl bg-amber-500/[0.08] hover:bg-amber-500/[0.15] border border-amber-200/80 text-center transition">
+                        <p class="text-sm sm:text-base font-extrabold text-[#B45309] tabular-nums">1076</p>
+                        <p class="text-[10px] font-bold text-[#1D1D1F] truncate">CM Helpline UP</p>
+                    </a>
+                </div>
+
+                <!-- Atrauli Circle & Aligarh Police Station CUG Numbers -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <a href="tel:9454402783" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">PS Atrauli (SHO)</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454402783</span>
+                    </a>
+                    <a href="tel:9454401259" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">CO Atrauli</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454401259</span>
+                    </a>
+                    <a href="tel:9454402791" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">PS Dadon</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454402791</span>
+                    </a>
+                    <a href="tel:9454402788" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">PS Chharra</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454402788</span>
+                    </a>
+                    <a href="tel:9454402793" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">PS Gangiri</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454402793</span>
+                    </a>
+                    <a href="tel:9454402804" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">PS Pali Mukimpur</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454402804</span>
+                    </a>
+                    <a href="tel:9454401014" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">SP Rural Aligarh</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454401014</span>
+                    </a>
+                    <a href="tel:9454400253" class="px-3 py-2 rounded-xl bg-[#F5F5F7] hover:bg-black/[0.06] border border-black/[0.05] flex items-center justify-between gap-2 transition">
+                        <span class="font-semibold text-[#1D1D1F] truncate">SSP Aligarh</span>
+                        <span class="font-bold text-[#007AFF] tabular-nums flex-shrink-0">9454400253</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- ==================== FOOTER ==================== -->
@@ -453,7 +549,7 @@
                 <span class="mx-1.5 text-black/25">|</span>
                 <span class="font-medium">Developed by - <span class="text-[#1D1D1F] font-bold">Cool Art®</span></span>
             </p>
-            <p class="text-[#A1A1A6] text-[9.5px] sm:text-[10.5px] font-normal">Version 7.3 • Latest Update: 26 Nov 2026</p>
+            <p class="text-[#A1A1A6] text-[9.5px] sm:text-[10.5px] font-normal">Version 7.4 • Latest Update: 26 Nov 2026</p>
         </div>
     </footer>
 
@@ -656,13 +752,14 @@ function doGet(e) {
             { id: 'd_14', bureau: 'atrauli', name: 'Atrauli Khabar', role: 'Atrauli News Page', dp: '', fb: 'https://www.facebook.com/profile.php?id=100008760490540', x: '', ig: '' },
             { id: 'd_15', bureau: 'atrauli', name: 'UP AJJ TAK 24 News', role: 'Regional News Channel', dp: '', fb: 'https://www.facebook.com/profile.php?id=100091777810117', x: '', ig: '' },
             { id: 'd_16', bureau: 'atrauli', name: 'Chaudhary Bijendra Singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/chaudharybijendra.singh.54', x: '', ig: '' },
+            { id: 'd_17', bureau: 'atrauli', name: 'Gagan Kumar', role: 'Local Representative / Social', dp: '', fb: 'https://www.facebook.com/itsgaganlodhi', x: '', ig: '' },
             { id: 's_1', bureau: 'state', name: 'CM Office, GoUP', role: 'Chief Minister Office, Uttar Pradesh', dp: '', fb: 'https://www.facebook.com/CMOfficeUP', x: 'https://x.com/CMOfficeUP', ig: 'https://www.instagram.com/cmofficeup' },
             { id: 's_2', bureau: 'state', name: 'UP Police', role: 'Uttar Pradesh Police HQ', dp: '', fb: 'https://www.facebook.com/uppolice', x: 'https://x.com/Uppolice', ig: 'https://www.instagram.com/uppolice' },
             { id: 'n_1', bureau: 'national', name: 'PIB India (Press Releases)', role: 'Press Information Bureau, Govt. of India', dp: '', fb: 'https://www.facebook.com/pibindia', x: 'https://x.com/PIB_India', ig: 'https://www.instagram.com/pibindia' },
             { id: 'n_2', bureau: 'national', name: 'PMO India', role: 'Prime Minister Office, India', dp: '', fb: 'https://www.facebook.com/PMOIndia', x: 'https://x.com/PMOIndia', ig: 'https://www.instagram.com/pmoindia' }
         ];
 
-        const STORAGE_KEY = 'skgb_editorial_cards_v3';
+        const STORAGE_KEY = 'skgb_editorial_cards_v4';
         let editorialCards = [];
         let activeDpTargetId = null;
 
@@ -1231,6 +1328,10 @@ function doGet(e) {
             const updateTicker = () => {
                 const current = cleanItems[idx % cleanItems.length];
                 tickerEl.innerHTML = `<span class="text-amber-300 mr-1">⚡ FLASH:</span> ${current.cleanTitle}`;
+                const masterWire = document.getElementById('masterControlWire');
+                if (masterWire && feedCfg.key === 'atrauli') {
+                    masterWire.innerHTML = `<span class="text-amber-300 font-bold mr-1.5">[${feedCfg.dateline}]</span> ${current.cleanTitle}`;
+                }
                 idx++;
             };
             updateTicker();
