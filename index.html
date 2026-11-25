@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सब कुछ घर बैठे न्यूज़ | फ़्लैश न्यूज़ रडार (इंटरनल डेस्क)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans Devanagari & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Devanagari"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brandRed: '#E61919',
+                        brandDark: '#111827',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            background-color: #F4F5F7;
+            color: #111827;
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbar for horizontal source pills */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Swipe Card Transitions */
+        .swipe-card {
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+            touch-action: pan-y;
+            user-select: none;
+        }
+        .swipe-card.dragging {
+            transition: none;
+            cursor: grabbing;
+        }
+
+        /* Pulse animation for LIVE / FLASH badge */
+        @keyframes softPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+        .animate-flash {
+            animation: softPulse 1.6s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ==================== TOP HEADER ==================== -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Brand Logo (Clean skgb.png ONLY - No Fake/Sample SVG) -->
+            <div class="flex items-center gap-3">
+                <div onclick="document.getElementById('logoFileInput').click()" class="flex-shrink-0 h-12 sm:h-14 flex items-center cursor-pointer group" title="सब कुछ घर बैठे न्यूज़ (skgb.png फ़ाइल चुनने के लिए क्लिक करें)">
+                    <img id="brandLogoImg" src="skgb.png" alt="सब कुछ घर बैठे न्यूज़" class="h-12 sm:h-14 w-auto object-contain" onerror="this.classList.add('hidden'); document.getElementById('brandLogoTextFallback').classList.remove('hidden');">
+                    <div id="brandLogoTextFallback" class="hidden flex items-center gap-2 px-3 py-2 rounded-xl bg-red-50 border border-red-200">
+                        <span class="font-extrabold text-brandRed text-sm sm:text-base">सब कुछ घर बैठे न्यूज़</span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-white border border-red-300 text-gray-700 group-hover:bg-red-600 group-hover:text-white transition">skgb.png चुनें</span>
+                    </div>
+                    <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                            सब कुछ घर बैठे न्यूज़
+                        </h1>
+                        <span class="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-red-50 text-brandRed border border-red-200">
+                            <span class="w-2 h-2 rounded-full bg-brandRed animate-flash"></span>
+                            फ़्लैश न्यूज़ रडार
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium flex items-center gap-2 mt-0.5">
+                        <span>इंटरनल डेस्क</span>
+                        <span>•</span>
+                        <span id="liveClock" class="text-gray-700 font-semibold">लोड हो रहा है...</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Controls: Bulletin, View Toggle, Add Link, Save Into Code -->
+            <div class="flex items-center gap-2 flex-wrap ml-auto sm:ml-0">
+                <!-- Bulletin Queue Button -->
+                <button onclick="openBulletinModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition">
+                    <span>⚡ बुलेटिन</span>
+                    <span id="bulletinCount" class="px-1.5 py-0.5 text-[11px] rounded-full bg-amber-600 text-white font-bold">0</span>
+                </button>
+
+                <!-- View Switcher (Swipe vs Grid) -->
+                <div class="bg-gray-100 p-1 rounded-xl border border-gray-200 flex items-center">
+                    <button id="btnViewSwipe" onclick="switchView('swipe')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-gray-900 shadow-sm transition">
+                        स्वाइप
+                    </button>
+                    <button id="btnViewGrid" onclick="switchView('grid')" class="px-2.5 py-1 rounded-lg text-xs font-bold text-gray-600 hover:text-gray-900 transition">
+                        सभी कार्ड
+                    </button>
+                </div>
+
+                <!-- Add New Link / RSS Feed Button -->
+                <button onclick="openAddSourceModal()" class="flex items-center gap-1 px-3 py-2 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold shadow-sm transition">
+                    <span>+ नया लिंक जोड़ें</span>
+                </button>
+
+                <!-- Permanent Save into HTML Code Button -->
+                <button onclick="openExportCodeModal()" class="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition" title="सभी जुड़े हुए नए लिंक्स को हमेशा के लिए HTML कोड फ़ाइल में सेव करें">
+                    <span>💾 कोड में सेव करें</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== SOURCE FILTER BAR (ALL CONNECTED FACEBOOK PAGES) ==================== -->
+        <div class="bg-gray-50 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar" id="sourcePillsContainer">
+                <!-- Dynamically rendered source pills -->
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== SUB-BAR: QUICK STATUS & DIRECTORY ==================== -->
+    <div class="max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2 text-xs">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-gray-700 font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span id="totalSourcesBadge">कुल 15 स्रोत सक्रिय</span>
+            </span>
+            <span id="autoSaveBadge" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold">
+                ✔ ऑटो-सेव चालू
+            </span>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+            <button onclick="openSourcesDirectoryModal()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 font-bold transition">
+                ✏️ सभी लिंक्स मैनेज / एडिट करें ↗
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 flex flex-col items-center justify-center">
+
+        <!-- 1. SWIPE DECK VIEW (Single Source / Feed Card Focus) -->
+        <section id="swipeDeckSection" class="w-full max-w-2xl mx-auto flex flex-col items-center">
+            
+            <!-- Progress & Keyboard Hint Bar -->
+            <div class="w-full flex items-center justify-between text-xs text-gray-500 mb-2 px-1">
+                <span id="cardCounterText" class="font-bold text-gray-800">स्रोत 1 / 15</span>
+                <span class="hidden sm:inline">कीबोर्ड <kbd class="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-[11px] font-mono">←</kbd> <kbd class="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-[11px] font-mono">→</kbd> या कार्ड को बाएं-दाएं स्वाइप करें</span>
+                <span class="sm:hidden">बाएं या दाएं स्वाइप करें ⇄</span>
+            </div>
+
+            <!-- Interactive Card Container -->
+            <div id="swipeCardWrapper" class="w-full relative min-h-[380px] flex items-center justify-center">
+                <!-- Active Swipe Card injected via JS -->
+            </div>
+
+            <!-- Bottom Navigation Controls -->
+            <div class="w-full grid grid-cols-2 gap-3 mt-4">
+                <button id="btnPrevPost" onclick="navigateCard(-1)" class="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-white hover:bg-gray-50 active:scale-[0.99] border border-gray-300 text-gray-800 font-bold text-sm shadow-sm transition">
+                    <span>← पिछला स्रोत</span>
+                </button>
+                <button id="btnNextPost" onclick="navigateCard(1)" class="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gray-900 hover:bg-black active:scale-[0.99] text-white font-bold text-sm shadow-sm transition">
+                    <span>अगला स्रोत →</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. GRID / LIST RADAR VIEW (All Cards at a Glance) -->
+        <section id="gridRadarSection" class="hidden w-full">
+            <div id="gridCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Grid cards injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
+            <div class="font-semibold text-gray-800">
+                © 2026 सब कुछ घर बैठे न्यूज़ | <span class="text-brandRed font-bold">केवल आंतरिक संपादकीय उपयोग हेतु</span>
+            </div>
+            <div class="font-medium">
+                Developed by <span class="font-bold text-gray-900">Cool Art Tech</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL 1: QUICK NEWS DRAFTER ("खबर बनाएं") ==================== -->
+    <div id="newsDraftModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="px-5 py-3.5 bg-gray-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-brandRed text-xs font-bold">NEWS BUILDER</span>
+                    <h3 class="font-bold text-base">क्विक न्यूज़ ड्राफ्टर (पोस्ट से तुरंत खबर बनाएं)</h3>
+                </div>
+                <button onclick="closeModal('newsDraftModal')" class="text-gray-300 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-4">
+                <!-- Step 1: Paste Facebook Post Text -->
+                <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-extrabold text-amber-950">स्टेप 1: Facebook से कॉपी की गई पोस्ट यहाँ पेस्ट करें</label>
+                        <a id="draftVerifyLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-700 hover:underline">
+                            पेज खोलकर पोस्ट कॉपी करें ↗
+                        </a>
+                    </div>
+                    <textarea id="rawPasteInput" rows="3" placeholder="Facebook पोस्ट का टेक्स्ट यहाँ पेस्ट करें और नीचे 'खबर में बदलें' दबाएं..." class="w-full px-3 py-2 rounded-xl border border-amber-300 bg-white text-sm text-gray-800 focus:outline-none focus:border-brandRed"></textarea>
+                    <button type="button" onclick="autoFormatNewsFromPaste()" class="px-3.5 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-bold transition">
+                        ⚡ ऑटो-फॉर्मेट (हेडलाइन व खबर में बदलें)
+                    </button>
+                </div>
+
+                <!-- Step 2: Ready News Output -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">प्रस्तावित ब्रेकिंग हेडलाइन (संपादन योग्य)</label>
+                    <input id="draftHeadline" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-bold text-gray-900 text-base focus:outline-none focus:border-brandRed">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">डेटलाइन / स्थान</label>
+                        <input id="draftLocation" type="text" value="अलीगढ़ / अतरौली" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">स्रोत (क्रेडिट)</label>
+                        <input id="draftSource" type="text" readonly class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">खबर का मुख्य मैटर (News Copy)</label>
+                    <textarea id="draftBody" rows="5" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm leading-relaxed text-gray-800 focus:outline-none focus:border-brandRed"></textarea>
+                </div>
+            </div>
+
+            <div class="px-5 py-3.5 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-end gap-2">
+                <button onclick="closeModal('newsDraftModal')" class="px-4 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100">बंद करें</button>
+                <button onclick="copyDraftNews()" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold shadow-sm transition">
+                    📋 पूरी खबर कॉपी करें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: ADD NEW URL / LIVE RSS FEED CONNECTOR ==================== -->
+    <div id="addSourceModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-gray-200 overflow-hidden">
+            <div class="px-5 py-3.5 bg-gray-900 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">+ नया Facebook लिंक या RSS फ़ीड जोड़ें</h3>
+                <button onclick="closeModal('addSourceModal')" class="text-gray-300 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            
+            <form onsubmit="handleAddSource(event)" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">व्यक्ति / पेज का नाम *</label>
+                    <input id="newSourceName" required type="text" placeholder="उदा. नगर पालिका अतरौली / विधायक जी" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-brandRed">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Facebook / X (Twitter) पेज URL *</label>
+                    <input id="newSourceUrl" required type="url" placeholder="https://www.facebook.com/..." class="w-full px-3.5 py-2 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-brandRed">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">अकाउंट प्रकार</label>
+                        <select id="newSourceType" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm bg-white">
+                            <option value="Public Page">Public Page</option>
+                            <option value="Public Figure">Public Figure / नेता</option>
+                            <option value="Profile (Pro Mode)">Profile (Pro Mode)</option>
+                            <option value="News Portal">न्यूज़ पोर्टल</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">डेटलाइन / क्षेत्र</label>
+                        <input id="newSourceLocation" type="text" value="अलीगढ़ / अतरौली" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm">
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-gray-50 border border-gray-200 space-y-1.5">
+                    <label class="block text-xs font-bold text-gray-800">वैकल्पिक: लाइव RSS / JSON फ़ीड URL (असली पोस्ट व फ़ोटो के लिए)</label>
+                    <input id="newSourceRss" type="url" placeholder="https://rss.app/feeds/xxxx.xml या .json" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white">
+                    <p class="text-[11px] text-gray-500">यहाँ जोड़ा गया लिंक ब्राउज़र में तुरंत सेव हो जाएगा और ऊपर <strong>"💾 कोड में सेव करें"</strong> से स्थायी फ़ाइल भी बन जाएगी।</p>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('addSourceModal')" class="px-4 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700">रद्द करें</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold shadow-sm">डैशबोर्ड में जोड़ें</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: ALL CONNECTED SOURCES DIRECTORY (EDIT / DELETE / RSS) ==================== -->
+    <div id="sourcesDirectoryModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-5 py-3.5 bg-gray-900 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">सभी जुड़े हुए Facebook स्रोत (प्रबंधन व डायरेक्ट लिंक)</h3>
+                <button onclick="closeModal('sourcesDirectoryModal')" class="text-gray-300 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            <div id="directoryList" class="p-4 overflow-y-auto divide-y divide-gray-100">
+                <!-- Populated via JS -->
+            </div>
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-200 flex flex-wrap justify-between items-center gap-2 text-xs text-gray-500">
+                <button onclick="resetToDefaultSources()" class="text-red-600 font-bold hover:underline">डिफ़ॉल्ट 15 लिंक्स रीसेट करें</button>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeModal('sourcesDirectoryModal'); openExportCodeModal();" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">💾 कोड में सेव करें</button>
+                    <button onclick="closeModal('sourcesDirectoryModal')" class="px-4 py-1.5 rounded-lg bg-gray-900 text-white font-bold">बंद करें</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 4: SELECTED BULLETIN QUEUE ==================== -->
+    <div id="bulletinModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-5 py-3.5 bg-amber-600 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">⚡ आज के बुलेटिन के लिए चुनी गई ब्रेकिंग लिस्ट</h3>
+                <button onclick="closeModal('bulletinModal')" class="text-white hover:text-amber-100 text-xl font-bold px-2">&times;</button>
+            </div>
+            <div id="bulletinListContainer" class="p-4 overflow-y-auto space-y-3">
+                <!-- Populated via JS -->
+            </div>
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+                <button onclick="clearBulletin()" class="text-xs font-bold text-red-600 hover:underline">लिस्ट खाली करें</button>
+                <button onclick="copyAllBulletin()" class="px-4 py-2 rounded-xl bg-gray-900 text-white text-xs font-bold">सभी बुलेटिन पॉइंट्स कॉपी करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 5: PERMANENT SAVE INTO CODE (EXPORT UPDATED HTML) ==================== -->
+    <div id="exportCodeModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-gray-200 overflow-hidden">
+            <div class="px-5 py-3.5 bg-emerald-700 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">💾 सभी लिंक्स को हमेशा के लिए कोड में सेव करें</h3>
+                <button onclick="closeModal('exportCodeModal')" class="text-emerald-100 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            <div class="p-5 space-y-4 text-sm text-gray-700">
+                <p class="leading-relaxed">
+                    आपने अभी तक जो भी नए Facebook लिंक्स या RSS फ़ीड जोड़े हैं (कुल <strong id="exportCountText" class="text-gray-900">15 स्रोत</strong>), वे सीधे इस वेब ऐप के <strong>मुख्य कोड (DEFAULT_SOURCES)</strong> के अंदर लिखकर तैयार हैं।
+                </p>
+                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1.5">
+                    <p class="font-bold">यह कैसे काम करता है:</p>
+                    <p>1. नीचे <strong>"अपडेटेड index.html डाउनलोड करें"</strong> पर क्लिक करें।</p>
+                    <p>2. डाउनलोड हुई फ़ाइल को अपने फ़ोल्डर में (जहाँ <code>skgb.png</code> रखी है) पुरानी फ़ाइल की जगह रख दें।</p>
+                    <p>3. अब आप इसे किसी भी कंप्यूटर या मोबाइल पर खोलेंगे, आपके सभी जोड़े हुए लिंक्स हमेशा के लिए कोड में पक्के सेव रहेंगे।</p>
+                </div>
+                <div class="flex flex-wrap justify-end gap-2 pt-1">
+                    <button onclick="copyUpdatedSourceCode()" class="px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-800 text-xs font-bold">
+                        📋 पूरा कोड कॉपी करें
+                    </button>
+                    <button onclick="downloadUpdatedHtmlFile()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm">
+                        ⬇ अपडेटेड index.html डाउनलोड करें
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg border border-gray-700 text-xs sm:text-sm font-bold flex items-center gap-2">
+        <span class="text-emerald-400">✔</span>
+        <span id="toastMessage">सफलतापूर्वक सेव हो गया!</span>
+    </div>
+
+    <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+    <script>
+        // =========================================================================
+        // DEFAULT_SOURCES: आपके सभी 15 अपडेटेड Facebook प्रोफ़ाइल नाम और URLs
+        // =========================================================================
+        const DEFAULT_SOURCES = [
+            {
+                id: 'bhoorapandit',
+                name: 'Bhoora Pandit',
+                handle: '@socialist.bhoorapandit',
+                url: 'https://www.facebook.com/socialist.bhoorapandit',
+                rssUrl: '',
+                type: 'Profile (Pro Mode)',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
+                avatarBg: 'bg-rose-700',
+                initials: 'BP'
+            },
+            {
+                id: 'virendrasinghlodhi',
+                name: 'Virendra Singh Lodhi',
+                handle: '@kvirendar.kumar.9',
+                url: 'https://www.facebook.com/kvirendar.kumar.9',
+                rssUrl: '',
+                type: 'Profile (Pro Mode)',
+                dateline: 'अलीगढ़',
+                badgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
+                avatarBg: 'bg-purple-700',
+                initials: 'VS'
+            },
+            {
+                id: 'chaudharyrishipalsingh',
+                name: 'Chaudhary Rishipal Singh',
+                handle: '@ChaydharyRishipalSingh',
+                url: 'https://www.facebook.com/ChaydharyRishipalSingh',
+                rssUrl: '',
+                type: 'Public Figure',
+                dateline: 'अतरौली (अलीगढ़)',
+                badgeColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                avatarBg: 'bg-orange-600',
+                initials: 'CR'
+            },
+            {
+                id: 'bodhpalsingh',
+                name: 'Bodhpal Singh',
+                handle: '@bodhpal.singh.50',
+                url: 'https://www.facebook.com/bodhpal.singh.50',
+                rssUrl: '',
+                type: 'Profile (Pro Mode)',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                avatarBg: 'bg-emerald-700',
+                initials: 'BS'
+            },
+            {
+                id: 'aligarhpolice',
+                name: 'Aligarh Police',
+                handle: '@aligarhpolice',
+                url: 'https://www.facebook.com/aligarhpolice',
+                rssUrl: '',
+                type: 'Public Page',
+                dateline: 'अलीगढ़ / अतरौली',
+                badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                avatarBg: 'bg-blue-900',
+                initials: 'AP'
+            },
+            {
+                id: 'praveenrajsingh',
+                name: 'Praveen raj singh',
+                handle: '@praveenrajsinghbjp',
+                url: 'https://www.facebook.com/praveenrajsinghbjp',
+                rssUrl: '',
+                type: 'Public Figure',
+                dateline: 'अलीगढ़',
+                badgeColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                avatarBg: 'bg-amber-600',
+                initials: 'PR'
+            },
+            {
+                id: 'tapeshchaudhary',
+                name: 'Tapesh Rishipal Singh Chaudhary',
+                handle: '@tapesh.rishipal.singh.chaudhary',
+                url: 'https://www.facebook.com/tapesh.rishipal.singh.chaudhary',
+                rssUrl: '',
+                type: 'Public Figure',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                avatarBg: 'bg-indigo-700',
+                initials: 'TR'
+            },
+            {
+                id: 'gopalmaheshwari',
+                name: 'Gopal Maheshwari',
+                handle: '@gopalbabuji',
+                url: 'https://www.facebook.com/gopalbabuji',
+                rssUrl: '',
+                type: 'Public Page',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
+                avatarBg: 'bg-teal-700',
+                initials: 'GM'
+            },
+            {
+                id: 'nawabsingh',
+                name: 'Nawab Singh',
+                handle: '@nawab.singh.90410',
+                url: 'https://www.facebook.com/nawab.singh.90410',
+                rssUrl: '',
+                type: 'Profile (Pro Mode)',
+                dateline: 'अलीगढ़',
+                badgeColor: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+                avatarBg: 'bg-cyan-700',
+                initials: 'NS'
+            },
+            {
+                id: 'maheshverma',
+                name: 'Mahesh Verma',
+                handle: '@mahesh.chandra.9210',
+                url: 'https://www.facebook.com/mahesh.chandra.9210',
+                rssUrl: '',
+                type: 'Profile (Pro Mode)',
+                dateline: 'अलीगढ़',
+                badgeColor: 'bg-violet-100 text-violet-800 border-violet-200',
+                avatarBg: 'bg-violet-700',
+                initials: 'MV'
+            },
+            {
+                id: 'vireshyadav',
+                name: 'Viresh yadav',
+                handle: '@Vireshyadavmla',
+                url: 'https://www.facebook.com/Vireshyadavmla',
+                rssUrl: '',
+                type: 'Public Figure',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-red-100 text-red-800 border-red-200',
+                avatarBg: 'bg-red-700',
+                initials: 'VY'
+            },
+            {
+                id: 'anilparashar',
+                name: 'Anil Parashar',
+                handle: '@AnilParashar.Official',
+                url: 'https://www.facebook.com/AnilParashar.Official',
+                rssUrl: '',
+                type: 'Public Figure',
+                dateline: 'अलीगढ़',
+                badgeColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                avatarBg: 'bg-orange-700',
+                initials: 'AP'
+            },
+            {
+                id: 'upjansamvadnews',
+                name: 'Upjansamvad News',
+                handle: '@upjansamvad.news',
+                url: 'https://www.facebook.com/upjansamvad.news',
+                rssUrl: '',
+                type: 'News Page',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-red-100 text-red-800 border-red-200',
+                avatarBg: 'bg-brandRed',
+                initials: 'UJ'
+            },
+            {
+                id: 'atraulikhabar',
+                name: 'Atrauli Khabar',
+                handle: 'profile.php?id=100008760490540',
+                url: 'https://www.facebook.com/profile.php?id=100008760490540',
+                rssUrl: '',
+                type: 'News Portal',
+                dateline: 'अतरौली',
+                badgeColor: 'bg-slate-200 text-slate-800 border-slate-300',
+                avatarBg: 'bg-slate-800',
+                initials: 'AK'
+            },
+            {
+                id: 'upajjtak24news',
+                name: 'UP AJJ TAK 24 News',
+                handle: 'profile.php?id=100091777810117',
+                url: 'https://www.facebook.com/profile.php?id=100091777810117',
+                rssUrl: '',
+                type: 'News Portal',
+                dateline: 'अलीगढ़ / अतरौली',
+                badgeColor: 'bg-red-100 text-red-800 border-red-200',
+                avatarBg: 'bg-red-800',
+                initials: '24'
+            }
+        ];
+
+        const STORAGE_KEY = 'skgb_sources_v3';
+        const BULLETIN_KEY = 'skgb_news_bulletin_v3';
+
+        // Load saved sources from localStorage or fall back to DEFAULT_SOURCES
+        function loadSources() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.warn('Storage read fallback', e);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_SOURCES));
+        }
+
+        function saveSourcesToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(connectedSources));
+                const badge = document.getElementById('autoSaveBadge');
+                if (badge) badge.classList.remove('hidden');
+            } catch (e) {
+                console.warn('Storage write warning', e);
+            }
+        }
+
+        let connectedSources = loadSources();
+        let liveFeedCache = {}; // Stores live RSS items + real photos keyed by source.id
+        let selectedSourceId = 'all';
+        let currentCardIndex = 0;
+        let currentView = 'swipe';
+        let bulletinQueue = JSON.parse(localStorage.getItem(BULLETIN_KEY) || '[]');
+
+        // Upload local skgb.png logo if previewing outside folder
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('brandLogoImg');
+                const fallback = document.getElementById('brandLogoTextFallback');
+                img.src = e.target.result;
+                img.classList.remove('hidden');
+                fallback.classList.add('hidden');
+                showToast('✔ आपका असली लोगो (skgb.png) सेट हो गया!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Fetch Live RSS/XML/JSON Feed if user attached an rssUrl to a source
+        async function fetchLiveFeedForSource(src) {
+            if (!src.rssUrl) return;
+            try {
+                // Uses rss2json public bridge so RSS.app / FetchRSS XML feeds load cleanly with images
+                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.rssUrl)}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                if (data.status === 'ok' && Array.isArray(data.items) && data.items.length > 0) {
+                    liveFeedCache[src.id] = data.items.slice(0, 5).map(item => {
+                        // Extract image from enclosure, thumbnail, or description HTML
+                        let photoUrl = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+                        if (!photoUrl && item.description) {
+                            const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/i);
+                            if (imgMatch) photoUrl = imgMatch[1];
+                        }
+                        const cleanText = (item.description || item.title || '').replace(/<[^>]*>?/gm, '').trim();
+                        return {
+                            title: item.title || '',
+                            text: cleanText,
+                            photo: photoUrl,
+                            pubDate: item.pubDate || 'ताज़ा अपडेट',
+                            link: item.link || src.url
+                        };
+                    });
+                    renderApp();
+                }
+            } catch (err) {
+                console.warn('RSS fetch skipped for', src.name, err);
+            }
+        }
+
+        function refreshAllRssFeeds() {
+            connectedSources.forEach(src => {
+                if (src.rssUrl) fetchLiveFeedForSource(src);
+            });
+        }
+
+        function getFilteredSources() {
+            if (selectedSourceId === 'all') return connectedSources;
+            return connectedSources.filter(s => s.id === selectedSourceId);
+        }
+
+        // Render Top Source Filter Pills
+        function renderSourcePills() {
+            const container = document.getElementById('sourcePillsContainer');
+            const totalBadge = document.getElementById('totalSourcesBadge');
+            if (totalBadge) totalBadge.textContent = `कुल ${connectedSources.length} स्रोत सक्रिय`;
+
+            const allActive = selectedSourceId === 'all';
+            let html = `
+                <button onclick="selectSource('all')" class="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition ${allActive ? 'bg-gray-900 text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'}">
+                    <span>सभी (${connectedSources.length})</span>
+                </button>
+            `;
+
+            connectedSources.forEach(src => {
+                const isActive = selectedSourceId === src.id;
+                const hasLive = Boolean(src.rssUrl);
+                html += `
+                    <button onclick="selectSource('${src.id}')" class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition ${isActive ? 'bg-brandRed text-white shadow-sm' : 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-100'}">
+                        <span class="w-5 h-5 rounded-full ${isActive ? 'bg-white text-brandRed' : src.avatarBg + ' text-white'} flex items-center justify-center text-[10px] font-extrabold">
+                            ${src.initials}
+                        </span>
+                        <span>${src.name}</span>
+                        ${hasLive ? '<span class="w-2 h-2 rounded-full bg-emerald-500" title="लाइव RSS जुड़ा हुआ"></span>' : ''}
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectSource(sourceId) {
+            selectedSourceId = sourceId;
+            currentCardIndex = 0;
+            renderSourcePills();
+            renderApp();
+        }
+
+        function switchView(view) {
+            currentView = view;
+            const swipeSec = document.getElementById('swipeDeckSection');
+            const gridSec = document.getElementById('gridRadarSection');
+            const btnSwipe = document.getElementById('btnViewSwipe');
+            const btnGrid = document.getElementById('btnViewGrid');
+
+            if (view === 'swipe') {
+                swipeSec.classList.remove('hidden');
+                gridSec.classList.add('hidden');
+                btnSwipe.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-gray-900 shadow-sm transition';
+                btnGrid.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-gray-600 hover:text-gray-900 transition';
+            } else {
+                swipeSec.classList.add('hidden');
+                gridSec.classList.remove('hidden');
+                btnGrid.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-gray-900 shadow-sm transition';
+                btnSwipe.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-gray-600 hover:text-gray-900 transition';
+            }
+            renderApp();
+        }
+
+        // Build Card HTML (Supports Real RSS Photos/Posts + Direct Facebook One-Click Radar)
+        function createSourceCardHTML(src, isSwipeMode = true) {
+            const inBulletin = bulletinQueue.includes(src.id);
+            const livePosts = liveFeedCache[src.id] || [];
+            const latestLive = livePosts[0];
+
+            return `
+                <article id="${isSwipeMode ? 'activeSwipeCard' : 'grid_' + src.id}" class="${isSwipeMode ? 'swipe-card w-full' : 'flex flex-col justify-between'} bg-white rounded-3xl border ${latestLive ? 'border-emerald-300 ring-2 ring-emerald-100' : 'border-gray-200'} shadow-md overflow-hidden">
+                    
+                    <!-- Card Top Bar: Profile Info -->
+                    <div class="p-4 sm:p-5 border-b border-gray-100 flex items-start justify-between gap-3 bg-gradient-to-r from-white to-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl ${src.avatarBg} text-white flex items-center justify-center font-extrabold text-sm shadow-xs flex-shrink-0">
+                                ${src.initials}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h2 class="font-extrabold text-gray-900 text-base sm:text-lg leading-snug">${src.name}</h2>
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${src.badgeColor}">
+                                        ${src.type}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                                    <span class="font-mono text-gray-600 truncate max-w-[180px] sm:max-w-xs">${src.handle}</span>
+                                    <span>•</span>
+                                    <span>📍 ${src.dateline || 'अलीगढ़'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${latestLive ? `
+                            <span class="flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-flash"></span>
+                                LIVE FEED
+                            </span>
+                        ` : `
+                            <span class="flex-shrink-0 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold border border-gray-200">
+                                डायरेक्ट रडार
+                            </span>
+                        `}
+                    </div>
+
+                    <!-- Card Body: Real RSS Post + Real Photo OR Clean Direct-Jump Action Panel -->
+                    <div class="p-5 sm:p-6 space-y-4">
+                        ${latestLive ? `
+                            <div class="space-y-3">
+                                <div class="text-xs font-bold text-emerald-700">🕒 ताज़ा पोस्ट (${latestLive.pubDate})</div>
+                                ${latestLive.photo ? `
+                                    <div class="rounded-2xl overflow-hidden border border-gray-200 bg-gray-100 max-h-64 flex items-center justify-center">
+                                        <img src="${latestLive.photo}" alt="${src.name}" class="w-full h-auto object-cover" onerror="this.parentElement.classList.add('hidden')">
+                                    </div>
+                                ` : ''}
+                                <p class="text-gray-800 text-sm sm:text-base leading-relaxed font-medium">
+                                    ${latestLive.text || latestLive.title}
+                                </p>
+                            </div>
+                        ` : `
+                            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200/80 space-y-3">
+                                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                                    <strong>${src.name}</strong> की आज की और कल की ताज़ा पोस्ट व असली फ़ोटो देखने के लिए नीचे <strong>"असली Facebook पेज खोलें"</strong> पर क्लिक करें। वहां से मैटर कॉपी करके तुरंत <strong>"✍️ खबर बनाएं"</strong> से अपनी न्यूज़ तैयार करें।
+                                </p>
+                                <div class="flex flex-wrap items-center gap-2 pt-1">
+                                    <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-xs transition">
+                                        <span>असली Facebook पेज खोलें</span>
+                                        <span>↗</span>
+                                    </a>
+                                    <button onclick="openRssPromptForSource('${src.id}')" class="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 font-bold text-xs transition">
+                                        <span>🔗 RSS फ़ीड लिंक जोड़ें</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- Card Action Footer: News Desk Tools -->
+                    <div class="px-4 sm:px-5 py-3.5 bg-gray-50 border-t border-gray-200 grid grid-cols-3 gap-2">
+                        <button onclick="openNewsDraftForSource('${src.id}')" class="col-span-3 sm:col-span-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-brandRed hover:bg-red-700 text-white font-bold text-xs shadow-xs transition">
+                            <span>✍️ खबर बनाएं</span>
+                        </button>
+                        <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 font-bold text-xs transition">
+                            <span>Facebook खोलें ↗</span>
+                        </a>
+                        <button onclick="toggleBulletin('${src.id}')" class="col-span-1 flex items-center justify-center gap-1 py-2.5 px-2.5 rounded-xl font-bold text-xs border transition ${inBulletin ? 'bg-amber-500 text-white border-amber-600' : 'bg-white hover:bg-amber-50 text-amber-800 border-amber-300'}">
+                            <span>${inBulletin ? '★ बुलेटिन में' : '☆ मार्क करें'}</span>
+                        </button>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderApp() {
+            const filtered = getFilteredSources();
+            const wrapper = document.getElementById('swipeCardWrapper');
+            const counterText = document.getElementById('cardCounterText');
+            const gridContainer = document.getElementById('gridCardsContainer');
+
+            if (filtered.length === 0) return;
+            if (currentCardIndex >= filtered.length) currentCardIndex = 0;
+            if (currentCardIndex < 0) currentCardIndex = filtered.length - 1;
+
+            const activeSource = filtered[currentCardIndex];
+            wrapper.innerHTML = createSourceCardHTML(activeSource, true);
+            counterText.textContent = `स्रोत ${currentCardIndex + 1} / ${filtered.length} — ${activeSource.name}`;
+            attachSwipeGestures();
+
+            gridContainer.innerHTML = filtered.map(src => createSourceCardHTML(src, false)).join('');
+            document.getElementById('bulletinCount').textContent = bulletinQueue.length;
+        }
+
+        // Navigate Left / Right in Swipe Deck
+        function navigateCard(direction) {
+            const filtered = getFilteredSources();
+            if (filtered.length <= 1) return;
+
+            const card = document.getElementById('activeSwipeCard');
+            if (card) {
+                card.style.transform = `translateX(${direction > 0 ? '-40px' : '40px'}) rotate(${direction > 0 ? '-2deg' : '2deg'})`;
+                card.style.opacity = '0.3';
+            }
+
+            setTimeout(() => {
+                currentCardIndex = (currentCardIndex + direction + filtered.length) % filtered.length;
+                renderApp();
+            }, 140);
+        }
+
+        // Touch & Mouse Drag-to-Swipe Support
+        function attachSwipeGestures() {
+            const card = document.getElementById('activeSwipeCard');
+            if (!card) return;
+
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+
+            const onStart = (clientX) => {
+                startX = clientX;
+                isDragging = true;
+                card.classList.add('dragging');
+            };
+
+            const onMove = (clientX) => {
+                if (!isDragging) return;
+                currentX = clientX - startX;
+                card.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.04}deg)`;
+            };
+
+            const onEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                card.classList.remove('dragging');
+
+                if (currentX < -75) {
+                    navigateCard(1);
+                } else if (currentX > 75) {
+                    navigateCard(-1);
+                } else {
+                    card.style.transform = 'translateX(0px) rotate(0deg)';
+                }
+                currentX = 0;
+            };
+
+            card.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+            card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+            card.addEventListener('touchend', onEnd);
+
+            card.addEventListener('mousedown', e => {
+                if (e.target.closest('button') || e.target.closest('a')) return;
+                onStart(e.clientX);
+            });
+            window.addEventListener('mousemove', e => onMove(e.clientX));
+            window.addEventListener('mouseup', onEnd);
+        }
+
+        // Keyboard Arrow Support
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (currentView !== 'swipe') return;
+            if (e.key === 'ArrowRight') navigateCard(1);
+            if (e.key === 'ArrowLeft') navigateCard(-1);
+        });
+
+        // ==================== QUICK NEWS DRAFTER ("खबर बनाएं") ====================
+        let activeDraftSource = null;
+
+        function openNewsDraftForSource(sourceId) {
+            const src = connectedSources.find(s => s.id === sourceId);
+            if (!src) return;
+            activeDraftSource = src;
+
+            const livePosts = liveFeedCache[src.id] || [];
+            const liveText = livePosts[0] ? (livePosts[0].text || livePosts[0].title) : '';
+
+            document.getElementById('rawPasteInput').value = liveText;
+            document.getElementById('draftLocation').value = src.dateline || 'अलीगढ़ / अतरौली';
+            document.getElementById('draftSource').value = `${src.name} (Facebook)`;
+            document.getElementById('draftVerifyLink').href = src.url;
+
+            if (liveText) {
+                autoFormatNewsFromPaste();
+            } else {
+                document.getElementById('draftHeadline').value = `${src.name} से जुड़ी बड़ी अपडेट: ...`;
+                document.getElementById('draftBody').value = `${src.dateline || 'अलीगढ़'} (सब कुछ घर बैठे न्यूज़ ब्यूरो)। ऊपर बॉक्स में Facebook पोस्ट पेस्ट करें और 'ऑटो-फॉर्मेट' दबाएं।`;
+            }
+
+            openModal('newsDraftModal');
+        }
+
+        function autoFormatNewsFromPaste() {
+            const raw = document.getElementById('rawPasteInput').value.trim();
+            const loc = document.getElementById('draftLocation').value.trim() || 'अलीगढ़';
+            const srcName = activeDraftSource ? activeDraftSource.name : 'सोशल मीडिया';
+
+            if (!raw) {
+                showToast('पहले ऊपर बॉक्स में Facebook पोस्ट पेस्ट करें!');
+                return;
+            }
+
+            const firstSentence = raw.split(/[।\.\n]/)[0].trim().slice(0, 85);
+            document.getElementById('draftHeadline').value = `${srcName}: ${firstSentence}`;
+            document.getElementById('draftBody').value = `${loc} (सब कुछ घर बैठे न्यूज़ ब्यूरो)। ${raw}\n\n${srcName} के आधिकारिक सोशल मीडिया अकाउंट से साझा की गई इस जानकारी के बाद स्थानीय स्तर पर चर्चा तेज हो गई है।`;
+            showToast('✔ खबर फॉर्मेट तैयार हो गई!');
+        }
+
+        function copyDraftNews() {
+            const headline = document.getElementById('draftHeadline').value.trim();
+            const body = document.getElementById('draftBody').value.trim();
+            copyToClipboard(`ब्रेकिंग न्यूज़: ${headline}\n\n${body}`, 'पूरी खबर कॉपी हो गई!');
+            closeModal('newsDraftModal');
+        }
+
+        // ==================== ADD, EDIT, DELETE & PERMANENT SAVE INTO CODE ====================
+        function handleAddSource(e) {
+            e.preventDefault();
+            const name = document.getElementById('newSourceName').value.trim();
+            const url = document.getElementById('newSourceUrl').value.trim();
+            const type = document.getElementById('newSourceType').value;
+            const dateline = document.getElementById('newSourceLocation').value.trim() || 'अलीगढ़';
+            const rssUrl = document.getElementById('newSourceRss').value.trim();
+
+            const newId = 'src_' + Date.now();
+            const initials = name.replace(/[^a-zA-Z\u0900-\u097F]/g, '').slice(0, 2) || 'FB';
+
+            const newSourceObj = {
+                id: newId,
+                name: name,
+                handle: url.replace('https://www.facebook.com/', '@'),
+                url: url,
+                rssUrl: rssUrl,
+                type: type,
+                dateline: dateline,
+                badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                avatarBg: 'bg-gray-900',
+                initials: initials
+            };
+
+            connectedSources.push(newSourceObj);
+            saveSourcesToStorage();
+
+            if (rssUrl) {
+                fetchLiveFeedForSource(newSourceObj);
+            }
+
+            e.target.reset();
+            closeModal('addSourceModal');
+            selectedSourceId = newId;
+            currentCardIndex = 0;
+            renderSourcePills();
+            renderApp();
+            showToast(`✔ "${name}" डैशबोर्ड में जुड़ गया! स्थायी सेव के लिए "💾 कोड में सेव करें" दबाएं।`);
+        }
+
+        function openRssPromptForSource(sourceId) {
+            openSourcesDirectoryModal();
+            showToast('लिस्ट में इस स्रोत के नीचे RSS लिंक पेस्ट करें');
+        }
+
+        function updateSourceName(sourceId, newName) {
+            const src = connectedSources.find(s => s.id === sourceId);
+            if (!src || !newName.trim()) return;
+            src.name = newName.trim();
+            src.initials = src.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'FB';
+            saveSourcesToStorage();
+            renderSourcePills();
+            renderApp();
+            showToast(`✔ नाम अपडेट हो गया: ${src.name}`);
+        }
+
+        function updateSourceRss(sourceId, newRss) {
+            const src = connectedSources.find(s => s.id === sourceId);
+            if (!src) return;
+            src.rssUrl = newRss.trim();
+            saveSourcesToStorage();
+            if (src.rssUrl) {
+                fetchLiveFeedForSource(src);
+                showToast(`✔ ${src.name} का RSS लिंक सेव हो गया!`);
+            } else {
+                delete liveFeedCache[src.id];
+                renderApp();
+                showToast('RSS लिंक हटाया गया');
+            }
+            renderSourcePills();
+        }
+
+        function deleteSource(sourceId) {
+            if (connectedSources.length <= 1) {
+                showToast('कम से कम 1 स्रोत होना आवश्यक है');
+                return;
+            }
+            connectedSources = connectedSources.filter(s => s.id !== sourceId);
+            saveSourcesToStorage();
+            if (selectedSourceId === sourceId) selectedSourceId = 'all';
+            renderSourcePills();
+            renderApp();
+            openSourcesDirectoryModal();
+            showToast('स्रोत हटाया गया और सूची अपडेट हो गई');
+        }
+
+        function resetToDefaultSources() {
+            connectedSources = JSON.parse(JSON.stringify(DEFAULT_SOURCES));
+            saveSourcesToStorage();
+            selectedSourceId = 'all';
+            currentCardIndex = 0;
+            renderSourcePills();
+            renderApp();
+            openSourcesDirectoryModal();
+            showToast('सभी 15 डिफ़ॉल्ट लिंक्स रीसेट हो गए');
+        }
+
+        function openSourcesDirectoryModal() {
+            const list = document.getElementById('directoryList');
+            list.innerHTML = connectedSources.map((src, index) => `
+                <div class="py-3.5 space-y-2">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                            <span class="text-xs font-bold text-gray-400 w-5">${index + 1}.</span>
+                            <div class="w-9 h-9 rounded-xl ${src.avatarBg} text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+                                ${src.initials}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <input type="text" value="${src.name}" onchange="updateSourceName('${src.id}', this.value)" class="w-full font-bold text-sm text-gray-900 bg-transparent border-b border-transparent hover:border-gray-300 focus:border-brandRed focus:outline-none px-1 py-0.5" title="नाम बदलने के लिए क्लिक करें">
+                                <p class="text-[11px] text-gray-500 truncate px-1">${src.url}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="closeModal('sourcesDirectoryModal'); selectSource('${src.id}');" class="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold">
+                                देखें
+                            </button>
+                            <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold">
+                                FB ↗
+                            </a>
+                            <button onclick="deleteSource('${src.id}')" class="px-2 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold" title="हटाएं">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Inline RSS Feed URL input for each source -->
+                    <div class="pl-8 flex items-center gap-2">
+                        <input type="url" value="${src.rssUrl || ''}" onchange="updateSourceRss('${src.id}', this.value)" placeholder="यहाँ इस पेज का RSS.app / FetchRSS लिंक पेस्ट करें (वैकल्पिक)..." class="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white text-[11px] text-gray-700 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+            `).join('');
+            openModal('sourcesDirectoryModal');
+        }
+
+        // ==================== PERMANENT SAVE INTO HTML SOURCE CODE ====================
+        function generateUpdatedHtmlCode() {
+            const fullDocHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const serializedSources = JSON.stringify(connectedSources, null, 12);
+            const updatedHtml = fullDocHtml.replace(
+                /const DEFAULT_SOURCES = \[[\s\S]*?\];/,
+                `const DEFAULT_SOURCES = ${serializedSources};`
+            );
+            return updatedHtml;
+        }
+
+        function openExportCodeModal() {
+            document.getElementById('exportCountText').textContent = `${connectedSources.length} स्रोत`;
+            openModal('exportCodeModal');
+        }
+
+        function downloadUpdatedHtmlFile() {
+            const updatedHtml = generateUpdatedHtmlCode();
+            const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            closeModal('exportCodeModal');
+            showToast('✔ अपडेटेड index.html डाउनलोड हो गई! अब इसे पुराने कोड की जगह सेव कर लें।');
+        }
+
+        function copyUpdatedSourceCode() {
+            const updatedHtml = generateUpdatedHtmlCode();
+            copyToClipboard(updatedHtml, 'पूरा अपडेटेड HTML कोड कॉपी हो गया!');
+            closeModal('exportCodeModal');
+        }
+
+        // ==================== BULLETIN QUEUE ====================
+        function toggleBulletin(sourceId) {
+            const idx = bulletinQueue.indexOf(sourceId);
+            if (idx === -1) {
+                bulletinQueue.push(sourceId);
+                showToast('⚡ बुलेटिन लिस्ट में जोड़ा गया!');
+            } else {
+                bulletinQueue.splice(idx, 1);
+                showToast('बुलेटिन लिस्ट से हटाया गया');
+            }
+            localStorage.setItem(BULLETIN_KEY, JSON.stringify(bulletinQueue));
+            renderApp();
+        }
+
+        function openBulletinModal() {
+            const container = document.getElementById('bulletinListContainer');
+            if (bulletinQueue.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">अभी कोई स्रोत बुलेटिन के लिए मार्क नहीं है। किसी भी कार्ड पर '☆ मार्क करें' दबाएं।</p>`;
+            } else {
+                container.innerHTML = bulletinQueue.map((id, i) => {
+                    const src = connectedSources.find(s => s.id === id);
+                    if (!src) return '';
+                    return `
+                        <div class="p-3 rounded-xl bg-amber-50/60 border border-amber-200 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-extrabold text-gray-900">#${i + 1} • ${src.name}</span>
+                                <p class="text-[11px] text-gray-600 truncate">${src.url}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 font-bold">खोलें ↗</a>
+                                <button onclick="toggleBulletin('${id}'); openBulletinModal();" class="text-xs text-red-600 font-bold px-2">हटाएं</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            openModal('bulletinModal');
+        }
+
+        function clearBulletin() {
+            bulletinQueue = [];
+            localStorage.setItem(BULLETIN_KEY, '[]');
+            renderApp();
+            openBulletinModal();
+        }
+
+        function copyAllBulletin() {
+            if (bulletinQueue.length === 0) return;
+            const summary = bulletinQueue.map((id, i) => {
+                const src = connectedSources.find(s => s.id === id);
+                return src ? `${i + 1}. ${src.name} — ${src.url}` : '';
+            }).filter(Boolean).join('\n');
+            copyToClipboard(`⚡ सब कुछ घर बैठे न्यूज़ — चेकलिस्ट:\n\n${summary}`, 'सभी बुलेटिन स्रोत कॉपी हो गए!');
+            closeModal('bulletinModal');
+        }
+
+        // Modal & Clipboard Utilities
+        function openModal(id) {
+            const el = document.getElementById(id);
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }
+
+        function copyToClipboard(text, message) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(message);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Live Hindi Clock in Header
+        function updateLiveClock() {
+            const now = new Date();
+            const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('liveClock').textContent = now.toLocaleString('hi-IN', options);
+        }
+
+        // Initialize Dashboard on Load
+        window.onload = function() {
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
+            renderSourcePills();
+            renderApp();
+            refreshAllRssFeeds();
+        };
+    </script>
+</body>
+</html>
