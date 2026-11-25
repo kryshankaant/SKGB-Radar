@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सब कुछ घर बैठे न्यूज़ | संपादकीय कंट्रोल रूम (इंटरनल डेस्क)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans Devanagari & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Devanagari"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brandRed: '#E61919',
+                        brandDark: '#111827',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #111827;
+            overflow-x: hidden;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .animate-flash {
+            animation: softPulse 1.6s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ==================== TOP HEADER ==================== -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Brand Logo (Clean skgb.png ONLY) -->
+            <div class="flex items-center gap-3">
+                <div onclick="document.getElementById('logoFileInput').click()" class="flex-shrink-0 h-12 sm:h-14 flex items-center cursor-pointer group" title="सब कुछ घर बैठे न्यूज़ (skgb.png चुनने के लिए क्लिक करें)">
+                    <img id="brandLogoImg" src="skgb.png" alt="सब कुछ घर बैठे न्यूज़" class="h-12 sm:h-14 w-auto object-contain" onerror="this.classList.add('hidden'); document.getElementById('brandLogoTextFallback').classList.remove('hidden');">
+                    <div id="brandLogoTextFallback" class="hidden flex items-center gap-2 px-3 py-2 rounded-xl bg-red-50 border border-red-200">
+                        <span class="font-extrabold text-brandRed text-sm sm:text-base">सब कुछ घर बैठे न्यूज़</span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-white border border-red-300 text-gray-700 group-hover:bg-red-600 group-hover:text-white transition">skgb.png</span>
+                    </div>
+                    <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                            सब कुछ घर बैठे न्यूज़
+                        </h1>
+                        <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-50 text-brandRed border border-red-200">
+                            <span class="w-2 h-2 rounded-full bg-brandRed animate-flash"></span>
+                            संपादकीय कंट्रोल रूम
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium flex items-center gap-2 mt-0.5">
+                        <span>इंटरनल न्यूज़ डेस्क</span>
+                        <span>•</span>
+                        <span id="liveClock" class="text-gray-700 font-semibold">लोड हो रहा है...</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Action Controls -->
+            <div class="flex items-center gap-2 flex-wrap ml-auto sm:ml-0">
+                <!-- Refresh Google News Radars -->
+                <button onclick="loadAllGoogleNewsRadars(true)" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition" title="चारों लाइव न्यूज़ रडार ताज़ा करें">
+                    <span>🔄 रडार रिफ़्रेश</span>
+                </button>
+
+                <!-- Bulletin Queue -->
+                <button onclick="openBulletinModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold transition">
+                    <span>⚡ बुलेटिन</span>
+                    <span id="bulletinCount" class="px-1.5 py-0.5 text-[11px] rounded-full bg-amber-600 text-white font-bold">0</span>
+                </button>
+
+                <!-- Add New Profile / Shortcut Card -->
+                <button onclick="openAddSourceModal()" class="flex items-center gap-1 px-3 py-2 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold shadow-sm transition">
+                    <span>+ नया कार्ड जोड़ें</span>
+                </button>
+
+                <!-- Permanent Save into HTML Code -->
+                <button onclick="openExportCodeModal()" class="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition" title="सभी DP, नाम और सोशल लिंक्स हमेशा के लिए कोड फ़ाइल में सेव करें">
+                    <span>💾 कोड में सेव करें</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTROL ROOM WORKSPACE ==================== -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 space-y-6">
+
+        <!-- ==================== SECTION 1: 4 COMPACT LIVE GOOGLE NEWS RADAR CARDS ==================== -->
+        <section aria-label="लाइव न्यूज़ रडार">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brandRed animate-flash"></span>
+                    <h2 class="text-sm sm:text-base font-extrabold text-gray-900">लाइव न्यूज़ रडार (आज व कल की प्रमुख सुर्खियाँ)</h2>
+                </div>
+                <span class="text-[11px] text-gray-500 font-semibold hidden sm:inline">खबर पर क्लिक करें या '✍️' दबाकर तुरंत ड्राफ्ट बनाएं</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                
+                <!-- Radar Card 1: Atrauli Local -->
+                <div class="bg-white rounded-2xl border border-red-200 shadow-xs flex flex-col overflow-hidden">
+                    <div class="px-3.5 py-2.5 bg-red-50 border-b border-red-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-brandRed animate-flash"></span>
+                            <h3 class="font-extrabold text-xs text-red-950">अतरौली (स्थानीय रडार)</h3>
+                        </div>
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-brandRed border border-red-200">LOCAL</span>
+                    </div>
+                    <div id="radarTicker_atrauli" class="px-3 py-1.5 bg-red-950 text-white text-[11px] font-bold truncate hidden"></div>
+                    <div id="radarList_atrauli" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
+                        <p class="text-gray-400 py-6 text-center">अतरौली की खबरें लोड हो रही हैं...</p>
+                    </div>
+                </div>
+
+                <!-- Radar Card 2: Aligarh District -->
+                <div class="bg-white rounded-2xl border border-blue-200 shadow-xs flex flex-col overflow-hidden">
+                    <div class="px-3.5 py-2.5 bg-blue-50 border-b border-blue-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                            <h3 class="font-extrabold text-xs text-blue-950">अलीगढ़ (जनपद रडार)</h3>
+                        </div>
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-blue-700 border border-blue-200">DISTRICT</span>
+                    </div>
+                    <div id="radarTicker_aligarh" class="px-3 py-1.5 bg-blue-950 text-white text-[11px] font-bold truncate hidden"></div>
+                    <div id="radarList_aligarh" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
+                        <p class="text-gray-400 py-6 text-center">अलीगढ़ की खबरें लोड हो रही हैं...</p>
+                    </div>
+                </div>
+
+                <!-- Radar Card 3: Uttar Pradesh State -->
+                <div class="bg-white rounded-2xl border border-orange-200 shadow-xs flex flex-col overflow-hidden">
+                    <div class="px-3.5 py-2.5 bg-orange-50 border-b border-orange-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-orange-600"></span>
+                            <h3 class="font-extrabold text-xs text-orange-950">उत्तर प्रदेश (प्रदेश ब्यूरो)</h3>
+                        </div>
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-orange-700 border border-orange-200">STATE</span>
+                    </div>
+                    <div id="radarTicker_up" class="px-3 py-1.5 bg-orange-950 text-white text-[11px] font-bold truncate hidden"></div>
+                    <div id="radarList_up" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
+                        <p class="text-gray-400 py-6 text-center">प्रदेश की खबरें लोड हो रही हैं...</p>
+                    </div>
+                </div>
+
+                <!-- Radar Card 4: National & Press Releases -->
+                <div class="bg-white rounded-2xl border border-emerald-200 shadow-xs flex flex-col overflow-hidden">
+                    <div class="px-3.5 py-2.5 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            <h3 class="font-extrabold text-xs text-emerald-950">राष्ट्रीय एवं प्रेस रिलीज़</h3>
+                        </div>
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-emerald-700 border border-emerald-200">PIB / NATION</span>
+                    </div>
+                    <div id="radarTicker_national" class="px-3 py-1.5 bg-emerald-950 text-white text-[11px] font-bold truncate hidden"></div>
+                    <div id="radarList_national" class="p-3 space-y-2.5 flex-1 max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
+                        <p class="text-gray-400 py-6 text-center">राष्ट्रीय एवं प्रेस रिलीज़ लोड हो रही हैं...</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SECTION 2: THREE EDITORIAL BUREAU DRAWERS (ACCORDIONS) ==================== -->
+        <section aria-label="संपादकीय ब्यूरो एवं सोशल डायरेक्टरी" class="space-y-4">
+            
+            <!-- Search Filter Bar across all Bureaus -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-gray-200 shadow-xs">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-sm sm:text-base font-extrabold text-gray-900">संपादकीय ब्यूरो एवं सोशल मीडिया रडार</h2>
+                    <span id="totalProfilesBadge" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-700 border border-gray-200">21 प्रोफ़ाइल</span>
+                </div>
+                <div class="w-full sm:w-72 relative">
+                    <input id="profileSearchInput" type="text" oninput="renderAllBureaus()" placeholder="नाम से खोजें (जैसे- Bhoora, Police, CM)..." class="w-full pl-3.5 pr-8 py-1.5 rounded-xl border border-gray-300 text-xs font-medium focus:outline-none focus:border-brandRed">
+                    <span class="absolute right-2.5 top-1.5 text-gray-400 text-xs">🔍</span>
+                </div>
+            </div>
+
+            <!-- DRAWER 1: जनपद ब्यूरो (District Bureau - Local 15 Profiles) -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+                <button type="button" onclick="toggleBureauDrawer('district')" class="w-full px-4 sm:px-5 py-3.5 bg-gradient-to-r from-gray-900 to-gray-800 text-white flex items-center justify-between text-left transition">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2 py-0.5 rounded bg-brandRed text-[11px] font-extrabold">जनपद ब्यूरो</span>
+                        <span class="font-extrabold text-sm sm:text-base">अतरौली एवं अलीगढ़ — स्थानीय जनप्रतिनिधि, प्रशासन व पोर्टल</span>
+                        <span id="count_district" class="px-2 py-0.5 rounded-full bg-white/15 text-xs font-bold">15</span>
+                    </div>
+                    <span id="arrow_district" class="text-sm font-bold transform transition-transform duration-200">▼</span>
+                </button>
+                <div id="body_district" class="p-4 sm:p-5 bg-gray-50/70">
+                    <div id="grid_district" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                        <!-- District Bureau Cards Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DRAWER 2: प्रदेश ब्यूरो (State Bureau - UP Leaders & Departments) -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+                <button type="button" onclick="toggleBureauDrawer('state')" class="w-full px-4 sm:px-5 py-3.5 bg-white hover:bg-gray-50 text-gray-900 border-b border-gray-100 flex items-center justify-between text-left transition">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2 py-0.5 rounded bg-orange-600 text-white text-[11px] font-extrabold">प्रदेश ब्यूरो</span>
+                        <span class="font-extrabold text-sm sm:text-base">उत्तर प्रदेश — प्रमुख नेतृत्व, शासन व प्रशासनिक हैंडल</span>
+                        <span id="count_state" class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold">3</span>
+                    </div>
+                    <span id="arrow_state" class="text-sm font-bold text-gray-500 transform -rotate-90 transition-transform duration-200">▼</span>
+                </button>
+                <div id="body_state" class="hidden p-4 sm:p-5 bg-gray-50/70">
+                    <div id="grid_state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                        <!-- State Bureau Cards Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DRAWER 3: राष्ट्रीय ब्यूरो एवं प्रेस रिलीज़ (National Bureau & Official Press Releases) -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+                <button type="button" onclick="toggleBureauDrawer('national')" class="w-full px-4 sm:px-5 py-3.5 bg-white hover:bg-gray-50 text-gray-900 border-b border-gray-100 flex items-center justify-between text-left transition">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2 py-0.5 rounded bg-emerald-700 text-white text-[11px] font-extrabold">राष्ट्रीय ब्यूरो</span>
+                        <span class="font-extrabold text-sm sm:text-base">राष्ट्रीय नेतृत्व एवं आधिकारिक प्रेस रिलीज़ (PIB / केंद्रीय कार्यालय)</span>
+                        <span id="count_national" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">3</span>
+                    </div>
+                    <span id="arrow_national" class="text-sm font-bold text-gray-500 transform -rotate-90 transition-transform duration-200">▼</span>
+                </button>
+                <div id="body_national" class="hidden p-4 sm:p-5 bg-gray-50/70">
+                    <div id="grid_national" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                        <!-- National Bureau Cards Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Hidden File Input for Uploading Any Person's Profile Picture (DP) -->
+    <input type="file" id="dpUploadInput" accept="image/*" class="hidden" onchange="handleProfileDpFileChange(event)">
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-600">
+            <div class="font-semibold text-gray-800">
+                © 2026 सब कुछ घर बैठे न्यूज़ | <span class="text-brandRed font-bold">केवल आंतरिक संपादकीय उपयोग हेतु</span>
+            </div>
+            <div class="font-medium">
+                Developed by <span class="font-bold text-gray-900">Cool Art Tech</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL 1: ADD / EDIT PERSON PROFILE CARD (DP + FB + X + INSTAGRAM) ==================== -->
+    <div id="profileFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="px-5 py-3.5 bg-gray-900 text-white flex items-center justify-between">
+                <h3 id="profileModalTitle" class="font-bold text-base">+ नया प्रोफ़ाइल कार्ड जोड़ें</h3>
+                <button onclick="closeModal('profileFormModal')" class="text-gray-300 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            
+            <form onsubmit="handleSaveProfileCard(event)" class="p-5 overflow-y-auto space-y-3.5">
+                <input type="hidden" id="editProfileId" value="">
+
+                <!-- DP Preview & Direct Upload inside Modal -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-gray-50 border border-gray-200">
+                    <div id="modalDpPreview" class="w-14 h-14 rounded-full bg-gray-800 text-white flex items-center justify-center font-extrabold text-base overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                        DP
+                    </div>
+                    <div class="flex-1 space-y-1.5">
+                        <label class="block text-xs font-bold text-gray-800">प्रोफ़ाइल फ़ोटो (DP)</label>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="triggerDpUploadForModal()" class="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-bold hover:bg-black transition">
+                                📷 फ़ोटो चुनें / बदलें
+                            </button>
+                            <button type="button" onclick="clearModalDp()" class="px-2.5 py-1.5 rounded-lg bg-white border border-gray-300 text-gray-600 text-xs font-bold hover:bg-gray-100">
+                                हटाएं
+                            </button>
+                        </div>
+                        <input type="hidden" id="formProfileDpData" value="">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">प्रोफ़ाइल का असली नाम *</label>
+                        <input id="formProfileName" required type="text" placeholder="उदा. Bhoora Pandit" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-semibold focus:outline-none focus:border-brandRed">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">संपादकीय ब्यूरो *</label>
+                        <select id="formProfileBureau" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-semibold bg-white">
+                            <option value="district">जनपद ब्यूरो (अतरौली / अलीगढ़)</option>
+                            <option value="state">प्रदेश ब्यूरो (उत्तर प्रदेश)</option>
+                            <option value="national">राष्ट्रीय ब्यूरो एवं प्रेस रिलीज़</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">पद / परिचय या स्थान</label>
+                    <input id="formProfileSubtitle" type="text" placeholder="उदा. अतरौली • जनप्रतिनिधि / प्रशासन" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-brandRed">
+                </div>
+
+                <!-- 3 Social Platform Links -->
+                <div class="space-y-2.5 pt-1 border-t border-gray-100">
+                    <p class="text-xs font-extrabold text-gray-800">सोशल मीडिया डायरेक्ट लिंक्स (जो उपलब्ध हों वे भरें):</p>
+                    
+                    <div>
+                        <label class="flex items-center gap-1.5 text-xs font-bold text-[#1877F2] mb-1">
+                            <span>Facebook लिंक</span>
+                        </label>
+                        <input id="formFbUrl" type="url" placeholder="https://www.facebook.com/..." class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-[#1877F2]">
+                    </div>
+
+                    <div>
+                        <label class="flex items-center gap-1.5 text-xs font-bold text-gray-900 mb-1">
+                            <span>X (Twitter) लिंक</span>
+                        </label>
+                        <input id="formXUrl" type="url" placeholder="https://x.com/..." class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-gray-900">
+                    </div>
+
+                    <div>
+                        <label class="flex items-center gap-1.5 text-xs font-bold text-[#E4405F] mb-1">
+                            <span>Instagram लिंक</span>
+                        </label>
+                        <input id="formIgUrl" type="url" placeholder="https://www.instagram.com/..." class="w-full px-3 py-2 rounded-xl border border-gray-300 text-xs focus:outline-none focus:border-[#E4405F]">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <button type="button" id="btnDeleteProfile" onclick="deleteCurrentEditingProfile()" class="hidden px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold">
+                        🗑️ कार्ड हटाएं
+                    </button>
+                    <div class="flex items-center gap-2 ml-auto">
+                        <button type="button" onclick="closeModal('profileFormModal')" class="px-4 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700">रद्द करें</button>
+                        <button type="submit" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold shadow-sm">सेव करें</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: QUICK NEWS DRAFTER ("खबर बनाएं") ==================== -->
+    <div id="newsDraftModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="px-5 py-3.5 bg-gray-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-brandRed text-xs font-bold">NEWS BUILDER</span>
+                    <h3 class="font-bold text-base">क्विक न्यूज़ ड्राफ्टर (तुरंत खबर बनाएं)</h3>
+                </div>
+                <button onclick="closeModal('newsDraftModal')" class="text-gray-300 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-4">
+                <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-extrabold text-amber-950">सोशल मीडिया पोस्ट या प्रेस रिलीज़ का टेक्स्ट यहाँ पेस्ट करें:</label>
+                        <a id="draftVerifyLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-700 hover:underline">
+                            मूल स्रोत खोलें ↗
+                        </a>
+                    </div>
+                    <textarea id="rawPasteInput" rows="3" placeholder="पोस्ट का मैटर यहाँ पेस्ट करें और नीचे 'ऑटो-फॉर्मेट' दबाएं..." class="w-full px-3 py-2 rounded-xl border border-amber-300 bg-white text-sm text-gray-800 focus:outline-none focus:border-brandRed"></textarea>
+                    <button type="button" onclick="autoFormatNewsFromPaste()" class="px-3.5 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-bold transition">
+                        ⚡ ऑटो-फॉर्मेट (हेडलाइन व खबर में बदलें)
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">ब्रेकिंग हेडलाइन (संपादन योग्य)</label>
+                    <input id="draftHeadline" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-bold text-gray-900 text-base focus:outline-none focus:border-brandRed">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">डेटलाइन / स्थान</label>
+                        <input id="draftLocation" type="text" value="अतरौली (अलीगढ़)" class="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">स्रोत (क्रेडिट)</label>
+                        <input id="draftSource" type="text" readonly class="w-full px-3 py-2 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">खबर का मुख्य मैटर (News Copy)</label>
+                    <textarea id="draftBody" rows="5" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm leading-relaxed text-gray-800 focus:outline-none focus:border-brandRed"></textarea>
+                </div>
+            </div>
+
+            <div class="px-5 py-3.5 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-end gap-2">
+                <button onclick="closeModal('newsDraftModal')" class="px-4 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100">बंद करें</button>
+                <button onclick="copyDraftNews()" class="px-4 py-2 rounded-xl bg-brandRed hover:bg-red-700 text-white text-xs font-bold shadow-sm transition">
+                    📋 पूरी खबर कॉपी करें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: BULLETIN QUEUE ==================== -->
+    <div id="bulletinModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-5 py-3.5 bg-amber-600 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">⚡ आज के बुलेटिन की चेकलिस्ट</h3>
+                <button onclick="closeModal('bulletinModal')" class="text-white hover:text-amber-100 text-xl font-bold px-2">&times;</button>
+            </div>
+            <div id="bulletinListContainer" class="p-4 overflow-y-auto space-y-2.5"></div>
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+                <button onclick="clearBulletin()" class="text-xs font-bold text-red-600 hover:underline">लिस्ट खाली करें</button>
+                <button onclick="copyAllBulletin()" class="px-4 py-2 rounded-xl bg-gray-900 text-white text-xs font-bold">सभी पॉइंट्स कॉपी करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 4: PERMANENT SAVE INTO CODE ==================== -->
+    <div id="exportCodeModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-gray-200 overflow-hidden">
+            <div class="px-5 py-3.5 bg-emerald-700 text-white flex items-center justify-between">
+                <h3 class="font-bold text-base">💾 सभी DP, नाम और लिंक्स को कोड में सेव करें</h3>
+                <button onclick="closeModal('exportCodeModal')" class="text-emerald-100 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+            <div class="p-5 space-y-4 text-sm text-gray-700">
+                <p class="leading-relaxed">
+                    आपने जो भी प्रोफ़ाइल फ़ोटो (DP), नए कार्ड्स और Facebook / X / Instagram लिंक्स जोड़े हैं (कुल <strong id="exportCountText" class="text-gray-900">21 कार्ड्स</strong>), वे सब सीधे इस वेब ऐप के <strong>मुख्य कोड</strong> में लिखकर तैयार हैं।
+                </p>
+                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1">
+                    <p class="font-bold">स्थायी सेव करने का तरीका:</p>
+                    <p>1. <strong>"अपडेटेड index.html डाउनलोड करें"</strong> पर क्लिक करें।</p>
+                    <p>2. डाउनलोड हुई फ़ाइल को अपने फ़ोल्डर में (जहाँ <code>skgb.png</code> रखी है) पुरानी फ़ाइल की जगह सेव कर दें।</p>
+                </div>
+                <div class="flex flex-wrap justify-end gap-2 pt-1">
+                    <button onclick="copyUpdatedSourceCode()" class="px-4 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-800 text-xs font-bold">
+                        📋 पूरा कोड कॉपी करें
+                    </button>
+                    <button onclick="downloadUpdatedHtmlFile()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm">
+                        ⬇ अपडेटेड index.html डाउनलोड करें
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg border border-gray-700 text-xs sm:text-sm font-bold flex items-center gap-2">
+        <span class="text-emerald-400">✔</span>
+        <span id="toastMessage">सफलतापूर्वक सेव हो गया!</span>
+    </div>
+
+    <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+    <script>
+        // =========================================================================
+        // OFFICIAL VECTOR ICONS (Facebook, X Media, Instagram)
+        // =========================================================================
+        const SOCIAL_ICONS = {
+            fb: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>`,
+            x: `<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+            ig: `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`
+        };
+
+        // =========================================================================
+        // DEFAULT_PROFILES: जनपद ब्यूरो (15), प्रदेश ब्यूरो (3), राष्ट्रीय ब्यूरो (3)
+        // =========================================================================
+        const DEFAULT_PROFILES = [
+            // --- 1. जनपद ब्यूरो (District Bureau: 15 Local Profiles) ---
+            {
+                id: 'bhoorapandit',
+                bureau: 'district',
+                name: 'Bhoora Pandit',
+                subtitle: 'अतरौली • स्थानीय नेतृत्व',
+                dp: '',
+                initials: 'BP',
+                avatarBg: 'bg-rose-700',
+                fbUrl: 'https://www.facebook.com/socialist.bhoorapandit',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'virendrasinghlodhi',
+                bureau: 'district',
+                name: 'Virendra Singh Lodhi',
+                subtitle: 'अलीगढ़ • जनप्रतिनिधि',
+                dp: '',
+                initials: 'VS',
+                avatarBg: 'bg-purple-700',
+                fbUrl: 'https://www.facebook.com/kvirendar.kumar.9',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'chaudharyrishipalsingh',
+                bureau: 'district',
+                name: 'Chaudhary Rishipal Singh',
+                subtitle: 'अतरौली (अलीगढ़) • जनप्रतिनिधि',
+                dp: '',
+                initials: 'CR',
+                avatarBg: 'bg-orange-600',
+                fbUrl: 'https://www.facebook.com/ChaydharyRishipalSingh',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'bodhpalsingh',
+                bureau: 'district',
+                name: 'Bodhpal Singh',
+                subtitle: 'अतरौली • सामाजिक व राजनीतिक',
+                dp: '',
+                initials: 'BS',
+                avatarBg: 'bg-emerald-700',
+                fbUrl: 'https://www.facebook.com/bodhpal.singh.50',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'aligarhpolice',
+                bureau: 'district',
+                name: 'Aligarh Police',
+                subtitle: 'अलीगढ़ • आधिकारिक पुलिस प्रशासन',
+                dp: '',
+                initials: 'AP',
+                avatarBg: 'bg-blue-900',
+                fbUrl: 'https://www.facebook.com/aligarhpolice',
+                xUrl: 'https://x.com/aligarhpolice',
+                igUrl: ''
+            },
+            {
+                id: 'praveenrajsingh',
+                bureau: 'district',
+                name: 'Praveen raj singh',
+                subtitle: 'अलीगढ़ • जनप्रतिनिधि',
+                dp: '',
+                initials: 'PR',
+                avatarBg: 'bg-amber-600',
+                fbUrl: 'https://www.facebook.com/praveenrajsinghbjp',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'tapeshchaudhary',
+                bureau: 'district',
+                name: 'Tapesh Rishipal Singh Chaudhary',
+                subtitle: 'अतरौली • युवा नेतृत्व',
+                dp: '',
+                initials: 'TR',
+                avatarBg: 'bg-indigo-700',
+                fbUrl: 'https://www.facebook.com/tapesh.rishipal.singh.chaudhary',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'gopalmaheshwari',
+                bureau: 'district',
+                name: 'Gopal Maheshwari',
+                subtitle: 'अतरौली • सार्वजनिक जीवन',
+                dp: '',
+                initials: 'GM',
+                avatarBg: 'bg-teal-700',
+                fbUrl: 'https://www.facebook.com/gopalbabuji',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'nawabsingh',
+                bureau: 'district',
+                name: 'Nawab Singh',
+                subtitle: 'अलीगढ़ • स्थानीय नेतृत्व',
+                dp: '',
+                initials: 'NS',
+                avatarBg: 'bg-cyan-700',
+                fbUrl: 'https://www.facebook.com/nawab.singh.90410',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'maheshverma',
+                bureau: 'district',
+                name: 'Mahesh Verma',
+                subtitle: 'अलीगढ़ • स्थानीय नेतृत्व',
+                dp: '',
+                initials: 'MV',
+                avatarBg: 'bg-violet-700',
+                fbUrl: 'https://www.facebook.com/mahesh.chandra.9210',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'vireshyadav',
+                bureau: 'district',
+                name: 'Viresh yadav',
+                subtitle: 'अतरौली • पूर्व विधायक',
+                dp: '',
+                initials: 'VY',
+                avatarBg: 'bg-red-700',
+                fbUrl: 'https://www.facebook.com/Vireshyadavmla',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'anilparashar',
+                bureau: 'district',
+                name: 'Anil Parashar',
+                subtitle: 'अलीगढ़ • विधायक',
+                dp: '',
+                initials: 'AP',
+                avatarBg: 'bg-orange-700',
+                fbUrl: 'https://www.facebook.com/AnilParashar.Official',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'upjansamvadnews',
+                bureau: 'district',
+                name: 'Upjansamvad News',
+                subtitle: 'अतरौली • डिजिटल न्यूज़ पेज',
+                dp: '',
+                initials: 'UJ',
+                avatarBg: 'bg-brandRed',
+                fbUrl: 'https://www.facebook.com/upjansamvad.news',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'atraulikhabar',
+                bureau: 'district',
+                name: 'Atrauli Khabar',
+                subtitle: 'अतरौली • स्थानीय न्यूज़ पोर्टल',
+                dp: '',
+                initials: 'AK',
+                avatarBg: 'bg-slate-800',
+                fbUrl: 'https://www.facebook.com/profile.php?id=100008760490540',
+                xUrl: '',
+                igUrl: ''
+            },
+            {
+                id: 'upajjtak24news',
+                bureau: 'district',
+                name: 'UP AJJ TAK 24 News',
+                subtitle: 'अलीगढ़ / अतरौली • न्यूज़ पोर्टल',
+                dp: '',
+                initials: '24',
+                avatarBg: 'bg-red-800',
+                fbUrl: 'https://www.facebook.com/profile.php?id=100091777810117',
+                xUrl: '',
+                igUrl: ''
+            },
+
+            // --- 2. प्रदेश ब्यूरो (State Bureau: Sample Starters, Editable) ---
+            {
+                id: 'state_cmo_up',
+                bureau: 'state',
+                name: 'CM Office, GoUP',
+                subtitle: 'लखनऊ • मुख्यमंत्री कार्यालय उ.प्र.',
+                dp: '',
+                initials: 'CM',
+                avatarBg: 'bg-orange-600',
+                fbUrl: 'https://www.facebook.com/CMOfficeUP',
+                xUrl: 'https://x.com/CMOfficeUP',
+                igUrl: 'https://www.instagram.com/cmofficeup/'
+            },
+            {
+                id: 'state_up_police',
+                bureau: 'state',
+                name: 'UP Police',
+                subtitle: 'लखनऊ • उत्तर प्रदेश पुलिस मुख्यालय',
+                dp: '',
+                initials: 'UP',
+                avatarBg: 'bg-blue-900',
+                fbUrl: 'https://www.facebook.com/uppolice',
+                xUrl: 'https://x.com/Uppolice',
+                igUrl: 'https://www.instagram.com/uppolice/'
+            },
+            {
+                id: 'state_info_dept',
+                bureau: 'state',
+                name: 'Information & PR Dept, UP',
+                subtitle: 'लखनऊ • सूचना एवं जनसंपर्क विभाग',
+                dp: '',
+                initials: 'PR',
+                avatarBg: 'bg-amber-700',
+                fbUrl: 'https://www.facebook.com/InfoDeptUP',
+                xUrl: 'https://x.com/InfoDeptUP',
+                igUrl: ''
+            },
+
+            // --- 3. राष्ट्रीय ब्यूरो एवं प्रेस रिलीज़ (National & Press Releases) ---
+            {
+                id: 'nat_pib_india',
+                bureau: 'national',
+                name: 'PIB India (प्रेस सूचना ब्यूरो)',
+                subtitle: 'नई दिल्ली • भारत सरकार आधिकारिक प्रेस रिलीज़',
+                dp: '',
+                initials: 'PI',
+                avatarBg: 'bg-emerald-800',
+                fbUrl: 'https://www.facebook.com/pibindia',
+                xUrl: 'https://x.com/PIB_India',
+                igUrl: 'https://www.instagram.com/pibindia/'
+            },
+            {
+                id: 'nat_pmo_india',
+                bureau: 'national',
+                name: 'PMO India',
+                subtitle: 'नई दिल्ली • प्रधानमंत्री कार्यालय',
+                dp: '',
+                initials: 'PM',
+                avatarBg: 'bg-indigo-900',
+                fbUrl: 'https://www.facebook.com/PMOIndia',
+                xUrl: 'https://x.com/PMOIndia',
+                igUrl: 'https://www.instagram.com/pmoindia/'
+            },
+            {
+                id: 'nat_dd_news',
+                bureau: 'national',
+                name: 'DD News (दूरदर्शन समाचार)',
+                subtitle: 'नई दिल्ली • राष्ट्रीय प्रसारक',
+                dp: '',
+                initials: 'DD',
+                avatarBg: 'bg-red-800',
+                fbUrl: 'https://www.facebook.com/DDNews',
+                xUrl: 'https://x.com/DDNewslive',
+                igUrl: 'https://www.instagram.com/ddnews_official/'
+            }
+        ];
+
+        const STORAGE_KEY = 'skgb_editorial_profiles_v1';
+        const BULLETIN_KEY = 'skgb_editorial_bulletin_v1';
+
+        function loadProfiles() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.warn('Storage read fallback', e);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+        }
+
+        function saveProfilesToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(profilesList));
+            } catch (e) {
+                showToast('⚠️ फ़ोटो बड़ी होने के कारण लोकल सेव सीमित है; "💾 कोड में सेव करें" का उपयोग करें।');
+            }
+        }
+
+        let profilesList = loadProfiles();
+        let bulletinQueue = JSON.parse(localStorage.getItem(BULLETIN_KEY) || '[]');
+        let activeDpTargetId = null;
+
+        // ==================== BRAND LOGO UPLOAD ====================
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('brandLogoImg');
+                const fallback = document.getElementById('brandLogoTextFallback');
+                img.src = e.target.result;
+                img.classList.remove('hidden');
+                fallback.classList.add('hidden');
+                showToast('✔ आपका असली लोगो (skgb.png) सेट हो गया!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ==================== 4 COMPACT GOOGLE NEWS LIVE RADAR CARDS ====================
+        const GOOGLE_RADAR_FEEDS = [
+            {
+                key: 'atrauli',
+                containerId: 'radarList_atrauli',
+                tickerId: 'radarTicker_atrauli',
+                dateline: 'अतरौली (अलीगढ़)',
+                query: 'अतरौली अलीगढ़'
+            },
+            {
+                key: 'aligarh',
+                containerId: 'radarList_aligarh',
+                tickerId: 'radarTicker_aligarh',
+                dateline: 'अलीगढ़',
+                query: 'अलीगढ़ समाचार'
+            },
+            {
+                key: 'up',
+                containerId: 'radarList_up',
+                tickerId: 'radarTicker_up',
+                dateline: 'उत्तर प्रदेश',
+                query: 'उत्तर प्रदेश बड़ी खबर'
+            },
+            {
+                key: 'national',
+                containerId: 'radarList_national',
+                tickerId: 'radarTicker_national',
+                dateline: 'नई दिल्ली / प्रेस रिलीज़',
+                query: 'PIB India प्रेस विज्ञप्ति भारत सरकार'
+            }
+        ];
+
+        const radarTickerTimers = {};
+
+        function formatRelativeHindiTime(dateStr) {
+            if (!dateStr) return 'ताज़ा';
+            const pub = new Date(dateStr);
+            if (isNaN(pub.getTime())) return 'ताज़ा';
+            const now = new Date();
+            const diffHrs = Math.floor((now - pub) / (1000 * 60 * 60));
+            if (diffHrs < 1) return 'अभी-अभी';
+            if (diffHrs < 24) return `${diffHrs} घंटे पहले`;
+            if (diffHrs < 48) return 'कल की खबर';
+            return pub.toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' });
+        }
+
+        function parseGoogleRssXml(xmlText) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xmlText, 'text/xml');
+            const nodes = Array.from(doc.querySelectorAll('item'));
+            return nodes.map(node => ({
+                title: node.querySelector('title')?.textContent || '',
+                link: node.querySelector('link')?.textContent || '',
+                pubDate: node.querySelector('pubDate')?.textContent || '',
+                source: node.querySelector('source')?.textContent || ''
+            })).filter(i => i.title);
+        }
+
+        async function fetchRssWithTripleFallback(googleRssUrl) {
+            // 1. Primary XML Proxy (AllOrigins)
+            try {
+                const res1 = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(googleRssUrl)}`);
+                if (res1.ok) {
+                    const json1 = await res1.json();
+                    if (json1 && json1.contents) {
+                        const items1 = parseGoogleRssXml(json1.contents);
+                        if (items1.length > 0) return items1;
+                    }
+                }
+            } catch (e) {}
+
+            // 2. Secondary XML Proxy (CodeTabs)
+            try {
+                const res2 = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(googleRssUrl)}`);
+                if (res2.ok) {
+                    const xml2 = await res2.text();
+                    const items2 = parseGoogleRssXml(xml2);
+                    if (items2.length > 0) return items2;
+                }
+            } catch (e) {}
+
+            // 3. Tertiary JSON Bridge (RSS2JSON)
+            try {
+                const res3 = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(googleRssUrl)}`);
+                if (res3.ok) {
+                    const data3 = await res3.json();
+                    if (data3.status === 'ok' && Array.isArray(data3.items) && data3.items.length > 0) {
+                        return data3.items.map(i => ({
+                            title: i.title || '',
+                            link: i.link || '',
+                            pubDate: i.pubDate || '',
+                            source: ''
+                        }));
+                    }
+                }
+            } catch (e) {}
+
+            return [];
+        }
+
+        function startCardFlashTicker(feedCfg, cleanItems) {
+            const tickerEl = document.getElementById(feedCfg.tickerId);
+            if (!tickerEl || cleanItems.length === 0) return;
+
+            if (radarTickerTimers[feedCfg.key]) {
+                clearInterval(radarTickerTimers[feedCfg.key]);
+            }
+
+            let idx = 0;
+            tickerEl.classList.remove('hidden');
+            const updateTicker = () => {
+                const current = cleanItems[idx % cleanItems.length];
+                tickerEl.innerHTML = `<span class="text-amber-300 mr-1">⚡ FLASH:</span> ${current.cleanTitle}`;
+                idx++;
+            };
+            updateTicker();
+            radarTickerTimers[feedCfg.key] = setInterval(updateTicker, 4000);
+        }
+
+        async function fetchSingleGoogleRadar(feedCfg) {
+            const container = document.getElementById(feedCfg.containerId);
+            if (!container) return;
+
+            const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(feedCfg.query)}&hl=hi&gl=IN&ceid=IN:hi`;
+            const rawItems = await fetchRssWithTripleFallback(googleRssUrl);
+
+            if (rawItems.length > 0) {
+                const items = rawItems.slice(0, 7).map(item => {
+                    const cleanTitle = (item.title || '').replace(/\s-\s[^-]+$/, '').trim();
+                    const sourceName = item.source || ((item.title && item.title.includes(' - ')) ? item.title.split(' - ').pop().trim() : 'Google News');
+                    const timeLabel = formatRelativeHindiTime(item.pubDate);
+                    return { ...item, cleanTitle, sourceName, timeLabel };
+                });
+
+                // Start auto-flashing headline strip at top of card
+                startCardFlashTicker(feedCfg, items);
+
+                container.innerHTML = items.map(item => {
+                    const isToday = item.timeLabel.includes('घंटे') || item.timeLabel === 'अभी-अभी';
+                    const encodedHeadline = encodeURIComponent(item.cleanTitle);
+                    const encodedLink = encodeURIComponent(item.link || '');
+                    const encodedLoc = encodeURIComponent(feedCfg.dateline);
+
+                    return `
+                        <div class="pt-2 first:pt-0 flex items-start justify-between gap-2 group">
+                            <div class="min-w-0 flex-1">
+                                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-bold text-gray-800 group-hover:text-brandRed leading-snug line-clamp-2 transition block">
+                                    ${item.cleanTitle}
+                                </a>
+                                <div class="flex items-center gap-1.5 mt-1 text-[10px] text-gray-500">
+                                    <span class="px-1.5 py-0.2 rounded font-bold ${isToday ? 'bg-red-50 text-brandRed' : 'bg-gray-100 text-gray-600'}">${item.timeLabel}</span>
+                                    <span class="truncate">${item.sourceName}</span>
+                                </div>
+                            </div>
+                            <button type="button" onclick="openDraftFromGoogleNews('${encodedHeadline}', '${encodedLoc}', '${encodedLink}')" class="flex-shrink-0 px-2 py-1 rounded-lg bg-gray-100 hover:bg-brandRed hover:text-white text-gray-700 text-[10px] font-bold transition" title="इस खबर से ड्राफ्ट बनाएं">
+                                ✍️
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                const fallbackSearch = `https://news.google.com/search?q=${encodeURIComponent(feedCfg.query)}&hl=hi&gl=IN&ceid=IN:hi`;
+                container.innerHTML = `
+                    <div class="py-4 text-center space-y-2">
+                        <p class="text-gray-500 text-[11px]">लाइव फ़ीड अभी उपलब्ध नहीं है, सीधे Google News पर देखें:</p>
+                        <a href="${fallbackSearch}" target="_blank" rel="noopener noreferrer" class="inline-block px-3 py-1.5 rounded-lg bg-gray-900 text-white text-[11px] font-bold">
+                            Google News खोलें ↗
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function loadAllGoogleNewsRadars(showNotice = false) {
+            GOOGLE_RADAR_FEEDS.forEach(cfg => fetchSingleGoogleRadar(cfg));
+            if (showNotice) showToast('🔄 चारों लाइव न्यूज़ रडार रिफ़्रेश हो रहे हैं...');
+        }
+
+        function openDraftFromGoogleNews(encodedHeadline, encodedLoc, encodedLink) {
+            const headline = decodeURIComponent(encodedHeadline);
+            const loc = decodeURIComponent(encodedLoc);
+            const link = decodeURIComponent(encodedLink);
+
+            document.getElementById('rawPasteInput').value = headline;
+            document.getElementById('draftHeadline').value = headline;
+            document.getElementById('draftLocation').value = loc;
+            document.getElementById('draftSource').value = 'Google News Radar';
+            document.getElementById('draftVerifyLink').href = link || '#';
+            document.getElementById('draftBody').value = `${loc} (सब कुछ घर बैठे न्यूज़ ब्यूरो)। ${headline}। विस्तृत जानकारी जुटाई जा रही है।`;
+            openModal('newsDraftModal');
+        }
+
+        // ==================== BUREAU DRAWERS (ACCORDION TOGGLE) ====================
+        function toggleBureauDrawer(bureauKey) {
+            const body = document.getElementById(`body_${bureauKey}`);
+            const arrow = document.getElementById(`arrow_${bureauKey}`);
+            if (!body) return;
+            const isHidden = body.classList.contains('hidden');
+            if (isHidden) {
+                body.classList.remove('hidden');
+                arrow.classList.remove('-rotate-90');
+            } else {
+                body.classList.add('hidden');
+                arrow.classList.add('-rotate-90');
+            }
+        }
+
+        // ==================== RENDER PROFILE CARDS (DP + NAME + FB | X | IG SEPARATOR) ====================
+        function createProfileCardHTML(p) {
+            const inBulletin = bulletinQueue.includes(p.id);
+
+            const dpBlock = p.dp
+                ? `<img src="${p.dp}" alt="${p.name}" class="w-full h-full object-cover">`
+                : `<span class="font-extrabold text-sm">${p.initials}</span>`;
+
+            const fbLinkHTML = p.fbUrl
+                ? `<a href="${p.fbUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[#1877F2] hover:underline font-bold text-xs py-1 px-1.5 rounded-lg hover:bg-blue-50 transition" title="Facebook खोलें">
+                        ${SOCIAL_ICONS.fb}
+                        <span>Facebook</span>
+                   </a>`
+                : `<button type="button" onclick="openEditProfileModal('${p.id}')" class="inline-flex items-center gap-1 text-gray-400 hover:text-[#1877F2] text-xs py-1 px-1.5 rounded-lg transition" title="Facebook लिंक जोड़ें">
+                        ${SOCIAL_ICONS.fb}
+                        <span>+FB</span>
+                   </button>`;
+
+            const xLinkHTML = p.xUrl
+                ? `<a href="${p.xUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-gray-900 hover:underline font-bold text-xs py-1 px-1.5 rounded-lg hover:bg-gray-100 transition" title="X (Twitter) खोलें">
+                        ${SOCIAL_ICONS.x}
+                        <span>X</span>
+                   </a>`
+                : `<button type="button" onclick="openEditProfileModal('${p.id}')" class="inline-flex items-center gap-1 text-gray-400 hover:text-gray-900 text-xs py-1 px-1.5 rounded-lg transition" title="X लिंक जोड़ें">
+                        ${SOCIAL_ICONS.x}
+                        <span>+X</span>
+                   </button>`;
+
+            const igLinkHTML = p.igUrl
+                ? `<a href="${p.igUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[#E4405F] hover:underline font-bold text-xs py-1 px-1.5 rounded-lg hover:bg-pink-50 transition" title="Instagram खोलें">
+                        ${SOCIAL_ICONS.ig}
+                        <span>Insta</span>
+                   </a>`
+                : `<button type="button" onclick="openEditProfileModal('${p.id}')" class="inline-flex items-center gap-1 text-gray-400 hover:text-[#E4405F] text-xs py-1 px-1.5 rounded-lg transition" title="Instagram लिंक जोड़ें">
+                        ${SOCIAL_ICONS.ig}
+                        <span>+IG</span>
+                   </button>`;
+
+            return `
+                <article class="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 shadow-xs hover:shadow-md transition flex flex-col justify-between overflow-hidden">
+                    
+                    <!-- Top: Profile Picture (Click to Change DP) + Name + Edit Icon -->
+                    <div class="p-3.5 flex items-center gap-3">
+                        <div onclick="triggerQuickDpUpload('${p.id}')" class="relative w-12 h-12 rounded-full ${p.dp ? 'bg-gray-100' : p.avatarBg} text-white flex items-center justify-center overflow-hidden flex-shrink-0 cursor-pointer group ring-2 ring-gray-100 shadow-xs" title="प्रोफ़ाइल फ़ोटो (DP) बदलने के लिए क्लिक करें">
+                            ${dpBlock}
+                            <div class="absolute inset-0 bg-black/55 text-white text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                📷 DP
+                            </div>
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-start justify-between gap-1">
+                                <h3 class="font-extrabold text-gray-900 text-sm leading-snug truncate" title="${p.name}">
+                                    ${p.name}
+                                </h3>
+                                <button type="button" onclick="openEditProfileModal('${p.id}')" class="text-gray-400 hover:text-gray-900 p-1 rounded-lg hover:bg-gray-100 flex-shrink-0 transition" title="नाम, DP या सोशल लिंक एडिट करें">
+                                    ✏️
+                                </button>
+                            </div>
+                            <p class="text-[11px] text-gray-500 truncate mt-0.5">${p.subtitle || 'सोशल मीडिया स्रोत'}</p>
+                        </div>
+                    </div>
+
+                    <!-- Middle: Facebook | X Media | Instagram with Separators -->
+                    <div class="px-3 py-2 bg-gray-50/90 border-t border-b border-gray-100 flex items-center justify-between gap-1">
+                        ${fbLinkHTML}
+                        <span class="text-gray-300 font-light select-none">|</span>
+                        ${xLinkHTML}
+                        <span class="text-gray-300 font-light select-none">|</span>
+                        ${igLinkHTML}
+                    </div>
+
+                    <!-- Bottom: Quick Editorial Actions -->
+                    <div class="px-3 py-2 bg-white flex items-center justify-between gap-2">
+                        <button type="button" onclick="openNewsDraftForProfile('${p.id}')" class="flex-1 py-1.5 px-2.5 rounded-xl bg-brandRed hover:bg-red-700 text-white text-[11px] font-bold transition">
+                            ✍️ खबर बनाएं
+                        </button>
+                        <button type="button" onclick="toggleBulletin('${p.id}')" class="py-1.5 px-2.5 rounded-xl border text-[11px] font-bold transition ${inBulletin ? 'bg-amber-500 text-white border-amber-600' : 'bg-white hover:bg-amber-50 text-amber-800 border-amber-200'}" title="बुलेटिन चेकलिस्ट में मार्क करें">
+                            ${inBulletin ? '★ मार्क्ड' : '☆ मार्क'}
+                        </button>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderAllBureaus() {
+            const searchTerm = (document.getElementById('profileSearchInput').value || '').trim().toLowerCase();
+            const bureaus = ['district', 'state', 'national'];
+            let totalVisible = 0;
+
+            bureaus.forEach(bKey => {
+                const items = profilesList.filter(p => {
+                    if (p.bureau !== bKey) return false;
+                    if (!searchTerm) return true;
+                    return p.name.toLowerCase().includes(searchTerm) || (p.subtitle && p.subtitle.toLowerCase().includes(searchTerm));
+                });
+
+                totalVisible += items.length;
+                const countEl = document.getElementById(`count_${bKey}`);
+                const gridEl = document.getElementById(`grid_${bKey}`);
+                if (countEl) countEl.textContent = items.length;
+
+                if (gridEl) {
+                    if (items.length === 0) {
+                        gridEl.innerHTML = `<p class="col-span-full text-xs text-gray-500 py-4 text-center">इस ब्यूरो में कोई प्रोफ़ाइल नहीं मिली। ऊपर "+ नया कार्ड जोड़ें" से जोड़ें।</p>`;
+                    } else {
+                        gridEl.innerHTML = items.map(p => createProfileCardHTML(p)).join('');
+                    }
+                }
+            });
+
+            document.getElementById('totalProfilesBadge').textContent = `${totalVisible} प्रोफ़ाइल`;
+            document.getElementById('bulletinCount').textContent = bulletinQueue.length;
+        }
+
+        // ==================== PROFILE DP UPLOAD (COMPRESSED FOR CLEAN STORAGE) ====================
+        function triggerQuickDpUpload(profileId) {
+            activeDpTargetId = profileId;
+            document.getElementById('dpUploadInput').value = '';
+            document.getElementById('dpUploadInput').click();
+        }
+
+        function triggerDpUploadForModal() {
+            activeDpTargetId = '__MODAL__';
+            document.getElementById('dpUploadInput').value = '';
+            document.getElementById('dpUploadInput').click();
+        }
+
+        function handleProfileDpFileChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const size = 160;
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+
+                    const minSide = Math.min(img.width, img.height);
+                    const sx = (img.width - minSide) / 2;
+                    const sy = (img.height - minSide) / 2;
+                    ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    if (activeDpTargetId === '__MODAL__') {
+                        document.getElementById('formProfileDpData').value = compressedDataUrl;
+                        document.getElementById('modalDpPreview').innerHTML = `<img src="${compressedDataUrl}" class="w-full h-full object-cover">`;
+                        showToast('✔ प्रोफ़ाइल फ़ोटो तैयार है, अब "सेव करें" दबाएं');
+                    } else if (activeDpTargetId) {
+                        const target = profilesList.find(p => p.id === activeDpTargetId);
+                        if (target) {
+                            target.dp = compressedDataUrl;
+                            saveProfilesToStorage();
+                            renderAllBureaus();
+                            showToast(`✔ ${target.name} की DP अपडेट हो गई! स्थायी सेव के लिए "💾 कोड में सेव करें" दबाएं।`);
+                        }
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearModalDp() {
+            document.getElementById('formProfileDpData').value = '';
+            document.getElementById('modalDpPreview').innerHTML = 'DP';
+        }
+
+        // ==================== ADD / EDIT / DELETE PROFILE MODAL ====================
+        function openAddSourceModal() {
+            document.getElementById('profileModalTitle').textContent = '+ नया प्रोफ़ाइल कार्ड जोड़ें';
+            document.getElementById('editProfileId').value = '';
+            document.getElementById('formProfileName').value = '';
+            document.getElementById('formProfileBureau').value = 'district';
+            document.getElementById('formProfileSubtitle').value = '';
+            document.getElementById('formFbUrl').value = '';
+            document.getElementById('formXUrl').value = '';
+            document.getElementById('formIgUrl').value = '';
+            clearModalDp();
+            document.getElementById('btnDeleteProfile').classList.add('hidden');
+            openModal('profileFormModal');
+        }
+
+        function openEditProfileModal(profileId) {
+            const p = profilesList.find(item => item.id === profileId);
+            if (!p) return;
+
+            document.getElementById('profileModalTitle').textContent = `✏️ प्रोफ़ाइल एडिट करें: ${p.name}`;
+            document.getElementById('editProfileId').value = p.id;
+            document.getElementById('formProfileName').value = p.name;
+            document.getElementById('formProfileBureau').value = p.bureau;
+            document.getElementById('formProfileSubtitle').value = p.subtitle || '';
+            document.getElementById('formFbUrl').value = p.fbUrl || '';
+            document.getElementById('formXUrl').value = p.xUrl || '';
+            document.getElementById('formIgUrl').value = p.igUrl || '';
+            document.getElementById('formProfileDpData').value = p.dp || '';
+
+            const preview = document.getElementById('modalDpPreview');
+            preview.innerHTML = p.dp ? `<img src="${p.dp}" class="w-full h-full object-cover">` : p.initials;
+
+            document.getElementById('btnDeleteProfile').classList.remove('hidden');
+            openModal('profileFormModal');
+        }
+
+        function handleSaveProfileCard(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editProfileId').value;
+            const name = document.getElementById('formProfileName').value.trim();
+            const bureau = document.getElementById('formProfileBureau').value;
+            const subtitle = document.getElementById('formProfileSubtitle').value.trim();
+            const fbUrl = document.getElementById('formFbUrl').value.trim();
+            const xUrl = document.getElementById('formXUrl').value.trim();
+            const igUrl = document.getElementById('formIgUrl').value.trim();
+            const dpData = document.getElementById('formProfileDpData').value;
+            const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'SB';
+
+            if (editId) {
+                const idx = profilesList.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    profilesList[idx] = {
+                        ...profilesList[idx],
+                        name,
+                        bureau,
+                        subtitle,
+                        fbUrl,
+                        xUrl,
+                        igUrl,
+                        dp: dpData,
+                        initials
+                    };
+                }
+                showToast(`✔ "${name}" अपडेट हो गया!`);
+            } else {
+                profilesList.push({
+                    id: 'prof_' + Date.now(),
+                    bureau,
+                    name,
+                    subtitle,
+                    dp: dpData,
+                    initials,
+                    avatarBg: 'bg-gray-800',
+                    fbUrl,
+                    xUrl,
+                    igUrl
+                });
+                showToast(`✔ नया कार्ड "${name}" जुड़ गया!`);
+            }
+
+            const bodyEl = document.getElementById(`body_${bureau}`);
+            const arrowEl = document.getElementById(`arrow_${bureau}`);
+            if (bodyEl && bodyEl.classList.contains('hidden')) {
+                bodyEl.classList.remove('hidden');
+                arrowEl.classList.remove('-rotate-90');
+            }
+
+            saveProfilesToStorage();
+            renderAllBureaus();
+            closeModal('profileFormModal');
+        }
+
+        function deleteCurrentEditingProfile() {
+            const editId = document.getElementById('editProfileId').value;
+            if (!editId) return;
+            profilesList = profilesList.filter(p => p.id !== editId);
+            saveProfilesToStorage();
+            renderAllBureaus();
+            closeModal('profileFormModal');
+            showToast('प्रोफ़ाइल कार्ड हटा दिया गया');
+        }
+
+        // ==================== QUICK NEWS DRAFTER ("खबर बनाएं") ====================
+        let activeDraftProfile = null;
+
+        function openNewsDraftForProfile(profileId) {
+            const p = profilesList.find(item => item.id === profileId);
+            if (!p) return;
+            activeDraftProfile = p;
+
+            document.getElementById('rawPasteInput').value = '';
+            document.getElementById('draftLocation').value = p.bureau === 'district' ? 'अतरौली (अलीगढ़)' : (p.bureau === 'state' ? 'लखनऊ / अलीगढ़' : 'नई दिल्ली');
+            document.getElementById('draftSource').value = `${p.name} (सोशल मीडिया)`;
+            document.getElementById('draftVerifyLink').href = p.fbUrl || p.xUrl || p.igUrl || '#';
+            document.getElementById('draftHeadline').value = `${p.name} से जुड़ी बड़ी अपडेट: ...`;
+            document.getElementById('draftBody').value = `${document.getElementById('draftLocation').value} (सब कुछ घर बैठे न्यूज़ ब्यूरो)। ऊपर बॉक्स में पोस्ट या प्रेस रिलीज़ का मैटर पेस्ट करें और 'ऑटो-फॉर्मेट' दबाएं।`;
+            openModal('newsDraftModal');
+        }
+
+        function autoFormatNewsFromPaste() {
+            const raw = document.getElementById('rawPasteInput').value.trim();
+            const loc = document.getElementById('draftLocation').value.trim() || 'अलीगढ़';
+            const srcName = activeDraftProfile ? activeDraftProfile.name : 'आधिकारिक स्रोत';
+
+            if (!raw) {
+                showToast('पहले ऊपर बॉक्स में पोस्ट का मैटर पेस्ट करें!');
+                return;
+            }
+
+            const firstSentence = raw.split(/[।\.\n]/)[0].trim().slice(0, 85);
+            document.getElementById('draftHeadline').value = `${srcName}: ${firstSentence}`;
+            document.getElementById('draftBody').value = `${loc} (सब कुछ घर बैठे न्यूज़ ब्यूरो)। ${raw}\n\n${srcName} के आधिकारिक हैंडल से साझा की गई इस सूचना के बाद स्थानीय स्तर पर हलचल तेज हो गई है।`;
+            showToast('✔ खबर फॉर्मेट तैयार हो गई!');
+        }
+
+        function copyDraftNews() {
+            const headline = document.getElementById('draftHeadline').value.trim();
+            const body = document.getElementById('draftBody').value.trim();
+            copyToClipboard(`ब्रेकिंग न्यूज़: ${headline}\n\n${body}`, 'पूरी खबर कॉपी हो गई!');
+            closeModal('newsDraftModal');
+        }
+
+        // ==================== BULLETIN QUEUE ====================
+        function toggleBulletin(profileId) {
+            const idx = bulletinQueue.indexOf(profileId);
+            if (idx === -1) {
+                bulletinQueue.push(profileId);
+                showToast('⚡ बुलेटिन लिस्ट में जोड़ा गया!');
+            } else {
+                bulletinQueue.splice(idx, 1);
+                showToast('बुलेटिन लिस्ट से हटाया गया');
+            }
+            localStorage.setItem(BULLETIN_KEY, JSON.stringify(bulletinQueue));
+            renderAllBureaus();
+        }
+
+        function openBulletinModal() {
+            const container = document.getElementById('bulletinListContainer');
+            if (bulletinQueue.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">अभी कोई स्रोत मार्क नहीं है। किसी भी कार्ड पर '☆ मार्क' दबाएं।</p>`;
+            } else {
+                container.innerHTML = bulletinQueue.map((id, i) => {
+                    const p = profilesList.find(item => item.id === id);
+                    if (!p) return '';
+                    const primaryLink = p.fbUrl || p.xUrl || p.igUrl || '#';
+                    return `
+                        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-extrabold text-gray-900">#${i + 1} • ${p.name}</span>
+                                <p class="text-[11px] text-gray-500">${p.subtitle || ''}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="${primaryLink}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 font-bold">खोलें ↗</a>
+                                <button onclick="toggleBulletin('${id}'); openBulletinModal();" class="text-xs text-red-600 font-bold px-2">हटाएं</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            openModal('bulletinModal');
+        }
+
+        function clearBulletin() {
+            bulletinQueue = [];
+            localStorage.setItem(BULLETIN_KEY, '[]');
+            renderAllBureaus();
+            openBulletinModal();
+        }
+
+        function copyAllBulletin() {
+            if (bulletinQueue.length === 0) return;
+            const summary = bulletinQueue.map((id, i) => {
+                const p = profilesList.find(item => item.id === id);
+                if (!p) return '';
+                return `${i + 1}. ${p.name} — ${p.fbUrl || p.xUrl || p.igUrl || ''}`;
+            }).filter(Boolean).join('\n');
+            copyToClipboard(`⚡ सब कुछ घर बैठे न्यूज़ — चेकलिस्ट:\n\n${summary}`, 'सभी बुलेटिन पॉइंट्स कॉपी हो गए!');
+            closeModal('bulletinModal');
+        }
+
+        // ==================== PERMANENT SAVE INTO HTML CODE ====================
+        function generateUpdatedHtmlCode() {
+            const fullDocHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const serializedProfiles = JSON.stringify(profilesList, null, 12);
+            return fullDocHtml.replace(
+                /const DEFAULT_PROFILES = \[[\s\S]*?\];/,
+                `const DEFAULT_PROFILES = ${serializedProfiles};`
+            );
+        }
+
+        function openExportCodeModal() {
+            document.getElementById('exportCountText').textContent = `${profilesList.length} कार्ड्स`;
+            openModal('exportCodeModal');
+        }
+
+        function downloadUpdatedHtmlFile() {
+            const updatedHtml = generateUpdatedHtmlCode();
+            const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            closeModal('exportCodeModal');
+            showToast('✔ अपडेटेड index.html डाउनलोड हो गई! अब इसे पुराने कोड की जगह सेव कर लें।');
+        }
+
+        function copyUpdatedSourceCode() {
+            copyToClipboard(generateUpdatedHtmlCode(), 'पूरा अपडेटेड HTML कोड कॉपी हो गया!');
+            closeModal('exportCodeModal');
+        }
+
+        // ==================== MODAL, CLIPBOARD & CLOCK UTILITIES ====================
+        function openModal(id) {
+            const el = document.getElementById(id);
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }
+
+        function copyToClipboard(text, message) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(message);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3200);
+        }
+
+        function updateLiveClock() {
+            const now = new Date();
+            const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('liveClock').textContent = now.toLocaleString('hi-IN', options);
+        }
+
+        // Initialize Control Room on Window Load
+        window.onload = function() {
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
+            renderAllBureaus();
+            loadAllGoogleNewsRadars(false);
+            // Auto-refresh Google News radars every 10 minutes
+            setInterval(() => loadAllGoogleNewsRadars(false), 10 * 60 * 1000);
+        };
+    </script>
+</body>
+</html>
