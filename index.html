@@ -104,8 +104,9 @@
     <!-- ==================== INTERNAL CONTROL ROOM LOGIN GATE ==================== -->
     <div id="editorialLoginGate" class="fixed inset-0 z-[100] bg-[#F5F5F7]/95 backdrop-blur-2xl flex items-center justify-center p-4">
         <div class="bg-white rounded-[28px] max-w-sm w-full p-7 shadow-2xl border border-black/[0.07] text-center space-y-5">
-            <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-b from-[#FF3B30] to-[#D70015] text-white flex items-center justify-center text-2xl shadow-md">
-                🔐
+            <div class="flex items-center justify-center">
+                <img id="loginBrandLogoImg" src="skgb.png" alt="Sab Kuch Ghar Baithe News" class="h-16 w-auto object-contain" onerror="this.classList.add('hidden'); document.getElementById('loginLogoFallback').classList.remove('hidden');">
+                <span id="loginLogoFallback" class="hidden text-xl font-extrabold text-[#D70015] tracking-tight">Sab Kuch Ghar Baithe News</span>
             </div>
             <div>
                 <h2 class="text-lg font-extrabold text-[#1D1D1F] tracking-tight">Sab Kuch Ghar Baithe News</h2>
@@ -129,13 +130,13 @@
     <header class="apple-glass border-b border-black/[0.07] sticky top-0 z-30 transition-all">
         <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             
-            <!-- Left: Original Logo + Title with Editorial Control Room right underneath -->
+            <!-- Left: Box-Free Original Logo + Title with Editorial Control Room right underneath -->
             <div class="flex items-center gap-3.5 min-w-0">
                 <div onclick="document.getElementById('logoFileInput').click()" class="cursor-pointer group relative flex-shrink-0 flex items-center" title="Click to select or change original logo (skgb.png)">
-                    <img id="brandLogoImg" src="skgb.png" alt="Sab Kuch Ghar Baithe News" class="h-11 sm:h-12 w-auto object-contain rounded-xl transition-transform duration-200 group-hover:scale-[1.02]" onerror="this.classList.add('hidden'); document.getElementById('logoTextFallback').classList.remove('hidden');">
-                    <div id="logoTextFallback" class="hidden px-3.5 py-2 rounded-2xl bg-gradient-to-b from-[#FF3B30] to-[#D70015] text-white font-extrabold text-sm sm:text-base tracking-tight shadow-xs">
+                    <img id="brandLogoImg" src="skgb.png" alt="Sab Kuch Ghar Baithe News" class="h-11 sm:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.03]" onerror="this.classList.add('hidden'); document.getElementById('logoTextFallback').classList.remove('hidden');">
+                    <span id="logoTextFallback" class="hidden text-[#D70015] font-extrabold text-base sm:text-lg tracking-tight">
                         SKGB News
-                    </div>
+                    </span>
                     <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
                 </div>
 
@@ -191,60 +192,60 @@
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 
                 <!-- Radar Card 1: Atrauli Local (Google News Live) -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-red-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-red-200/70 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-red-500/[0.15] via-rose-500/[0.08] to-red-500/[0.03] border-b border-red-200/60 flex items-center justify-between gap-1">
                         <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full bg-[#FF3B30] animate-flash flex-shrink-0"></span>
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate" title="Latest Atrauli news from Google News">Atrauli (Local Radar)</h3>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#991B1B] tracking-tight truncate" title="Latest Atrauli news from Google News">Atrauli (Local Radar)</h3>
                         </div>
-                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/10 text-[#D70015] tracking-wider flex-shrink-0">LOCAL</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-[#B91C1C] tracking-wider flex-shrink-0">LOCAL</span>
                     </div>
-                    <div id="radarTicker_atrauli" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_atrauli" class="px-2.5 sm:px-3.5 py-1.5 bg-[#7F1D1D] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_atrauli" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-6 text-center text-[11px]">Loading latest Atrauli news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 2: Aligarh District -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-blue-200/70 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500/[0.15] via-sky-500/[0.08] to-blue-500/[0.03] border-b border-blue-200/60 flex items-center justify-between gap-1">
                         <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full bg-[#007AFF] flex-shrink-0"></span>
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Aligarh (District Radar)</h3>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1E3A8A] tracking-tight truncate">Aligarh (District Radar)</h3>
                         </div>
-                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-[#007AFF] tracking-wider flex-shrink-0">DISTRICT</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/15 text-[#1D4ED8] tracking-wider flex-shrink-0">DISTRICT</span>
                     </div>
-                    <div id="radarTicker_aligarh" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_aligarh" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1E3A8A] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_aligarh" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-6 text-center text-[11px]">Loading Aligarh district news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 3: Uttar Pradesh State -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-amber-200/70 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-amber-500/[0.16] via-orange-500/[0.08] to-amber-500/[0.03] border-b border-amber-200/60 flex items-center justify-between gap-1">
                         <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full bg-[#FF9500] flex-shrink-0"></span>
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Uttar Pradesh (State Bureau)</h3>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#9A3412] tracking-tight truncate">Uttar Pradesh (State Bureau)</h3>
                         </div>
-                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/10 text-[#CC7700] tracking-wider flex-shrink-0">STATE</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-[#C2410C] tracking-wider flex-shrink-0">STATE</span>
                     </div>
-                    <div id="radarTicker_up" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_up" class="px-2.5 sm:px-3.5 py-1.5 bg-[#7C2D12] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_up" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-6 text-center text-[11px]">Loading Uttar Pradesh news...</p>
                     </div>
                 </div>
 
                 <!-- Radar Card 4: National & Press Releases -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500/[0.07] to-transparent border-b border-black/[0.05] flex items-center justify-between gap-1">
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-emerald-200/70 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500/[0.15] via-teal-500/[0.08] to-emerald-500/[0.03] border-b border-emerald-200/60 flex items-center justify-between gap-1">
                         <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <span class="w-2 h-2 rounded-full bg-[#34C759] flex-shrink-0"></span>
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">National & Press Releases</h3>
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#065F46] tracking-tight truncate">National & Press Releases</h3>
                         </div>
-                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-[#248A3D] tracking-wider flex-shrink-0">PIB / NATION</span>
+                        <span class="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-[#047857] tracking-wider flex-shrink-0">PIB / NATION</span>
                     </div>
-                    <div id="radarTicker_national" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_national" class="px-2.5 sm:px-3.5 py-1.5 bg-[#064E3B] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_national" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-6 text-center text-[11px]">Loading national & press releases...</p>
                     </div>
@@ -253,7 +254,7 @@
             </div>
         </section>
 
-        <!-- ==================== SECTION 2: 4 MAJOR NEWSPAPERS - ATRAULI ONLY (WITH LOGOS) ==================== -->
+        <!-- ==================== SECTION 2: 4 MAJOR NEWSPAPERS - ATRAULI ONLY (WITH PROMINENT LOGOS) ==================== -->
         <section aria-label="Atrauli Major Newspapers Radar">
             <div class="flex items-center justify-between mb-3.5 px-0.5">
                 <div class="flex items-center gap-2.5">
@@ -266,60 +267,60 @@
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 
                 <!-- Newspaper Card 1: Amar Ujala - Atrauli -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=amarujala.com&sz=64" alt="Amar Ujala" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Amar Ujala — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-rose-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-rose-500/[0.14] via-red-500/[0.07] to-white border-b border-rose-200/60 flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=amarujala.com&sz=128" alt="Amar Ujala" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-rose-200 shadow-xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#9F1239] tracking-tight truncate">Amar Ujala — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Aamarujala.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-red-500/10 hover:bg-[#FF3B30] hover:text-white text-[#D70015] transition-all flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Aamarujala.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-rose-500/15 hover:bg-[#E11D48] hover:text-white text-[#BE123C] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_amarujala" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_paper_amarujala" class="px-2.5 sm:px-3.5 py-1.5 bg-[#881337] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_paper_amarujala" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Amar Ujala (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 2: Dainik Bhaskar - Atrauli -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=bhaskar.com&sz=64" alt="Dainik Bhaskar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Dainik Bhaskar — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-orange-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-orange-500/[0.15] via-amber-500/[0.08] to-white border-b border-orange-200/60 flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=bhaskar.com&sz=128" alt="Dainik Bhaskar" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-orange-200 shadow-xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#9A3412] tracking-tight truncate">Dainik Bhaskar — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Abhaskar.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-orange-500/10 hover:bg-[#FF9500] hover:text-white text-[#CC7700] transition-all flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Abhaskar.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-orange-500/15 hover:bg-[#EA580C] hover:text-white text-[#C2410C] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_bhaskar" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_paper_bhaskar" class="px-2.5 sm:px-3.5 py-1.5 bg-[#7C2D12] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_paper_bhaskar" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Dainik Bhaskar (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 3: Hindustan - Atrauli -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=livehindustan.com&sz=64" alt="Hindustan" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Hindustan — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-sky-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-sky-500/[0.15] via-blue-500/[0.08] to-white border-b border-sky-200/60 flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=livehindustan.com&sz=128" alt="Hindustan" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-sky-200 shadow-xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#075985] tracking-tight truncate">Hindustan — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-blue-500/10 hover:bg-[#007AFF] hover:text-white text-[#007AFF] transition-all flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Alivehindustan.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-sky-500/15 hover:bg-[#0284C7] hover:text-white text-[#0369A1] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_hindustan" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_paper_hindustan" class="px-2.5 sm:px-3.5 py-1.5 bg-[#0C4A6E] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_paper_hindustan" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Hindustan (Atrauli)...</p>
                     </div>
                 </div>
 
                 <!-- Newspaper Card 4: Dainik Jagran - Atrauli -->
-                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
-                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-black/[0.015] border-b border-black/[0.05] flex items-center justify-between gap-1.5">
-                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-                            <img src="https://www.google.com/s2/favicons?domain=jagran.com&sz=64" alt="Dainik Jagran" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-white p-0.5 border border-black/[0.08] shadow-2xs flex-shrink-0 object-contain">
-                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate">Dainik Jagran — Atrauli</h3>
+                <div class="bg-white rounded-[18px] sm:rounded-[22px] border border-purple-200/75 shadow-apple hover:shadow-apple-hover transition-all duration-300 flex flex-col overflow-hidden">
+                    <div class="px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-purple-500/[0.14] via-indigo-500/[0.07] to-white border-b border-purple-200/60 flex items-center justify-between gap-1.5">
+                        <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                            <img src="https://www.google.com/s2/favicons?domain=jagran.com&sz=128" alt="Dainik Jagran" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white p-0.5 border border-purple-200 shadow-xs flex-shrink-0 object-contain">
+                            <h3 class="font-bold text-[11.5px] sm:text-[13px] text-[#581C87] tracking-tight truncate">Dainik Jagran — Atrauli</h3>
                         </div>
-                        <a href="https://news.google.com/search?q=site%3Ajagran.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 hover:bg-[#34C759] hover:text-white text-[#248A3D] transition-all flex-shrink-0">All ↗</a>
+                        <a href="https://news.google.com/search?q=site%3Ajagran.com+%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi" target="_blank" rel="noopener noreferrer" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-purple-500/15 hover:bg-[#7E22CE] hover:text-white text-[#6B21A8] transition-all flex-shrink-0">All ↗</a>
                     </div>
-                    <div id="radarTicker_paper_jagran" class="px-2.5 sm:px-3.5 py-1.5 bg-[#1D1D1F] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
+                    <div id="radarTicker_paper_jagran" class="px-2.5 sm:px-3.5 py-1.5 bg-[#4C1D95] text-white text-[10px] sm:text-[11px] font-medium truncate hidden"></div>
                     <div id="radarList_paper_jagran" class="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2.5 flex-1 max-h-64 overflow-y-auto apple-scroll divide-y divide-black/[0.05] text-xs">
                         <p class="text-[#86868B] py-5 text-center text-[11px]">Loading Dainik Jagran (Atrauli)...</p>
                     </div>
@@ -328,12 +329,12 @@
             </div>
         </section>
 
-        <!-- ==================== SECTION 3: THREE EDITORIAL BUREAU DRAWERS ==================== -->
+        <!-- ==================== SECTION 3: FOUR SEPARATE EDITORIAL BUREAU DRAWERS ==================== -->
         <section aria-label="Editorial Bureaus & Social Media Desk" class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-[22px] border border-black/[0.06] shadow-apple">
                 <div>
                     <h2 class="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">Editorial Bureaus & Social Media Shortcuts</h2>
-                    <p class="text-xs text-[#86868B] font-normal mt-0.5">Click any profile avatar (DP) to upload a photo from your gallery • Open Facebook, X or Instagram directly below</p>
+                    <p class="text-xs text-[#86868B] font-normal mt-0.5">Tap any profile DP to update photo • Open Facebook, X or Instagram directly alongside each name</p>
                 </div>
                 <div class="relative w-full sm:w-72">
                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#86868B] text-xs pointer-events-none">🔍</span>
@@ -341,78 +342,103 @@
                 </div>
             </div>
 
-            <!-- DRAWER 1: DISTRICT BUREAU (JANPAD BUREAU - OPEN BY DEFAULT) -->
-            <div id="drawer_district" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden bureau-open">
-                <div onclick="toggleBureauDrawer('district')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3.5">
-                        <span class="w-10 h-10 rounded-2xl bg-red-500/10 text-[#D70015] flex items-center justify-center text-lg">🏛️</span>
+            <!-- DRAWER 1: ATRAULI DESK (OPEN BY DEFAULT) -->
+            <div id="drawer_atrauli" class="bg-white rounded-[22px] border border-red-200/70 shadow-apple overflow-hidden bureau-open">
+                <div onclick="toggleBureauDrawer('atrauli')" class="w-full px-4 sm:px-5 py-3.5 bg-gradient-to-r from-red-500/[0.08] via-rose-500/[0.03] to-white hover:from-red-500/[0.12] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-2xl bg-red-500/15 text-[#D70015] flex items-center justify-center text-base">📍</span>
                         <div>
-                            <div class="flex items-center gap-2.5">
-                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">District Bureau (Atrauli / Aligarh Desk)</h3>
-                                <span id="count_district" class="px-2.5 py-0.5 rounded-full bg-[#FF3B30] text-white text-[11px] font-bold tabular-nums">16</span>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Atrauli Desk (Local Bureau)</h3>
+                                <span id="count_atrauli" class="px-2 py-0.5 rounded-full bg-[#FF3B30] text-white text-[11px] font-bold tabular-nums">15</span>
                             </div>
-                            <p class="text-xs text-[#86868B] mt-0.5">Local public representatives, administration officials & regional news portals</p>
+                            <p class="text-[11px] text-[#86868B] mt-0.5">Atrauli public representatives, local leaders & regional news portals</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('district')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('atrauli')" class="px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-[#FF3B30] hover:text-white text-[#D70015] text-xs font-semibold transition-all">
                             + Add
                         </button>
                         <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_district" class="p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
-                    <div id="grid_district" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                <div id="body_atrauli" class="p-3 sm:p-4 border-t border-red-200/50 bg-red-500/[0.025]">
+                    <div id="grid_atrauli" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2"></div>
                 </div>
             </div>
 
-            <!-- DRAWER 2: STATE BUREAU (PRADESH BUREAU) -->
-            <div id="drawer_state" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden">
-                <div onclick="toggleBureauDrawer('state')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3.5">
-                        <span class="w-10 h-10 rounded-2xl bg-orange-500/10 text-[#CC7700] flex items-center justify-center text-lg">🗺️</span>
+            <!-- DRAWER 2: ALIGARH DESK (OPEN BY DEFAULT) -->
+            <div id="drawer_aligarh" class="bg-white rounded-[22px] border border-blue-200/70 shadow-apple overflow-hidden bureau-open">
+                <div onclick="toggleBureauDrawer('aligarh')" class="w-full px-4 sm:px-5 py-3.5 bg-gradient-to-r from-blue-500/[0.08] via-sky-500/[0.03] to-white hover:from-blue-500/[0.12] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-2xl bg-blue-500/15 text-[#007AFF] flex items-center justify-center text-base">🏛️</span>
                         <div>
-                            <div class="flex items-center gap-2.5">
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Aligarh Desk (District Administration & HQ)</h3>
+                                <span id="count_aligarh" class="px-2 py-0.5 rounded-full bg-[#007AFF] text-white text-[11px] font-bold tabular-nums">1</span>
+                            </div>
+                            <p class="text-[11px] text-[#86868B] mt-0.5">Aligarh district police, administration & district-level handles</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('aligarh')" class="px-3 py-1.5 rounded-full bg-blue-500/10 hover:bg-[#007AFF] hover:text-white text-[#007AFF] text-xs font-semibold transition-all">
+                            + Add
+                        </button>
+                        <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                </div>
+                <div id="body_aligarh" class="p-3 sm:p-4 border-t border-blue-200/50 bg-blue-500/[0.025]">
+                    <div id="grid_aligarh" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2"></div>
+                </div>
+            </div>
+
+            <!-- DRAWER 3: STATE BUREAU (PRADESH BUREAU) -->
+            <div id="drawer_state" class="bg-white rounded-[22px] border border-amber-200/70 shadow-apple overflow-hidden">
+                <div onclick="toggleBureauDrawer('state')" class="w-full px-4 sm:px-5 py-3.5 bg-gradient-to-r from-amber-500/[0.08] via-orange-500/[0.03] to-white hover:from-amber-500/[0.12] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-2xl bg-orange-500/15 text-[#CC7700] flex items-center justify-center text-base">🗺️</span>
+                        <div>
+                            <div class="flex items-center gap-2">
                                 <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">State Bureau (Uttar Pradesh Desk)</h3>
-                                <span id="count_state" class="px-2.5 py-0.5 rounded-full bg-[#FF9500] text-white text-[11px] font-bold tabular-nums">2</span>
+                                <span id="count_state" class="px-2 py-0.5 rounded-full bg-[#FF9500] text-white text-[11px] font-bold tabular-nums">2</span>
                             </div>
-                            <p class="text-xs text-[#86868B] mt-0.5">State leadership, cabinet & official Uttar Pradesh handles</p>
+                            <p class="text-[11px] text-[#86868B] mt-0.5">State leadership, cabinet & official Uttar Pradesh handles</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('state')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('state')" class="px-3 py-1.5 rounded-full bg-orange-500/10 hover:bg-[#FF9500] hover:text-white text-[#CC7700] text-xs font-semibold transition-all">
                             + Add
                         </button>
                         <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_state" class="hidden p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
-                    <div id="grid_state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                <div id="body_state" class="hidden p-3 sm:p-4 border-t border-amber-200/50 bg-amber-500/[0.025]">
+                    <div id="grid_state" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2"></div>
                 </div>
             </div>
 
-            <!-- DRAWER 3: NATIONAL & PRESS RELEASE BUREAU -->
-            <div id="drawer_national" class="bg-white rounded-[22px] border border-black/[0.06] shadow-apple overflow-hidden">
-                <div onclick="toggleBureauDrawer('national')" class="w-full px-4 sm:px-5 py-4 bg-white hover:bg-black/[0.015] flex items-center justify-between cursor-pointer select-none transition">
-                    <div class="flex items-center gap-3.5">
-                        <span class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-[#248A3D] flex items-center justify-center text-lg">🇮🇳</span>
+            <!-- DRAWER 4: NATIONAL & PRESS RELEASE BUREAU -->
+            <div id="drawer_national" class="bg-white rounded-[22px] border border-emerald-200/70 shadow-apple overflow-hidden">
+                <div onclick="toggleBureauDrawer('national')" class="w-full px-4 sm:px-5 py-3.5 bg-gradient-to-r from-emerald-500/[0.08] via-teal-500/[0.03] to-white hover:from-emerald-500/[0.12] flex items-center justify-between cursor-pointer select-none transition">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-2xl bg-emerald-500/15 text-[#248A3D] flex items-center justify-center text-base">🇮🇳</span>
                         <div>
-                            <div class="flex items-center gap-2.5">
+                            <div class="flex items-center gap-2">
                                 <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">National Bureau & Press Releases (National Desk)</h3>
-                                <span id="count_national" class="px-2.5 py-0.5 rounded-full bg-[#34C759] text-white text-[11px] font-bold tabular-nums">2</span>
+                                <span id="count_national" class="px-2 py-0.5 rounded-full bg-[#34C759] text-white text-[11px] font-bold tabular-nums">2</span>
                             </div>
-                            <p class="text-xs text-[#86868B] mt-0.5">Central leadership, ministries & official Press Information Bureau (PIB)</p>
+                            <p class="text-[11px] text-[#86868B] mt-0.5">Central leadership, ministries & official Press Information Bureau (PIB)</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('national')" class="px-3 py-1.5 rounded-full bg-[#F5F5F7] hover:bg-[#1D1D1F] hover:text-white text-[#1D1D1F] text-xs font-semibold transition-all">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="event.stopPropagation(); openAddCardModal('national')" class="px-3 py-1.5 rounded-full bg-emerald-500/10 hover:bg-[#34C759] hover:text-white text-[#248A3D] text-xs font-semibold transition-all">
                             + Add
                         </button>
                         <svg class="w-5 h-5 text-[#86868B] bureau-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                     </div>
                 </div>
-                <div id="body_national" class="hidden p-4 sm:p-5 border-t border-black/[0.05] bg-[#F5F5F7]/60">
-                    <div id="grid_national" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                <div id="body_national" class="hidden p-3 sm:p-4 border-t border-emerald-200/50 bg-emerald-500/[0.025]">
+                    <div id="grid_national" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2"></div>
                 </div>
             </div>
 
@@ -427,7 +453,7 @@
                 <span class="mx-1.5 text-black/25">|</span>
                 <span class="font-medium">Developed by - <span class="text-[#1D1D1F] font-bold">Cool Art®</span></span>
             </p>
-            <p class="text-[#A1A1A6] text-[9.5px] sm:text-[10.5px] font-normal">Version 7.2 • Latest Update: 26 Nov 2026</p>
+            <p class="text-[#A1A1A6] text-[9.5px] sm:text-[10.5px] font-normal">Version 7.3 • Latest Update: 26 Nov 2026</p>
         </div>
     </footer>
 
@@ -448,7 +474,8 @@
                 <div>
                     <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Select Editorial Bureau</label>
                     <select id="cardBureauSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-semibold bg-[#F5F5F7] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
-                        <option value="district">District Bureau (District Desk)</option>
+                        <option value="atrauli">Atrauli Desk (Local Bureau)</option>
+                        <option value="aligarh">Aligarh Desk (District HQ)</option>
                         <option value="state">State Bureau (State Desk)</option>
                         <option value="national">National Bureau & Press Releases (National Desk)</option>
                     </select>
@@ -603,40 +630,39 @@ function doGet(e) {
     </div>
 
     <!-- ==================== APPLE DYNAMIC PILL TOAST NOTIFICATION ==================== -->
-    <div id="toastBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 hidden bg-[#1D1D1F]/95 backdrop-blur-md text-white px-4 py-2.5 rounded-full shadow-2xl text-xs font-semibold border border-white/10"></div>
+    <div id="toastBox" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[110] hidden px-4 py-2.5 rounded-full bg-[#1D1D1F]/95 text-white text-xs font-semibold shadow-xl backdrop-blur-md"></div>
 
-    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
     <script>
-        // ==================== ORIGINAL PLATFORM SVG ICONS ====================
-        const ICON_FB = `<svg class="w-4 h-4 fill-[#1877F2] flex-shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
-        const ICON_X = `<svg class="w-3.5 h-3.5 fill-gray-900 flex-shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
-        const ICON_IG = `<svg class="w-4 h-4 fill-[#E4405F] flex-shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`;
+        // ==================== SOCIAL MEDIA SVG ICONS ====================
+        const ICON_FB = `<svg class="w-3.5 h-3.5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>`;
+        const ICON_X = `<svg class="w-3 h-3 text-[#1D1D1F]" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+        const ICON_IG = `<svg class="w-3.5 h-3.5 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`;
 
-        // ==================== DEFAULT PROFILE CARDS (ALL 15 UPDATED DISTRICT PROFILES + STATE/NATIONAL EXAMPLES) ====================
+        // ==================== DEFAULT PROFILE CARDS (SEPARATE ATRAULI & ALIGARH DESKS + STATE & NATIONAL) ====================
         const DEFAULT_CARDS = [
-            { id: 'd_1', bureau: 'district', name: 'Bhoora Pandit', role: 'Local Representative / Social', dp: '', fb: 'https://www.facebook.com/socialist.bhoorapandit', x: '', ig: '' },
-            { id: 'd_2', bureau: 'district', name: 'Virendra Singh Lodhi', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/kvirendar.kumar.9', x: '', ig: '' },
-            { id: 'd_3', bureau: 'district', name: 'Chaudhary Rishipal Singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/ChaydharyRishipalSingh', x: '', ig: '' },
-            { id: 'd_4', bureau: 'district', name: 'Bodhpal Singh', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/bodhpal.singh.50', x: '', ig: '' },
-            { id: 'd_5', bureau: 'district', name: 'Aligarh Police', role: 'Police Administration (Aligarh)', dp: '', fb: 'https://www.facebook.com/aligarhpolice', x: 'https://x.com/aligarhpolice', ig: 'https://www.instagram.com/aligarhpolice' },
-            { id: 'd_6', bureau: 'district', name: 'Praveen raj singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/praveenrajsinghbjp', x: '', ig: '' },
-            { id: 'd_7', bureau: 'district', name: 'Tapesh Rishipal Singh Chaudhary', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/tapesh.rishipal.singh.chaudhary', x: '', ig: '' },
-            { id: 'd_8', bureau: 'district', name: 'Gopal Maheshwari', role: 'Local Representative', dp: '', fb: 'https://www.facebook.com/gopalbabuji', x: '', ig: '' },
-            { id: 'd_9', bureau: 'district', name: 'Nawab Singh', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/nawab.singh.90410', x: '', ig: '' },
-            { id: 'd_10', bureau: 'district', name: 'Mahesh Verma', role: 'Local Representative', dp: '', fb: 'https://www.facebook.com/mahesh.chandra.9210', x: '', ig: '' },
-            { id: 'd_11', bureau: 'district', name: 'Viresh yadav', role: 'Ex-MLA / Public Representative', dp: '', fb: 'https://www.facebook.com/Vireshyadavmla', x: '', ig: '' },
-            { id: 'd_12', bureau: 'district', name: 'Anil Parashar', role: 'MLA / Public Representative', dp: '', fb: 'https://www.facebook.com/AnilParashar.Official', x: '', ig: '' },
-            { id: 'd_13', bureau: 'district', name: 'Upjansamvad News', role: 'Regional News Portal', dp: '', fb: 'https://www.facebook.com/upjansamvad.news', x: '', ig: '' },
-            { id: 'd_14', bureau: 'district', name: 'Atrauli Khabar', role: 'Atrauli News Page', dp: '', fb: 'https://www.facebook.com/profile.php?id=100008760490540', x: '', ig: '' },
-            { id: 'd_15', bureau: 'district', name: 'UP AJJ TAK 24 News', role: 'Regional News Channel', dp: '', fb: 'https://www.facebook.com/profile.php?id=100091777810117', x: '', ig: '' },
-            { id: 'd_16', bureau: 'district', name: 'Chaudhary Bijendra Singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/chaudharybijendra.singh.54', x: '', ig: '' },
+            { id: 'd_1', bureau: 'atrauli', name: 'Bhoora Pandit', role: 'Local Representative / Social', dp: '', fb: 'https://www.facebook.com/socialist.bhoorapandit', x: '', ig: '' },
+            { id: 'd_2', bureau: 'atrauli', name: 'Virendra Singh Lodhi', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/kvirendar.kumar.9', x: '', ig: '' },
+            { id: 'd_3', bureau: 'atrauli', name: 'Chaudhary Rishipal Singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/ChaydharyRishipalSingh', x: '', ig: '' },
+            { id: 'd_4', bureau: 'atrauli', name: 'Bodhpal Singh', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/bodhpal.singh.50', x: '', ig: '' },
+            { id: 'd_5', bureau: 'aligarh', name: 'Aligarh Police', role: 'Police Administration (Aligarh)', dp: '', fb: 'https://www.facebook.com/aligarhpolice', x: 'https://x.com/aligarhpolice', ig: 'https://www.instagram.com/aligarhpolice' },
+            { id: 'd_6', bureau: 'atrauli', name: 'Praveen raj singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/praveenrajsinghbjp', x: '', ig: '' },
+            { id: 'd_7', bureau: 'atrauli', name: 'Tapesh Rishipal Singh Chaudhary', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/tapesh.rishipal.singh.chaudhary', x: '', ig: '' },
+            { id: 'd_8', bureau: 'atrauli', name: 'Gopal Maheshwari', role: 'Local Representative', dp: '', fb: 'https://www.facebook.com/gopalbabuji', x: '', ig: '' },
+            { id: 'd_9', bureau: 'atrauli', name: 'Nawab Singh', role: 'Local Leadership', dp: '', fb: 'https://www.facebook.com/nawab.singh.90410', x: '', ig: '' },
+            { id: 'd_10', bureau: 'atrauli', name: 'Mahesh Verma', role: 'Local Representative', dp: '', fb: 'https://www.facebook.com/mahesh.chandra.9210', x: '', ig: '' },
+            { id: 'd_11', bureau: 'atrauli', name: 'Viresh yadav', role: 'Ex-MLA / Public Representative', dp: '', fb: 'https://www.facebook.com/Vireshyadavmla', x: '', ig: '' },
+            { id: 'd_12', bureau: 'atrauli', name: 'Anil Parashar', role: 'MLA / Public Representative', dp: '', fb: 'https://www.facebook.com/AnilParashar.Official', x: '', ig: '' },
+            { id: 'd_13', bureau: 'atrauli', name: 'Upjansamvad News', role: 'Regional News Portal', dp: '', fb: 'https://www.facebook.com/upjansamvad.news', x: '', ig: '' },
+            { id: 'd_14', bureau: 'atrauli', name: 'Atrauli Khabar', role: 'Atrauli News Page', dp: '', fb: 'https://www.facebook.com/profile.php?id=100008760490540', x: '', ig: '' },
+            { id: 'd_15', bureau: 'atrauli', name: 'UP AJJ TAK 24 News', role: 'Regional News Channel', dp: '', fb: 'https://www.facebook.com/profile.php?id=100091777810117', x: '', ig: '' },
+            { id: 'd_16', bureau: 'atrauli', name: 'Chaudhary Bijendra Singh', role: 'Public Representative / Politics', dp: '', fb: 'https://www.facebook.com/chaudharybijendra.singh.54', x: '', ig: '' },
             { id: 's_1', bureau: 'state', name: 'CM Office, GoUP', role: 'Chief Minister Office, Uttar Pradesh', dp: '', fb: 'https://www.facebook.com/CMOfficeUP', x: 'https://x.com/CMOfficeUP', ig: 'https://www.instagram.com/cmofficeup' },
             { id: 's_2', bureau: 'state', name: 'UP Police', role: 'Uttar Pradesh Police HQ', dp: '', fb: 'https://www.facebook.com/uppolice', x: 'https://x.com/Uppolice', ig: 'https://www.instagram.com/uppolice' },
             { id: 'n_1', bureau: 'national', name: 'PIB India (Press Releases)', role: 'Press Information Bureau, Govt. of India', dp: '', fb: 'https://www.facebook.com/pibindia', x: 'https://x.com/PIB_India', ig: 'https://www.instagram.com/pibindia' },
             { id: 'n_2', bureau: 'national', name: 'PMO India', role: 'Prime Minister Office, India', dp: '', fb: 'https://www.facebook.com/PMOIndia', x: 'https://x.com/PMOIndia', ig: 'https://www.instagram.com/pmoindia' }
         ];
 
-        const STORAGE_KEY = 'skgb_editorial_cards_v2';
+        const STORAGE_KEY = 'skgb_editorial_cards_v3';
         let editorialCards = [];
         let activeDpTargetId = null;
 
@@ -664,10 +690,29 @@ function doGet(e) {
             return (name || 'SB').split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
         }
 
-        // ==================== RENDER ALL 3 BUREAU DRAWERS ====================
+        // ==================== RENDER ALL 4 BUREAU DRAWERS (SLIM COMPACT ROW CARDS) ====================
         function renderAllBureaus() {
             const query = (document.getElementById('bureauSearchInput')?.value || '').trim().toLowerCase();
-            const bureaus = ['district', 'state', 'national'];
+            const bureaus = ['atrauli', 'aligarh', 'state', 'national'];
+
+            const bureauCardThemes = {
+                atrauli: {
+                    cardBg: 'bg-gradient-to-r from-rose-50/90 via-white to-red-50/50 border-red-200/75 hover:border-red-300',
+                    avatarBg: 'from-[#FF3B30] to-[#B91C1C]'
+                },
+                aligarh: {
+                    cardBg: 'bg-gradient-to-r from-sky-50/90 via-white to-blue-50/50 border-blue-200/75 hover:border-blue-300',
+                    avatarBg: 'from-[#007AFF] to-[#1D4ED8]'
+                },
+                state: {
+                    cardBg: 'bg-gradient-to-r from-amber-50/90 via-white to-orange-50/50 border-amber-200/75 hover:border-amber-300',
+                    avatarBg: 'from-[#FF9500] to-[#C2410C]'
+                },
+                national: {
+                    cardBg: 'bg-gradient-to-r from-emerald-50/90 via-white to-teal-50/50 border-emerald-200/75 hover:border-emerald-300',
+                    avatarBg: 'from-[#34C759] to-[#047857]'
+                }
+            };
 
             bureaus.forEach(bureau => {
                 const grid = document.getElementById(`grid_${bureau}`);
@@ -683,55 +728,45 @@ function doGet(e) {
 
                 if (filtered.length === 0) {
                     grid.innerHTML = `
-                        <div class="col-span-full py-8 text-center bg-white rounded-xl border border-dashed border-gray-300">
-                            <p class="text-xs text-gray-500 font-semibold">No profile cards found in this bureau.</p>
-                            <button type="button" onclick="openAddCardModal('${bureau}')" class="mt-2 px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-bold">+ Add New Card</button>
+                        <div class="col-span-full py-6 text-center bg-white rounded-2xl border border-dashed border-gray-300">
+                            <p class="text-xs text-gray-500 font-semibold">No profile cards found in this desk.</p>
+                            <button type="button" onclick="openAddCardModal('${bureau}')" class="mt-2 px-3 py-1 rounded-full bg-gray-900 text-white text-xs font-bold">+ Add New Card</button>
                         </div>
                     `;
                     return;
                 }
 
+                const theme = bureauCardThemes[bureau] || bureauCardThemes.atrauli;
+
                 grid.innerHTML = filtered.map(card => {
                     const avatarHtml = card.dp
-                        ? `<img src="${card.dp}" alt="${card.name}" class="w-12 h-12 rounded-full object-cover border border-black/[0.08] shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">`
-                        : `<div class="w-12 h-12 rounded-full bg-gradient-to-b from-[#3A3A3C] to-[#1D1D1F] text-white font-bold text-sm flex items-center justify-center shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">${getInitials(card.name)}</div>`;
+                        ? `<img src="${card.dp}" alt="${card.name}" class="w-8 h-8 rounded-full object-cover border border-black/[0.1] shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">`
+                        : `<div class="w-8 h-8 rounded-full bg-gradient-to-b ${theme.avatarBg} text-white font-bold text-[11px] flex items-center justify-center shadow-2xs group-hover:ring-2 group-hover:ring-[#007AFF] transition">${getInitials(card.name)}</div>`;
 
                     const fbBtn = card.fb
-                        ? `<a href="${card.fb}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1877F2] hover:bg-blue-500/[0.06] transition" title="Open Facebook Profile">${ICON_FB}<span>Facebook</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add Facebook Link">${ICON_FB}<span>+ FB</span></button>`;
+                        ? `<a href="${card.fb}" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center transition" title="Open Facebook Profile">${ICON_FB}</a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-full bg-black/[0.03] hover:bg-black/[0.08] opacity-35 hover:opacity-80 flex items-center justify-center transition" title="Add Facebook Link">${ICON_FB}</button>`;
 
                     const xBtn = card.x
-                        ? `<a href="${card.x}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#1D1D1F] hover:bg-black/[0.04] transition" title="Open X (Twitter)">${ICON_X}<span>X</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add X Link">${ICON_X}<span>+ X</span></button>`;
+                        ? `<a href="${card.x}" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-full bg-black/[0.06] hover:bg-black/[0.12] flex items-center justify-center transition" title="Open X (Twitter)">${ICON_X}</a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-full bg-black/[0.03] hover:bg-black/[0.08] opacity-35 hover:opacity-80 flex items-center justify-center transition" title="Add X Link">${ICON_X}</button>`;
 
                     const igBtn = card.ig
-                        ? `<a href="${card.ig}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#E4405F] hover:bg-pink-500/[0.06] transition" title="Open Instagram">${ICON_IG}<span>Insta</span></a>`
-                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="flex-1 py-2.5 px-2 flex items-center justify-center gap-1 text-[11px] font-medium text-[#86868B] hover:text-[#1D1D1F] hover:bg-black/[0.03] transition" title="Add Instagram Link">${ICON_IG}<span>+ IG</span></button>`;
+                        ? `<a href="${card.ig}" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-full bg-pink-500/10 hover:bg-pink-500/20 flex items-center justify-center transition" title="Open Instagram">${ICON_IG}</a>`
+                        : `<button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-full bg-black/[0.03] hover:bg-black/[0.08] opacity-35 hover:opacity-80 flex items-center justify-center transition" title="Add Instagram Link">${ICON_IG}</button>`;
 
                     return `
-                        <div class="bg-white rounded-[20px] border border-black/[0.06] shadow-apple hover:shadow-apple-hover hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden">
-                            <!-- Top Profile Section -->
-                            <div class="p-3.5 flex items-start justify-between gap-2.5">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <button type="button" onclick="triggerCardDpUpload('${card.id}')" class="relative group flex-shrink-0 cursor-pointer" title="Click to change Profile Picture (DP)">
-                                        ${avatarHtml}
-                                        <span class="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white border border-black/[0.1] shadow-xs flex items-center justify-center text-[10px] group-hover:bg-[#007AFF] group-hover:text-white transition">📷</span>
-                                    </button>
-                                    <div class="min-w-0">
-                                        <h4 class="font-bold text-[13.5px] text-[#1D1D1F] tracking-tight truncate" title="${card.name}">${card.name}</h4>
-                                        <p class="text-[11px] text-[#86868B] font-normal truncate mt-0.5">${card.role || 'Editorial Source'}</p>
-                                    </div>
-                                </div>
-
-                                <!-- Card Actions (Edit / Delete) -->
-                                <div class="flex items-center gap-0.5 flex-shrink-0">
-                                    <button type="button" onclick="openEditCardModal('${card.id}')" class="w-7 h-7 rounded-full hover:bg-black/[0.05] text-[#86868B] hover:text-[#1D1D1F] flex items-center justify-center text-xs transition" title="Edit name or social links">✏️</button>
-                                    <button type="button" onclick="deleteEditorialCard('${card.id}')" class="w-7 h-7 rounded-full hover:bg-red-500/10 text-[#86868B] hover:text-[#FF3B30] flex items-center justify-center text-xs transition" title="Delete card">🗑️</button>
-                                </div>
+                        <div class="${theme.cardBg} rounded-2xl border px-2.5 py-2 shadow-2xs hover:shadow-apple transition-all duration-200 flex items-center justify-between gap-2">
+                            <!-- Left: DP + Name in a single slim horizontal strip -->
+                            <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                                <button type="button" onclick="triggerCardDpUpload('${card.id}')" class="relative group flex-shrink-0 cursor-pointer" title="Tap to update Profile Picture (DP)">
+                                    ${avatarHtml}
+                                </button>
+                                <h4 class="font-bold text-[12.5px] sm:text-[13px] text-[#1D1D1F] tracking-tight truncate" title="${card.name}">${card.name}</h4>
                             </div>
 
-                            <!-- Bottom Platform Bar with Separators: Facebook | X | Instagram -->
-                            <div class="border-t border-black/[0.05] bg-[#F5F5F7]/70 flex items-center divide-x divide-black/[0.06]">
+                            <!-- Right: FB | X | Insta Icons directly in line -->
+                            <div class="flex items-center gap-1 flex-shrink-0">
                                 ${fbBtn}
                                 ${xBtn}
                                 ${igBtn}
@@ -742,7 +777,7 @@ function doGet(e) {
             });
 
             if (query) {
-                ['district', 'state', 'national'].forEach(b => {
+                ['atrauli', 'aligarh', 'state', 'national'].forEach(b => {
                     const hasMatch = editorialCards.some(c => c.bureau === b && ((c.name || '').toLowerCase().includes(query) || (c.role || '').toLowerCase().includes(query)));
                     if (hasMatch) openBureauDrawer(b);
                 });
@@ -824,16 +859,25 @@ function doGet(e) {
             reader.onload = function(e) {
                 const logoImg = document.getElementById('brandLogoImg');
                 const fallback = document.getElementById('logoTextFallback');
-                logoImg.src = e.target.result;
-                logoImg.classList.remove('hidden');
-                fallback.classList.add('hidden');
-                showToast('✅ New header logo updated!');
+                const loginLogo = document.getElementById('loginBrandLogoImg');
+                const loginFallback = document.getElementById('loginLogoFallback');
+                if (logoImg) {
+                    logoImg.src = e.target.result;
+                    logoImg.classList.remove('hidden');
+                }
+                if (fallback) fallback.classList.add('hidden');
+                if (loginLogo) {
+                    loginLogo.src = e.target.result;
+                    loginLogo.classList.remove('hidden');
+                }
+                if (loginFallback) loginFallback.classList.add('hidden');
+                showToast('✅ New header & login logo updated!');
             };
             reader.readAsDataURL(file);
         }
 
         // ==================== ADD / EDIT / DELETE PROFILE CARDS ====================
-        function openAddCardModal(defaultBureau = 'district') {
+        function openAddCardModal(defaultBureau = 'atrauli') {
             document.getElementById('cardModalTitle').textContent = 'Add New Profile Card';
             document.getElementById('editCardId').value = '';
             document.getElementById('cardBureauSelect').value = defaultBureau;
@@ -1193,6 +1237,23 @@ function doGet(e) {
             radarTickerTimers[feedCfg.key] = setInterval(updateTicker, 4000);
         }
 
+        function highlightHeadlineKeywords(text) {
+            if (!text) return '';
+            let out = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            // Highlight Atrauli (Red/Rose pill)
+            out = out.replace(/(अतरौली|Atrauli)/gi, '<span class="font-extrabold text-[#D70015] bg-red-500/12 px-1 rounded">$1</span>');
+            // Highlight Aligarh (Royal Blue pill)
+            out = out.replace(/(अलीगढ़|अलीगढ़|Aligarh)/gi, '<span class="font-extrabold text-[#0055D4] bg-blue-500/12 px-1 rounded">$1</span>');
+            // Highlight Uttar Pradesh / UP (Saffron/Amber pill)
+            out = out.replace(/(उत्तर\s*प्रदेश|यूपी|Uttar\s*Pradesh|\bUP\b)/gi, '<span class="font-extrabold text-[#C2410C] bg-orange-500/12 px-1 rounded">$1</span>');
+            // Highlight National / India / Bharat / PIB (Emerald pill)
+            out = out.replace(/(राष्ट्रीय|भारत\s*सरकार|भारत|देश|National|India|PIB)/gi, '<span class="font-extrabold text-[#047857] bg-emerald-500/12 px-1 rounded">$1</span>');
+            return out;
+        }
+
         function renderRadarItemsToCard(feedCfg, rawItems) {
             const container = document.getElementById(feedCfg.containerId);
             if (!container) return;
@@ -1206,9 +1267,10 @@ function doGet(e) {
 
             const items = sortedRaw.slice(0, 8).map(item => {
                 const cleanTitle = (item.title || '').replace(/\s-\s[^-]+$/, '').trim();
+                const highlightedTitle = highlightHeadlineKeywords(cleanTitle);
                 const sourceName = item.source || ((item.title && item.title.includes(' - ')) ? item.title.split(' - ').pop().trim() : (feedCfg.paperName || 'Google News'));
                 const timeLabel = formatRelativeHindiTime(item.pubDate);
-                return { ...item, cleanTitle, sourceName, timeLabel };
+                return { ...item, cleanTitle, highlightedTitle, sourceName, timeLabel };
             });
 
             startCardFlashTicker(feedCfg, items);
@@ -1222,8 +1284,8 @@ function doGet(e) {
                 return `
                     <div class="pt-1.5 sm:pt-2.5 first:pt-0 flex items-start justify-between gap-1.5 sm:gap-2.5 group">
                         <div class="min-w-0 flex-1">
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-[11px] sm:text-[12.5px] text-[#1D1D1F] group-hover:text-[#007AFF] leading-[1.3] sm:leading-snug line-clamp-2 transition block">
-                                ${item.cleanTitle}
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-[11px] sm:text-[12.5px] text-[#1D1D1F] group-hover:text-[#007AFF] leading-[1.35] sm:leading-snug line-clamp-2 transition block">
+                                ${item.highlightedTitle}
                             </a>
                             <div class="flex items-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] text-[#86868B]">
                                 <span class="px-1 sm:px-1.5 py-0.2 sm:py-0.5 rounded font-semibold flex-shrink-0 ${isToday ? 'bg-red-500/10 text-[#D70015]' : 'bg-black/[0.04] text-[#86868B]'}">${item.timeLabel}</span>
@@ -1362,6 +1424,14 @@ function doGet(e) {
             const modal = document.getElementById('draftModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+        }
+
+        function copyDraftText() {
+            const textarea = document.getElementById('draftTextarea');
+            if (!textarea) return;
+            textarea.select();
+            document.execCommand('copy');
+            showToast('📋 News copy copied to clipboard!');
         }
 
         function openBlankDraftModal() {
