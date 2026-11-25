@@ -576,74 +576,74 @@
                     <select id="cardBureauSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-semibold bg-[#F5F5F7] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
                         <option value="atrauli">Atrauli Desk (Local Bureau)</option>
                         <option value="aligarh">Aligarh Desk (District HQ)</option>
-                        <option value="state">State Bureau (State Desk)</option>
-                        <option value="national">National Bureau & Press Releases (National Desk)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Display Name *</label>
-                    <input type="text" id="cardNameInput" required placeholder="e.g. Chaudhary Rishipal Singh" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-[#1D1D1F] mb-1">Designation / Role (Short Tag)</label>
-                    <input type="text" id="cardRoleInput" placeholder="e.g. Public Representative / Police Admin / News Portal" class="w-full px-3.5 py-2.5 rounded-xl border border-black/[0.1] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30">
-                </div>
-
-                <div class="pt-2 border-t border-black/[0.06] space-y-2.5">
-                    <p class="text-[11px] font-bold text-[#86868B] uppercase tracking-wider">Social Media Profile Links</p>
-                    
-                    <div>
-                        <label class="block text-[11px] font-semibold text-[#1877F2] mb-0.5">Facebook URL</label>
-                        <input type="url" id="cardFbInput" placeholder="https://www.facebook.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-[#1877F2]/30">
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-semibold text-[#1D1D1F] mb-0.5">X (Twitter) URL</label>
-                        <input type="url" id="cardXInput" placeholder="https://x.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-black/20">
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-semibold text-[#E4405F] mb-0.5">Instagram URL</label>
-                        <input type="url" id="cardIgInput" placeholder="https://www.instagram.com/..." class="w-full px-3.5 py-2 rounded-xl border border-black/[0.1] text-xs focus:outline-none focus:ring-2 focus:ring-[#E4405F]/30">
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-end gap-2 pt-3 border-t border-black/[0.06]">
-                    <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-full bg-[#F5F5F7] hover:bg-black/10 text-[#1D1D1F] text-xs font-semibold transition">Cancel</button>
-                    <button type="submit" class="px-5 py-2 rounded-full bg-[#007AFF] hover:bg-[#0066D6] text-white text-xs font-semibold shadow-xs transition">Save Card</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==================== MODAL 2: INSTANT NEWS DRAFT BUILDER ==================== -->
-    <div id="draftModal" class="fixed inset-0 bg-black/35 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-[26px] max-w-lg w-full p-6 shadow-2xl border border-black/[0.08] space-y-4">
-            <div class="flex items-center justify-between border-b border-black/[0.06] pb-3.5">
+    <!-- ==================== MODAL 2: SPLIT-VIEW ORIGINAL & AI REGENERATED NEWS DRAFT BUILDER ==================== -->
+    <div id="draftModal" class="fixed inset-0 bg-black/40 backdrop-blur-md z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-[26px] max-w-2xl w-full p-4 sm:p-6 shadow-2xl border border-black/[0.08] space-y-3.5 max-h-[92vh] overflow-y-auto apple-scroll">
+            <div class="flex items-center justify-between border-b border-black/[0.06] pb-3">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full bg-red-500/10 text-[#D70015] text-xs font-bold">✍️ News Draft</span>
-                    <h3 class="font-bold text-sm text-[#1D1D1F] tracking-tight">Ready-to-Publish Copy</h3>
+                    <span class="px-2.5 py-0.5 rounded-full bg-red-500/10 text-[#D70015] text-xs font-bold">✍️ Editorial Studio</span>
+                    <h3 class="font-bold text-sm sm:text-base text-[#1D1D1F] tracking-tight">Original & Regenerated Copy</h3>
                 </div>
                 <button type="button" onclick="closeDraftModal()" class="w-8 h-8 rounded-full bg-[#F5F5F7] hover:bg-black/10 flex items-center justify-center text-[#86868B] hover:text-[#1D1D1F] font-bold transition">✕</button>
             </div>
 
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-semibold text-[#86868B] mb-1.5">News Copy (Editable):</label>
-                    <textarea id="draftTextarea" rows="7" class="w-full p-3.5 rounded-2xl bg-[#F5F5F7] border border-black/[0.08] text-xs sm:text-sm font-medium text-[#1D1D1F] leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"></textarea>
-                </div>
-
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
-                    <a id="draftSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-[#007AFF] hover:underline">Open Original Source ↗</a>
+            <!-- TOP BOX: ORIGINAL / RAW NEWS -->
+            <div class="space-y-1.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <label class="text-[11px] font-bold text-[#1D1D1F] uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        1. Original Source / Raw News
+                    </label>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="copyDraftText()" class="px-4 py-2 rounded-full bg-[#1D1D1F] hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 transition">
-                            <span>📋</span>
-                            <span>Copy News</span>
+                        <button type="button" id="fetchFullArticleBtn" onclick="fetchFullOriginalArticle()" class="px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 text-[10.5px] font-bold transition flex items-center gap-1">
+                            <span>⚡ Fetch Full Article</span>
                         </button>
+                        <a id="draftSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-[#007AFF] hover:underline">Open Link ↗</a>
                     </div>
                 </div>
+                <textarea id="originalDraftTextarea" rows="4" placeholder="Paste full news text or click 'Fetch Full Article' to pull the complete story..." class="w-full p-3 rounded-2xl bg-[#F5F5F7] border border-black/[0.08] text-xs font-medium text-[#1D1D1F] leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/30"></textarea>
+            </div>
+
+            <!-- AI REGENERATE ACTION BAR -->
+            <div class="bg-gradient-to-r from-blue-500/[0.08] via-indigo-500/[0.06] to-purple-500/[0.08] border border-blue-200/70 rounded-2xl p-2.5 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10.5px] font-bold text-[#1E3A8A]">✨ Regenerate into Revised News (Below Box):</span>
+                    <span id="aiRegenStatus" class="text-[10px] font-semibold text-[#007AFF] hidden">Generating...</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="regenerateNewsCopy('rewrite')" class="px-3 py-1.5 rounded-full bg-[#007AFF] hover:bg-[#0066D6] text-white text-[11px] font-bold shadow-2xs transition">
+                        ✨ Rewrite News (संशोधित खबर)
+                    </button>
+                    <button type="button" onclick="regenerateNewsCopy('breaking')" class="px-3 py-1.5 rounded-full bg-[#FF3B30] hover:bg-[#D70015] text-white text-[11px] font-bold shadow-2xs transition">
+                        🚨 Breaking Alert
+                    </button>
+                    <button type="button" onclick="regenerateNewsCopy('social')" class="px-3 py-1.5 rounded-full bg-[#1D1D1F] hover:bg-black text-white text-[11px] font-bold shadow-2xs transition">
+                        📱 FB / X Post
+                    </button>
+                    <button type="button" onclick="regenerateNewsCopy('crisp')" class="px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold shadow-2xs transition">
+                        📰 Press Summary
+                    </button>
+                </div>
+            </div>
+
+            <!-- BOTTOM BOX: OUR REVISED / REGENERATED NEWS -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                    <label class="text-[11px] font-bold text-[#047857] uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-[#34C759]"></span>
+                        2. Revised / Regenerated News Copy (Ready to Publish)
+                    </label>
+                    <button type="button" onclick="copyOriginalText()" class="text-[10.5px] font-semibold text-[#86868B] hover:text-[#1D1D1F]">Copy Original</button>
+                </div>
+                <textarea id="draftTextarea" rows="6" placeholder="Your revised / regenerated news copy will appear here..." class="w-full p-3.5 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/25 text-xs sm:text-sm font-medium text-[#1D1D1F] leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30"></textarea>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-black/[0.06]">
+                <button type="button" onclick="closeDraftModal()" class="px-4 py-2 rounded-full bg-[#F5F5F7] hover:bg-black/10 text-[#1D1D1F] text-xs font-semibold transition">Close</button>
+                <button type="button" onclick="copyDraftText()" class="px-5 py-2 rounded-full bg-[#1D1D1F] hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition">
+                    <span>📋</span>
+                    <span>Copy Revised News</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1368,161 +1368,150 @@ function doGet(e) {
                 const ta = a.pubDate ? new Date(a.pubDate).getTime() : 0;
                 const tb = b.pubDate ? new Date(b.pubDate).getTime() : 0;
                 return (isNaN(tb) ? 0 : tb) - (isNaN(ta) ? 0 : ta);
-            });
+        // ==================== SPLIT-VIEW ORIGINAL & AI REGENERATED DRAFT MODAL ====================
+        let currentDraftLocation = 'अतरौली (अलीगढ़)';
+        let currentDraftUrl = '';
 
-            const items = sortedRaw.slice(0, 8).map(item => {
-                const cleanTitle = (item.title || '').replace(/\s-\s[^-]+$/, '').trim();
-                const highlightedTitle = highlightHeadlineKeywords(cleanTitle);
-                const sourceName = item.source || ((item.title && item.title.includes(' - ')) ? item.title.split(' - ').pop().trim() : (feedCfg.paperName || 'Google News'));
-                const timeLabel = formatRelativeHindiTime(item.pubDate);
-                return { ...item, cleanTitle, highlightedTitle, sourceName, timeLabel };
-            });
-
-            startCardFlashTicker(feedCfg, items);
-
-            container.innerHTML = items.map(item => {
-                const isToday = item.timeLabel.includes('h ago') || item.timeLabel === 'Just now';
-                const encodedHeadline = encodeURIComponent(item.cleanTitle);
-                const encodedLink = encodeURIComponent(item.link || '');
-                const encodedLoc = encodeURIComponent(feedCfg.dateline);
-
-                return `
-                    <div class="pt-1.5 sm:pt-2.5 first:pt-0 flex items-start justify-between gap-1.5 sm:gap-2.5 group">
-                        <div class="min-w-0 flex-1">
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-[11px] sm:text-[12.5px] text-[#1D1D1F] group-hover:text-[#007AFF] leading-[1.35] sm:leading-snug line-clamp-2 transition block">
-                                ${item.highlightedTitle}
-                            </a>
-                            <div class="flex items-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] text-[#86868B]">
-                                <span class="px-1 sm:px-1.5 py-0.2 sm:py-0.5 rounded font-semibold flex-shrink-0 ${isToday ? 'bg-red-500/10 text-[#D70015]' : 'bg-black/[0.04] text-[#86868B]'}">${item.timeLabel}</span>
-                                <span class="truncate">${item.sourceName}</span>
-                            </div>
-                        </div>
-                        <button type="button" onclick="openDraftFromGoogleNews('${encodedHeadline}', '${encodedLoc}', '${encodedLink}')" class="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-[#F5F5F7] hover:bg-[#007AFF] hover:text-white text-[#1D1D1F] flex items-center justify-center text-[9px] sm:text-[11px] transition" title="Create instant draft from this news">
-                            ✍️
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        async function fetchSingleRadarCard(feedCfg) {
-            const container = document.getElementById(feedCfg.containerId);
-            if (!container) return;
-
-            // Instant cache render first so UI shows headlines in 0ms
-            try {
-                const cachedRaw = localStorage.getItem(RADAR_CACHE_PREFIX + feedCfg.key);
-                if (cachedRaw) {
-                    const cachedItems = JSON.parse(cachedRaw);
-                    if (Array.isArray(cachedItems) && cachedItems.length > 0) {
-                        renderRadarItemsToCard(feedCfg, cachedItems);
-                    }
-                }
-            } catch (e) {}
-
-            const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(feedCfg.query)}&hl=hi&gl=IN&ceid=IN:hi&scoring=n`;
-            const rawItems = await fetchRssWithTripleFallback(googleRssUrl, feedCfg.query);
-
-            if (rawItems.length > 0) {
-                try {
-                    localStorage.setItem(RADAR_CACHE_PREFIX + feedCfg.key, JSON.stringify(rawItems.slice(0, 8)));
-                } catch (e) {}
-                renderRadarItemsToCard(feedCfg, rawItems);
-            } else if (!container.querySelector('a[target="_blank"]')) {
-                container.innerHTML = `
-                    <div class="py-4 text-center space-y-2">
-                        <p class="text-gray-500 text-[11px]">Live feed unavailable right now, view directly on Google News:</p>
-                        <a href="${feedCfg.searchUrl}" target="_blank" rel="noopener noreferrer" class="inline-block px-3 py-1.5 rounded-lg bg-gray-900 text-white text-[11px] font-bold">
-                            Open News ↗
-                        </a>
-                    </div>
-                `;
-            }
-        }
-
-        async function loadAllGoogleNewsRadars(showNotice = false) {
-            if (showNotice) showToast('🔄 Refreshing all live radars & newspaper desks...');
-            const allFeeds = [...REGIONAL_RADAR_FEEDS, ...NEWSPAPER_ATRAULI_FEEDS];
-
-            // First render cached items instantly
-            allFeeds.forEach(feedCfg => {
-                try {
-                    const cachedRaw = localStorage.getItem(RADAR_CACHE_PREFIX + feedCfg.key);
-                    if (cachedRaw) {
-                        const cachedItems = JSON.parse(cachedRaw);
-                        if (Array.isArray(cachedItems) && cachedItems.length > 0) {
-                            renderRadarItemsToCard(feedCfg, cachedItems);
-                        }
-                    }
-                } catch (e) {}
-            });
-            // If All-in-One Google Apps Script is connected, try JSONP (<script> tag bypasses iFrame CORS) first, then fetch
-            if (CUSTOM_APPS_SCRIPT_URL && CUSTOM_APPS_SCRIPT_URL.startsWith('http')) {
-                const applyFeedsPayload = (data) => {
-                    if (!data || !data.feeds) return false;
-                    let loadedAny = false;
-                    allFeeds.forEach(feedCfg => {
-                        const list = data.feeds[feedCfg.key];
-                        if (Array.isArray(list) && list.length > 0) {
-                            loadedAny = true;
-                            try {
-                                localStorage.setItem(RADAR_CACHE_PREFIX + feedCfg.key, JSON.stringify(list.slice(0, 8)));
-                            } catch (e) {}
-                            renderRadarItemsToCard(feedCfg, list);
-                        }
-                    });
-                    return loadedAny;
-                };
-
-                try {
-                    const jsonpData = await new Promise((resolve, reject) => {
-                        const cbName = '__skgb_gas_' + Math.random().toString(36).slice(2);
-                        const script = document.createElement('script');
-                        const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 8000);
-                        function cleanup() {
-                            clearTimeout(timer);
-                            delete window[cbName];
-                            if (script.parentNode) script.parentNode.removeChild(script);
-                        }
-                        window[cbName] = (d) => { cleanup(); resolve(d); };
-                        script.onerror = () => { cleanup(); reject(new Error('error')); };
-                        const sep = CUSTOM_APPS_SCRIPT_URL.includes('?') ? '&' : '?';
-                        script.src = `${CUSTOM_APPS_SCRIPT_URL}${sep}callback=${cbName}&_t=${Date.now()}`;
-                        document.head.appendChild(script);
-                    });
-                    if (applyFeedsPayload(jsonpData)) return;
-                } catch (e) {}
-
-                try {
-                    const sep = CUSTOM_APPS_SCRIPT_URL.includes('?') ? '&' : '?';
-                    const res = await fetch(`${CUSTOM_APPS_SCRIPT_URL}${sep}_t=${Date.now()}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (applyFeedsPayload(data)) return;
-                    }
-                } catch (e) {}
-            }
-
-            // Fallback: fetch each card via JSONP + Proxies
-            await Promise.all(REGIONAL_RADAR_FEEDS.map(cfg => fetchSingleRadarCard(cfg)));
-            await Promise.all(NEWSPAPER_ATRAULI_FEEDS.map(cfg => fetchSingleRadarCard(cfg)));
-        }
-
-        // ==================== INSTANT DRAFT MODAL ====================
         function openDraftFromGoogleNews(encodedHeadline, encodedLocation, encodedLink) {
             const headline = decodeURIComponent(encodedHeadline || '');
             const location = decodeURIComponent(encodedLocation || 'अतरौली (अलीगढ़)');
             const link = decodeURIComponent(encodedLink || '#');
 
-            const draftText = `${headline}\n\n${location} | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n${headline} को लेकर क्षेत्र में चर्चा तेज हो गई है। प्राप्त जानकारी के अनुसार संबंधित मामले में आवश्यक कार्रवाई एवं अपडेट सामने आ रहे हैं।\n\n— रिपोर्ट: सब कुछ घर बैठे न्यूज़ डेस्क`;
+            currentDraftLocation = location;
+            currentDraftUrl = (link && link !== '#') ? link : '';
 
+            // Top Box: Original Source Text
+            const origBox = document.getElementById('originalDraftTextarea');
+            if (origBox) {
+                origBox.value = `${headline}\n\nस्रोत स्थान: ${location}\n(पूरी खबर खींचने के लिए ऊपर '⚡ Fetch Full Article' दबाएं या मूल खबर यहाँ पेस्ट करें)`;
+            }
+
+            // Bottom Box: Initial Editorial Draft
+            const draftText = `${headline}\n\n${location} | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n${headline} को लेकर क्षेत्र में चर्चा तेज हो गई है। प्राप्त जानकारी के अनुसार संबंधित मामले में आवश्यक कार्रवाई एवं अपडेट सामने आ रहे हैं।\n\n— रिपोर्ट: सब कुछ घर बैठे न्यूज़ डेस्क`;
             document.getElementById('draftTextarea').value = draftText;
+
             const sourceEl = document.getElementById('draftSourceLink');
             sourceEl.href = link || '#';
 
             const modal = document.getElementById('draftModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+
+            // Automatically try fetching full article text in background if link exists
+            if (currentDraftUrl) {
+                fetchFullOriginalArticle(true);
+            }
+        }
+
+        async function fetchFullOriginalArticle(silent = false) {
+            const origBox = document.getElementById('originalDraftTextarea');
+            const btn = document.getElementById('fetchFullArticleBtn');
+            if (!origBox) return;
+
+            if (!currentDraftUrl || currentDraftUrl === '#') {
+                if (!silent) showToast('ℹ️ No external link attached — paste your raw news directly in the top box.');
+                return;
+            }
+
+            if (btn) btn.textContent = '⏳ Fetching...';
+            try {
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(currentDraftUrl)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const html = data?.contents || '';
+                    if (html) {
+                        const doc = new DOMParser().parseFromString(html, 'text/html');
+                        const paragraphs = Array.from(doc.querySelectorAll('article p, .story-content p, .article-body p, p'))
+                            .map(p => (p.textContent || '').replace(/\s+/g, ' ').trim())
+                            .filter(t => t.length > 45 && !/cookie|subscribe|advertisement|copyright|whatsapp/i.test(t));
+
+                        const uniqueParas = [...new Set(paragraphs)].slice(0, 8);
+                        if (uniqueParas.length > 0) {
+                            origBox.value = uniqueParas.join('\n\n');
+                            if (!silent) showToast('✅ Full article paragraphs loaded in the top box!');
+                        } else if (!silent) {
+                            showToast('⚠️ Publisher blocked auto-read. Open link & paste text into top box.');
+                        }
+                    }
+                }
+            } catch (e) {
+                if (!silent) showToast('⚠️ Could not auto-fetch article. Please paste text in top box.');
+            } finally {
+                if (btn) btn.innerHTML = '<span>⚡ Fetch Full Article</span>';
+            }
+        }
+
+        async function regenerateNewsCopy(mode = 'rewrite') {
+            const origText = (document.getElementById('originalDraftTextarea')?.value || '').trim();
+            const revisedBox = document.getElementById('draftTextarea');
+            const statusEl = document.getElementById('aiRegenStatus');
+
+            if (!origText) {
+                showToast('⚠️ Please enter or paste the original news in the top box first.');
+                return;
+            }
+
+            if (statusEl) {
+                statusEl.textContent = '✨ Rewriting in Hindi...';
+                statusEl.classList.remove('hidden');
+            }
+
+            const modePrompts = {
+                rewrite: 'Rewrite this Hindi news report completely in fresh, natural, copyright-free journalistic Hindi for "सब कुछ घर बैठे न्यूज़" (Sab Kuch Ghar Baithe News). Keep all facts, names, and locations accurate, with a sharp headline and 2-3 clean paragraphs.',
+                breaking: 'Convert this news into an urgent, crisp Hindi Breaking News alert with bullet points for "सब कुछ घर बैठे न्यूज़".',
+                social: 'Write an engaging Hindi Facebook & X (Twitter) news post based on this news for "सब कुछ घर बैठे न्यूज़", including a strong hook and 4-5 relevant Hindi/English hashtags (like #Atrauli #Aligarh #UPNews).',
+                crisp: 'Summarize this news into a crisp 60-to-80-word Hindi newspaper brief with dateline and byline "— सब कुछ घर बैठे न्यूज़ डेस्क".'
+            };
+
+            const systemPrompt = 'You are the Senior Hindi News Editor for "Sab Kuch Ghar Baithe News" (Atrauli, Aligarh, Uttar Pradesh). Always output clean, ready-to-publish Hindi news copy without markdown asterisks or extra commentary.';
+            const userQuery = `${modePrompts[mode] || modePrompts.rewrite}\n\nDateline: ${currentDraftLocation}\nOriginal News:\n${origText}`;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                let response = null;
+                for (let attempt = 0; attempt < 3; attempt++) {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userQuery }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
+                    });
+                    if (response.ok) break;
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
+                }
+
+                if (response && response.ok) {
+                    const result = await response.json();
+                    const generated = result?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                    if (generated && revisedBox) {
+                        revisedBox.value = generated;
+                        showToast('✅ Revised news copy regenerated in the bottom box!');
+                        return;
+                    }
+                }
+                throw new Error('AI fallback');
+            } catch (err) {
+                // Clean local editorial re-formatter fallback if offline
+                const lines = origText.split('\n').map(l => l.trim()).filter(Boolean);
+                const head = lines[0] || 'ताज़ा समाचार';
+                const body = lines.slice(1).join(' ') || head;
+                if (revisedBox) {
+                    if (mode === 'social') {
+                        revisedBox.value = `🚨 बड़ी खबर | ${head}\n\n${currentDraftLocation}: ${body}\n\nजुड़े रहें — सब कुछ घर बैठे न्यूज़ के साथ\n#Atrauli #Aligarh #UPNews #SabKuchGharBaitheNews`;
+                    } else if (mode === 'breaking') {
+                        revisedBox.value = `🔴 BREAKING NEWS | ${currentDraftLocation}\n\n• ${head}\n• ${body}\n\n— सब कुछ घर बैठे न्यूज़ ब्यूरो`;
+                    } else {
+                        revisedBox.value = `${head}\n\n${currentDraftLocation} | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n${body}\n\n— संपादकीय डेस्क, सब कुछ घर बैठे न्यूज़`;
+                    }
+                }
+                showToast('✅ Revised draft formatted in the bottom box!');
+            } finally {
+                if (statusEl) statusEl.classList.add('hidden');
+            }
         }
 
         function closeDraftModal() {
@@ -1531,17 +1520,28 @@ function doGet(e) {
             modal.classList.remove('flex');
         }
 
+        function copyOriginalText() {
+            const textarea = document.getElementById('originalDraftTextarea');
+            if (!textarea) return;
+            textarea.select();
+            document.execCommand('copy');
+            showToast('📋 Original news copied!');
+        }
+
         function copyDraftText() {
             const textarea = document.getElementById('draftTextarea');
             if (!textarea) return;
             textarea.select();
             document.execCommand('copy');
-            showToast('📋 News copy copied to clipboard!');
+            showToast('📋 Revised news copy copied to clipboard!');
         }
 
         function openBlankDraftModal() {
-            const blankTemplate = `अतरौली (अलीगढ़) | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n\n[यहाँ अपनी मुख्य खबर या प्रेस विज्ञप्ति लिखें...]\n\n— रिपोर्ट: सब कुछ घर बैठे न्यूज़ डेस्क`;
-            document.getElementById('draftTextarea').value = blankTemplate;
+            currentDraftLocation = 'अतरौली (अलीगढ़)';
+            currentDraftUrl = '';
+            const origBox = document.getElementById('originalDraftTextarea');
+            if (origBox) origBox.value = '';
+            document.getElementById('draftTextarea').value = `अतरौली (अलीगढ़) | सब कुछ घर बैठे न्यूज़ ब्यूरो:\n\n[यहाँ आपकी संशोधित या नई खबर तैयार होगी...]\n\n— रिपोर्ट: सब कुछ घर बैठे न्यूज़ डेस्क`;
             const sourceEl = document.getElementById('draftSourceLink');
             sourceEl.href = 'https://news.google.com/search?q=%E0%A4%85%E0%A4%A4%E0%A4%B0%E0%A5%8C%E0%A4%B2%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi';
 
